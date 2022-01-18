@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.Xml.Serialization;
+using System.Xml;
 
 namespace KSA_Collector.FileHundler
 {
@@ -180,7 +181,7 @@ namespace KSA_Collector.FileHundler
 
         private sessionMachineNetworksEcusDtcs[] dtcsField;
 
-        private sessionMachineNetworksEcusIdentifications[] identificationsField;
+        private Identifications[] identificationsField;
 
         private string idField;
 
@@ -202,7 +203,7 @@ namespace KSA_Collector.FileHundler
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("identifications")]
-        public sessionMachineNetworksEcusIdentifications[] identifications
+        public Identifications[] identifications
         {
             get
             {
@@ -489,34 +490,15 @@ namespace KSA_Collector.FileHundler
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class sessionMachineNetworksEcusIdentifications
+    public partial class Identifications
     {
+        public string id;
 
-        private string idField;
+        private dynamic valueField;
 
-        private sessionMachineNetworksEcusIdentificationsValue valueField;
+        public string displayText;
 
-        private string valueStrField;
-
-        private string displayTextField;
-
-        /// <remarks/>
-        public string id
-        {
-            get
-            {
-                return this.idField;
-            }
-            set
-            {
-                this.idField = value;
-            }
-        }
-
-        /// <remarks/>
-        //[System.Xml.Serialization.XmlElement("value", typeof(sessionMachineNetworksEcusIdentificationsValue))]
-
-        public sessionMachineNetworksEcusIdentificationsValue value
+        public dynamic value
         {
             get
             {
@@ -524,190 +506,172 @@ namespace KSA_Collector.FileHundler
             }
             set
             {
-                this.valueField = value;
+                this.valueField = GetValue(value);
             }
         }
 
-
-        public string valueStr
+        private string GetValue(dynamic _value)
         {
-            get
+            if (_value.GetType() == typeof(string))
             {
-                return this.valueStrField;
+                return (string)_value;
             }
-            set
+            else if (_value.GetType() == typeof(XmlNode[]))
             {
-                this.valueStrField = value;
-            }
-        }
+                XmlNode node = ((XmlNode[])_value).Last();
+                string valueString = "";
 
-        /// <remarks/>
-        public string displayText
-        {
-            get
-            {
-                return this.displayTextField;
+                for (int i = 0; i < node.ChildNodes.Count; i++)
+                    valueString += node.ChildNodes[i].InnerText + " ";
+                return valueString;
             }
-            set
+            else
             {
-                this.displayTextField = value;
+                return _value.ToString();
             }
         }
     }
+
+
+/// <remarks/>
+[System.SerializableAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+public partial class sessionMachineNetworksEcusIdentificationsValue
+{
+
+    private string valueField;
 
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class sessionMachineNetworksEcusIdentificationsValue
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string value
     {
-        private string valueField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        public string value
+        get
         {
-            get
-            {
-                return this.valueField;
-            }
-            set
-            {
-                this.valueField = value;
-            }
+            return this.valueField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.valueField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.SerializableAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+public partial class sessionMachineTestResults
+{
+
+    private string idField;
+
+    private string resultField;
+
+    private string assertionField;
+
+    private string timestampField;
+
+    private string displayTextField;
+
+    private string dataField;
+
+    private EcuProcedure[] Tests;
+
+    /// <remarks/>
+    public string id
+    {
+        get
+        {
+            return this.idField;
+        }
+        set
+        {
+            this.idField = value;
         }
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class sessionMachineTestResults
+    public string result
     {
-
-        private string idField;
-
-        private string resultField;
-
-        private string assertionField;
-
-        private string timestampField;
-
-        private string displayTextField;
-
-        private string dataField;
-
-        private EcuProcedure[] Tests;
-
-        /// <remarks/>
-        public string id
+        get
         {
-            get
-            {
-                return this.idField;
-            }
-            set
-            {
-                this.idField = value;
-            }
+            return this.resultField;
         }
-
-        /// <remarks/>
-        public string result
+        set
         {
-            get
-            {
-                return this.resultField;
-            }
-            set
-            {
-                this.resultField = value;
-            }
-        }
-
-        /// <remarks/>
-        public string assertion
-        {
-            get
-            {
-                return this.assertionField;
-            }
-            set
-            {
-                this.assertionField = value;
-            }
-        }
-
-        /// <remarks/>
-        public string timestamp
-        {
-            get
-            {
-                return this.timestampField;
-            }
-            set
-            {
-                this.timestampField = value;
-            }
-        }
-
-        /// <remarks/>
-        public string displayText
-        {
-            get
-            {
-                return this.displayTextField;
-            }
-            set
-            {
-                this.displayTextField = value;
-            }
-        }
-
-        /// <remarks/>
-        public string data
-        {
-            get
-            {
-                return this.dataField;
-            }
-            set
-            {
-                this.dataField = value;
-
-                EcuProcedure procedure = JsonSerializer.Deserialize<EcuProcedure>(this.dataField);
-            }
+            this.resultField = value;
         }
     }
 
-
-    public class EcuProcedure
+    /// <remarks/>
+    public string assertion
     {
-        public string name { get; set; }
-        public string result { get; set; }
-        public string timestampStart { get; set; }
-        public string timestamp { get; set; }
-        public string VIN { get; set; }
-        public string VINForFlash { get; set; }
-        public string flashDataFile { get; set; }
-        public string versionDB { get; set; }
+        get
+        {
+            return this.assertionField;
+        }
+        set
+        {
+            this.assertionField = value;
+        }
     }
+
+    /// <remarks/>
+    public string timestamp
+    {
+        get
+        {
+            return this.timestampField;
+        }
+        set
+        {
+            this.timestampField = value;
+        }
+    }
+
+    /// <remarks/>
+    public string displayText
+    {
+        get
+        {
+            return this.displayTextField;
+        }
+        set
+        {
+            this.displayTextField = value;
+        }
+    }
+
+    /// <remarks/>
+    public string data
+    {
+        get
+        {
+            return this.dataField;
+        }
+        set
+        {
+            this.dataField = value;
+
+            EcuProcedure procedure = JsonSerializer.Deserialize<EcuProcedure>(this.dataField);
+        }
+    }
+}
+
+
+public class EcuProcedure
+{
+    public string name { get; set; }
+    public string result { get; set; }
+    public string timestampStart { get; set; }
+    public string timestamp { get; set; }
+    public string VIN { get; set; }
+    public string VINForFlash { get; set; }
+    public string flashDataFile { get; set; }
+    public string versionDB { get; set; }
+}
 
 }
 
