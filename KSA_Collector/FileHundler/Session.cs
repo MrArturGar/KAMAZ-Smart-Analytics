@@ -512,11 +512,7 @@ namespace KSA_Collector.FileHundler
 
         private string GetValue(dynamic _value)
         {
-            if (_value.GetType() == typeof(string))
-            {
-                return (string)_value;
-            }
-            else if (_value.GetType() == typeof(XmlNode[]))
+            if (_value.GetType() == typeof(XmlNode[]))
             {
                 XmlNode node = ((XmlNode[])_value).Last();
                 string valueString = "";

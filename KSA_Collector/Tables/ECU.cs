@@ -12,8 +12,8 @@ namespace KSA_Collector.Tables
     internal class ECU
     {
         int id;
-        string Codifier;
-        public Dictionary<string, string> identifications;
+        public string Codifier;
+        public Dictionary<string, string> identifications = new Dictionary<string, string>();
 
         string TableName;
 
