@@ -9,50 +9,17 @@ namespace KSA_Collector.Tables
 {
     internal class Session
     {
-        int id;/// 
-        int id_Vehicle;
-        string VIN_old;
-        DateTime Date;
-        int id_serviceCenters;
-        string VersionDB;
-        string VCISN;
-        float Mileage;
-        bool Has_Identifications = false;
-        bool Has_DTC = false;
-        bool Has_Tests = false;
-        bool Has_Flash = false;
-        string FilePath;
-        byte[] Hash;
-
-        public Session(string _path)
-        {
-            XDocument doc = XDocument.Load(_path);
-            XElement node = doc.Root;
-            if (node != null && node.Name == "session")
-            {
-                string username = node.Element("username").Value;
-
-                ServiceCenters serviceCenters = new ServiceCenters(username);
-                id_serviceCenters = serviceCenters.GetId_ServiceCenters();
-
-                XElement machine = node.Elements("machine").First();
-
-                GetData(machine);
-            }
-            else
-                throw new Exception("Xml node is NULL or invalid");
-        }
-
-        private void GetData(XElement _machine)
-        {
-            string id_truck = _machine.Element("id").Value;
-            string displayName = _machine.Element("displayName").Value;
-
-            XElement[] ecus = _machine.Elements("ecus").ToArray();
-            for (int i = 0; i < ecus.Length; i++)
-            {
-                ECU ecu = new ECU(ecus[i]);
-            }
-        }
+        public int id { get; set; }
+        public Vehicle id_Vehicle { get; set; }
+        public string SessionsName { get; set; }
+        public DateTime Date { get; set; }
+        public ServiceCenter id_serviceCenters { get; set; }
+        public string VersionDB { get; set; }
+        public string VCISN { get; set; }
+        public float Mileage { get; set; }
+        public bool Has_Identifications { get; set; }
+        public bool Has_DTC { get; set; }
+        public bool Has_Tests { get; set; }
+        public bool Has_Flash { get; set; }
     }
 }

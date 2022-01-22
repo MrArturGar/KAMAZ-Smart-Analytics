@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using KSA_Collector.Tables;
-using KSA_Collector.Settings;
+using KSA_Collector;
 
 namespace KSA_Collector.FileHundler
 {
@@ -21,41 +20,44 @@ namespace KSA_Collector.FileHundler
 
             FileInfo fileSession = _path.GetFiles()[0];
 
-            session sessionFile = new session();
+            session session = new session();
             XmlSerializer serializer = new XmlSerializer(typeof(session));
             try
             {
-                sessionFile = (session)serializer.Deserialize(new StreamReader(fileSession.FullName));
-
-
+                session = (session)serializer.Deserialize(new StreamReader(fileSession.FullName));
+                ECU_Handler(session);
             }
             catch (Exception ex) { }
-
         }
 
-        private void LoadTable_ECUs_and_Vehicle(sessionMachineNetworks _network)
+        private void ECU_Handler(session _session)
         {
-            IdentificationSettings settings = IdentificationSettings.GetSettings();
+            DataHandler dataHandler = new DataHandler();   
+            string design_number = _session.machine.networks.id;
+            var ecus = _session.machine.networks.ecus;
 
-            int ecuCount = _network.ecus.Length;
-            ECU[] ecu = new ECU[ecuCount-1];
+            Tables.ECU[] ecus_tables = new Tables.ECU[ecus.Count()];
 
-
-            for (int i = 0; i < ecuCount; i++)
+            for (int i = 0; i < ecus.Count(); i++)
             {
-                ecu[i].Codifier = _network.ecus[i].id;
-
-                string[] signalNames = settings.GetSignalNames(ecu[i].Codifier);
-
-                Identifications[] identies = _network.ecus[i].identifications;
-
-                for (int j = 0; j < identies.Length; j++)
+                Tables.ApplicationContext applicationContext = new Tables.ApplicationContext();
+                var ecu = ecus[i];
+                Tables.System systems = new Tables.System()
                 {
-                    string signalName = identies[j].id.Split('-')[0];
-                    if (signalNames.Contains(signalName))
-                        ecu[i].identifications.Add(signalName, identies[j].value);
-                }
+                    Name = dataHandler.GetSystemName(ecu.id),
+                    Domain = dataHandler.GetSystemName(ecu.id)
+                };
+                applicationContext.Systems.Add(systems);
+                applicationContext.SaveChanges();
+
+                ecus_tables[i] = new Tables.ECU()
+                {
+                    Codifier = ecu.id,
+                    System_id = systems.id
+                };
             }
+
+
         }
     }
 }

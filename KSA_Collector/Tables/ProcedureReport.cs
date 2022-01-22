@@ -8,14 +8,14 @@ namespace KSA_Collector.Tables
 {
     internal class ProcedureReport
     {
-        int id;
-        int id_session;
-        string Procedure_name;
-        bool Result;
-        DateTime Date_start;
-        DateTime Date_end;
-        string Using_VIN;
-        string DataFiles;
+        public int id { get; set; }
+        public int id_session { get; set; }
+        public string Procedure_name { get; set; }
+        public bool Result { get; set; }
+        public DateTime Date_start { get; set; }
+        public DateTime Date_end { get; set; }
+        public string Using_VIN { get; set; }
+        public string DataFiles { get; set; }
 
     }
 }

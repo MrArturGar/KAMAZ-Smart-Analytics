@@ -7,15 +7,15 @@ using System.Security.Cryptography;
 
 using KSA_Collector.Settings;
 
-namespace KSA_Collector.Tables
+namespace KSA_Collector.FileHundler
 {
-    internal class ServiceCenters
+    internal class ServiceCentersHandler
     {
         string Table = "ServiceCenters";
         string username;
         string tempHashPath = "\\Temp\\ServiceCenters.hash";
         string CSV_Path;
-        public ServiceCenters(string _username)
+        public ServiceCentersHandler(string _username)
         {
             username = _username;
         }
