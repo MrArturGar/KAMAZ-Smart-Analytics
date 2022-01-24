@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace KSA_Collector.Tables
+namespace KSA_Collector.TablesOld
 {
     class ApplicationContext : DbContext
     {
-        public ApplicationContext() 
-        { 
+        public ApplicationContext()
+        {
             Database.EnsureCreated();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -30,5 +30,10 @@ namespace KSA_Collector.Tables
         public DbSet<ECU_Identidication> ECU_Identidication { get; set; }
         public DbSet<Vehicles_ECUs> Vehicles_ECUs { get; set; }
         public DbSet<ServiceCenter> ServiceCenters { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<System>().HasIndex(u => u.Name).IsUnique();
+        }
     }
 }

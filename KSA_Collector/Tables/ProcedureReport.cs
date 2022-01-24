@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KSA_Collector.Tables
 {
-    internal class ProcedureReport
+    public partial class ProcedureReport
     {
-        public int id { get; set; }
-        public int id_session { get; set; }
-        public string Procedure_name { get; set; }
-        public bool Result { get; set; }
-        public DateTime Date_start { get; set; }
-        public DateTime Date_end { get; set; }
-        public string Using_VIN { get; set; }
-        public string DataFiles { get; set; }
-
+        public int Id { get; set; }
+        public int IdSession { get; set; }
+        public string Codifier { get; set; } = null!;
+        public string ProcedureName { get; set; } = null!;
+        public bool? Result { get; set; }
+        public DateTime DateStart { get; set; }
+        public DateTime DateEnd { get; set; }
+        public string? UsingVin { get; set; }
+        public string DataFiles { get; set; } = null!;
     }
 }

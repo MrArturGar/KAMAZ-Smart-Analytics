@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KSA_Collector.Tables
 {
-    internal class AOGlonassReport
+    public partial class AoglonassReport
     {
-        public int id { get; set; }
-        public Session id_session { get; set; }
-        public DateTime Date_start { get; set; }
-        public string Type { get; set; }
-        public string Request { get; set; }
-        public string Response { get; set; }
-
+        public int Id { get; set; }
+        public int IdSession { get; set; }
+        public DateTime DateStart { get; set; }
+        public string Type { get; set; } = null!;
+        public string Request { get; set; } = null!;
+        public string Response { get; set; } = null!;
     }
 }

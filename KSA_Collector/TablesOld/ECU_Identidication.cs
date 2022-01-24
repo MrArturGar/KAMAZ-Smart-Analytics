@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KSA_Collector.Tables
+namespace KSA_Collector.TablesOld
 {
     internal class ECU_Identidication
     {

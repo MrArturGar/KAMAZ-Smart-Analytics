@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KSA_Collector.Tables
 {
-    internal class Vehicle
+    public partial class Vehicle
     {
-        public int id { get; set; }
-        public string VIN { get; set; }
-        public string Design_Number { get; set; }
-        public string ICCID { get; set; }
-        public string ICCIDC { get; set; }
-        public string IMEI { get; set; }
-        public string Type { get; set; }
+        public Vehicle()
+        {
+            Sessions = new HashSet<Session>();
+        }
+
+        public int Id { get; set; }
+        public string Vin { get; set; } = null!;
+        public string DesignNumber { get; set; } = null!;
+        public string Iccid { get; set; } = null!;
+        public string Iccidc { get; set; } = null!;
+        public string Imei { get; set; } = null!;
+        public string Type { get; set; } = null!;
+
+        public virtual ICollection<Session> Sessions { get; set; }
     }
 }

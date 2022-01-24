@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KSA_Collector.Tables
 {
-    internal class Composite
+    public partial class Composite
     {
-        public int id { get; set; }
-        public string Design_Number { get; set; }
-        public int id_ECU { get; set; }
+        public int Id { get; set; }
+        public string DesignNumber { get; set; } = null!;
+        public int IdEcu { get; set; }
     }
 }

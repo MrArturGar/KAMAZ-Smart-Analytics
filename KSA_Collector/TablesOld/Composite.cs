@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KSA_Collector.Tables
+namespace KSA_Collector.TablesOld
 {
-    internal class Vehicles_ECUs
+    internal class Composite
     {
         public int id { get; set; }
-        public int id_Identifications { get; set; }
-        public int id_Vehicle { get; set; }
+        public string Design_Number { get; set; }
+        public int id_ECU { get; set; }
     }
 }

@@ -36,25 +36,52 @@ namespace KSA_Collector.FileHundler
             string design_number = _session.machine.networks.id;
             var ecus = _session.machine.networks.ecus;
 
-            Tables.ECU[] ecus_tables = new Tables.ECU[ecus.Count()];
+            Tables.Ecu[] ecus_tables = new Tables.Ecu[ecus.Count()];
 
             for (int i = 0; i < ecus.Count(); i++)
             {
-                Tables.ApplicationContext applicationContext = new Tables.ApplicationContext();
+                Tables.KSA_DBContext applicationContext = new Tables.KSA_DBContext();
                 var ecu = ecus[i];
-                Tables.System systems = new Tables.System()
-                {
-                    Name = dataHandler.GetSystemName(ecu.id),
-                    Domain = dataHandler.GetSystemName(ecu.id)
-                };
-                applicationContext.Systems.Add(systems);
-                applicationContext.SaveChanges();
+                string codifier = dataHandler.RemoveDCPrefix(ecus[i].id);
 
-                ecus_tables[i] = new Tables.ECU()
+                Tables.System system = new Tables.System()
                 {
-                    Codifier = ecu.id,
-                    System_id = systems.id
+                    Name = dataHandler.GetSystemName(codifier),
+                    Domain = dataHandler.GetDomainName(codifier)
                 };
+
+                try
+                {
+                    applicationContext.Systems.Add(system);
+                    applicationContext.SaveChanges();
+                }
+                catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+                {
+                    system = applicationContext.Systems
+            .Where(c => c.Name == system.Name)
+            .Single();
+                }
+
+
+                ecus_tables[i] = new Tables.Ecu()
+                {
+                    Codifier = codifier,
+                    SystemId = system.Id
+                };
+
+                try
+                {
+                    applicationContext.Ecus.Add(ecus_tables[i]);
+                    applicationContext.SaveChanges();
+                }
+                catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+                {
+                    ecus_tables[i] = applicationContext.Ecus
+            .Where(c => c.Codifier == ecus_tables[i].Codifier)
+            .Single();
+                }
+
+
             }
 
 
