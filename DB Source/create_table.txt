@@ -1,0 +1,209 @@
+CREATE TABLE [Vehicles] (
+	id integer IDENTITY(1,1),
+	VIN varchar(32) NOT NULL,
+	Design_Number varchar(32) NOT NULL,
+	ICCID varchar(32) NOT NULL,
+	ICCIDC varchar(32) NOT NULL,
+	IMEI varchar(32) NOT NULL,
+	Type varchar(32) NOT NULL,
+  CONSTRAINT [PK_VEHICLES] PRIMARY KEY CLUSTERED
+  (
+  [id] ASC
+  ) WITH (IGNORE_DUP_KEY = OFF)
+
+)
+
+CREATE TABLE [Sessions] (
+	id integer IDENTITY(1,1),
+	id_Vehicle integer NOT NULL,
+	SessionsName varchar(255) NOT NULL UNIQUE,
+	Date datetime NOT NULL UNIQUE,
+	id_serviceCenters integer NOT NULL,
+	VersionDB varchar(32) NOT NULL,
+	VCISN varchar(32) NOT NULL,
+	Mileage float NOT NULL,
+	Has_Identifications bit NOT NULL DEFAULT 'False',
+	Has_DTC bit NOT NULL DEFAULT 'False',
+	Has_Tests bit NOT NULL DEFAULT 'False',
+	Has_Flash bit NOT NULL DEFAULT 'False',
+  CONSTRAINT [PK_SESSIONS] PRIMARY KEY CLUSTERED
+  (
+  [id] ASC
+  ) WITH (IGNORE_DUP_KEY = OFF)
+
+)
+
+CREATE TABLE [ProcedureReports] (
+	id integer IDENTITY(1,1),
+	id_session integer NOT NULL,
+	Codifier varchar(32) NOT NULL,
+	Procedure_name varchar(255) NOT NULL,
+	Result bit NOT NULL DEFAULT 'False',
+	Date_start datetime NOT NULL,
+	Date_end datetime NOT NULL,
+	Using_VIN varchar(32) DEFAULT 'NULL',
+	DataFiles text NOT NULL,
+  CONSTRAINT [PK_PROCEDUREREPORTS] PRIMARY KEY CLUSTERED
+  (
+  [id] ASC
+  ) WITH (IGNORE_DUP_KEY = OFF)
+
+)
+
+CREATE TABLE [AOGlonassReports] (
+	id integer IDENTITY(1,1),
+	id_session integer NOT NULL,
+	Date_start datetime NOT NULL,
+	Type varchar(255) NOT NULL,
+	Request text NOT NULL,
+	Response text NOT NULL,
+  CONSTRAINT [PK_AOGLONASSREPORTS] PRIMARY KEY CLUSTERED
+  (
+  [id] ASC
+  ) WITH (IGNORE_DUP_KEY = OFF)
+
+)
+
+CREATE TABLE [Systems] (
+	id integer IDENTITY(1,1),
+	Name varchar(32) NOT NULL UNIQUE,
+	Domain varchar(32) NOT NULL,
+  CONSTRAINT [PK_SYSTEMS] PRIMARY KEY CLUSTERED
+  (
+  [id] ASC
+  ) WITH (IGNORE_DUP_KEY = OFF)
+
+)
+
+CREATE TABLE [ECUs] (
+	id integer IDENTITY(1,1),
+	Codifier varchar(32) NOT NULL UNIQUE,
+	System_id integer NOT NULL,
+  CONSTRAINT [PK_ECUS] PRIMARY KEY CLUSTERED
+  (
+  [id] ASC
+  ) WITH (IGNORE_DUP_KEY = OFF)
+
+)
+
+CREATE TABLE [Identifications] (
+	id integer IDENTITY(1,1),
+	Name varchar(255) NOT NULL,
+	Value varchar(255) NOT NULL,
+  CONSTRAINT [PK_IDENTIFICATIONS] PRIMARY KEY CLUSTERED
+  (
+  [id] ASC
+  ) WITH (IGNORE_DUP_KEY = OFF)
+
+)
+
+CREATE TABLE [ECU_Identification] (
+	id integer IDENTITY(1,1),
+	id_ECU integer NOT NULL,
+	id_Identifications integer NOT NULL,
+  CONSTRAINT [PK_ECU_IDENTIFICATION] PRIMARY KEY CLUSTERED
+  (
+  [id] ASC
+  ) WITH (IGNORE_DUP_KEY = OFF)
+
+)
+
+CREATE TABLE [Vehicles_ECUs] (
+	id integer IDENTITY(1,1),
+	id_Identifications integer NOT NULL,
+	id_Session integer NOT NULL,
+  CONSTRAINT [PK_VEHICLES_ECUS] PRIMARY KEY CLUSTERED
+  (
+  [id] ASC
+  ) WITH (IGNORE_DUP_KEY = OFF)
+
+)
+
+CREATE TABLE [Composites] (
+	id integer IDENTITY(1,1),
+	Design_Number varchar(32) NOT NULL UNIQUE,
+	id_ECU integer NOT NULL,
+  CONSTRAINT [PK_COMPOSITES] PRIMARY KEY CLUSTERED
+  (
+  [id] ASC
+  ) WITH (IGNORE_DUP_KEY = OFF)
+
+)
+
+CREATE TABLE [ServiceCenters] (
+	id integer IDENTITY(1,1),
+	Name varchar(255) NOT NULL,
+	Address varchar(255) NOT NULL,
+	City varchar(255) NOT NULL,
+	Postcode varchar(255) NOT NULL,
+	Region varchar(255) NOT NULL,
+	Username varchar(255) NOT NULL,
+	Status varchar(255) NOT NULL,
+	Diler_tr varchar(255) NOT NULL,
+  CONSTRAINT [PK_SERVICECENTERS] PRIMARY KEY CLUSTERED
+  (
+  [id] ASC
+  ) WITH (IGNORE_DUP_KEY = OFF)
+
+)
+
+
+ALTER TABLE [Sessions] WITH CHECK ADD CONSTRAINT [Sessions_fk0] FOREIGN KEY ([id_Vehicle]) REFERENCES [Vehicles]([id])
+ON UPDATE CASCADE
+
+ALTER TABLE [Sessions] CHECK CONSTRAINT [Sessions_fk0]
+
+ALTER TABLE [Sessions] WITH CHECK ADD CONSTRAINT [Sessions_fk1] FOREIGN KEY ([id_serviceCenters]) REFERENCES [ServiceCenters]([id])
+ON UPDATE CASCADE
+
+ALTER TABLE [Sessions] CHECK CONSTRAINT [Sessions_fk1]
+
+
+ALTER TABLE [ProcedureReports] WITH CHECK ADD CONSTRAINT [ProcedureReports_fk0] FOREIGN KEY ([id_session]) REFERENCES [Sessions]([id])
+ON UPDATE CASCADE
+
+ALTER TABLE [ProcedureReports] CHECK CONSTRAINT [ProcedureReports_fk0]
+
+
+ALTER TABLE [AOGlonassReports] WITH CHECK ADD CONSTRAINT [AOGlonassReports_fk0] FOREIGN KEY ([id_session]) REFERENCES [Sessions]([id])
+ON UPDATE CASCADE
+
+ALTER TABLE [AOGlonassReports] CHECK CONSTRAINT [AOGlonassReports_fk0]
+
+
+
+ALTER TABLE [ECUs] WITH CHECK ADD CONSTRAINT [ECUs_fk0] FOREIGN KEY ([System_id]) REFERENCES [Systems]([id])
+ON UPDATE CASCADE
+
+ALTER TABLE [ECUs] CHECK CONSTRAINT [ECUs_fk0]
+
+
+
+ALTER TABLE [ECU_Identification] WITH CHECK ADD CONSTRAINT [ECU_Identification_fk0] FOREIGN KEY ([id_ECU]) REFERENCES [ECUs]([id])
+ON UPDATE CASCADE
+
+ALTER TABLE [ECU_Identification] CHECK CONSTRAINT [ECU_Identification_fk0]
+
+ALTER TABLE [ECU_Identification] WITH CHECK ADD CONSTRAINT [ECU_Identification_fk1] FOREIGN KEY ([id_Identifications]) REFERENCES [Identifications]([id])
+ON UPDATE CASCADE
+
+ALTER TABLE [ECU_Identification] CHECK CONSTRAINT [ECU_Identification_fk1]
+
+
+ALTER TABLE [Vehicles_ECUs] WITH CHECK ADD CONSTRAINT [Vehicles_ECUs_fk0] FOREIGN KEY ([id_Identifications]) REFERENCES [ECU_Identification]([id])
+ON UPDATE CASCADE
+
+ALTER TABLE [Vehicles_ECUs] CHECK CONSTRAINT [Vehicles_ECUs_fk0]
+
+ALTER TABLE [Vehicles_ECUs] WITH CHECK ADD CONSTRAINT [Vehicles_ECUs_fk1] FOREIGN KEY ([id_Session]) REFERENCES [Sessions]([id])
+ON UPDATE CASCADE
+
+ALTER TABLE [Vehicles_ECUs] CHECK CONSTRAINT [Vehicles_ECUs_fk1]
+
+
+ALTER TABLE [Composites] WITH CHECK ADD CONSTRAINT [Composites_fk0] FOREIGN KEY ([id_ECU]) REFERENCES [ECUs]([id])
+ON UPDATE CASCADE
+
+ALTER TABLE [Composites] CHECK CONSTRAINT [Composites_fk0]
+
+

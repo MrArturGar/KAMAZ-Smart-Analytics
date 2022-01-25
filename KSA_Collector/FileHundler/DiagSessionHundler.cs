@@ -10,9 +10,13 @@ namespace KSA_Collector.FileHundler
 {
     internal class DiagSessionHundler
     {
+        Tables.KSA_DBContext ApplicationContext;
+        Settings.IdentificationSettings IdentificationSettings;
+
         public DiagSessionHundler(DirectoryInfo _path)
         {
             Load(_path);
+            GetSettings();
         }
 
         private void Load(DirectoryInfo _path)
@@ -30,9 +34,15 @@ namespace KSA_Collector.FileHundler
             catch (Exception ex) { }
         }
 
+        private void GetSettings()
+        {
+            Settings.IdentificationSettings identificationSettings = Settings.IdentificationSettings.GetSettings();
+        }
+
         private void ECU_Handler(session _session)
         {
-            DataHandler dataHandler = new DataHandler();   
+            ApplicationContext = new Tables.KSA_DBContext();
+            DataHandler dataHandler = new DataHandler();
             string design_number = _session.machine.networks.id;
             var ecus = _session.machine.networks.ecus;
 
@@ -40,27 +50,15 @@ namespace KSA_Collector.FileHundler
 
             for (int i = 0; i < ecus.Count(); i++)
             {
-                Tables.KSA_DBContext applicationContext = new Tables.KSA_DBContext();
                 var ecu = ecus[i];
-                string codifier = dataHandler.RemoveDCPrefix(ecus[i].id);
+                string codifier = ecus[i].id;
 
                 Tables.System system = new Tables.System()
                 {
                     Name = dataHandler.GetSystemName(codifier),
                     Domain = dataHandler.GetDomainName(codifier)
                 };
-
-                try
-                {
-                    applicationContext.Systems.Add(system);
-                    applicationContext.SaveChanges();
-                }
-                catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
-                {
-                    system = applicationContext.Systems
-            .Where(c => c.Name == system.Name)
-            .Single();
-                }
+                system = SaveSystem(system);
 
 
                 ecus_tables[i] = new Tables.Ecu()
@@ -68,23 +66,138 @@ namespace KSA_Collector.FileHundler
                     Codifier = codifier,
                     SystemId = system.Id
                 };
+                ecus_tables[i] = SaveEcu(ecus_tables[i]);
 
-                try
+                Tables.Composite composite = new Tables.Composite()
                 {
-                    applicationContext.Ecus.Add(ecus_tables[i]);
-                    applicationContext.SaveChanges();
-                }
-                catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
-                {
-                    ecus_tables[i] = applicationContext.Ecus
-            .Where(c => c.Codifier == ecus_tables[i].Codifier)
-            .Single();
-                }
+                    DesignNumber = _session.machine.networks.displayName,
+                    IdEcu = ecus_tables[i].Id
+                };
+                composite = SaveComposite(composite);
 
+                Identification_Handler(ecus[i], ecus_tables[i]);
 
             }
-
-
         }
+
+        private void Identification_Handler(sessionMachineNetworksEcus ecuFile, Tables.Ecu ecu)
+        {
+            var identifications = ecuFile.identifications;
+            string[] signals = IdentificationSettings.GetSignalNames(ecuFile.id);
+
+            for (int i = 0; i< identifications.Length;i++)
+            {
+                string signalName = identifications[i].id.Split('-')[0];
+
+                if (signals.Contains(signalName))
+                {
+                    Tables.Identification ident = new Tables.Identification()
+                    {
+                        Name = signalName,
+                        Value = identifications[i].value
+                    };
+                    ident = SaveIdentification(ident);
+
+                    Tables.EcuIdentification ecu_ident = new Tables.EcuIdentification()
+                    {
+                        IdEcu = ecu.Id,
+                        IdIdentifications = ident.Id
+                    };
+                    ecu_ident = SaveEcuIdentification(ecu_ident);
+
+
+                }
+            }
+        }
+
+
+
+        private Tables.System SaveSystem(Tables.System system)
+        {
+            try
+            {
+                ApplicationContext.Systems.Add(system);
+                ApplicationContext.SaveChanges();
+                return system;
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            {
+                return ApplicationContext.Systems
+        .Where(c => c.Name == system.Name)
+        .Single();
+            }
+        }
+
+        private Tables.Ecu SaveEcu(Tables.Ecu ecu)
+        {
+            try
+            {
+                ApplicationContext.Ecus.Add(ecu);
+                ApplicationContext.SaveChanges();
+                return ecu;
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            {
+                return ApplicationContext.Ecus
+        .Where(c => c.Codifier == ecu.Codifier)
+        .Single();
+            }
+        }
+
+        private Tables.Composite SaveComposite(Tables.Composite composite)
+        {
+            try
+            {
+                ApplicationContext.Composites.Add(composite);
+                ApplicationContext.SaveChanges();
+                return composite;
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            {
+                return ApplicationContext.Composites
+        .Where(c => c.DesignNumber == composite.DesignNumber && c.IdEcu == composite.IdEcu)
+        .Single();
+            }
+        }
+
+        private Tables.Identification SaveIdentification(Tables.Identification identification)
+        {
+            /////////////////////////
+            Tables.Identification ident = ApplicationContext.Identifications
+        .Where(c => c.Name == identification.Name && c.Value == identification.Value)
+        .Single();
+
+            if (ident == null) { 
+                ApplicationContext.Identifications.Add(identification);
+                ApplicationContext.SaveChanges();
+                return identification;
+            }
+            else
+            {
+                return ident;
+            }
+        }
+
+        private Tables.EcuIdentification SaveEcuIdentification(Tables.EcuIdentification _ecuIdent)
+        {
+            /////////////////////////
+            Tables.EcuIdentification ecuIdent = ApplicationContext.EcuIdentifications
+        .Where(c => c.IdEcu == _ecuIdent.IdEcu && c.IdIdentifications == _ecuIdent.IdIdentifications)
+        .Single();
+
+            if (ecuIdent == null)
+            {
+                ApplicationContext.EcuIdentifications.Add(ecuIdent);
+                ApplicationContext.SaveChanges();
+                return _ecuIdent;
+            }
+            else
+            {
+                return ecuIdent;
+            }
+        }
+
+
+
     }
 }

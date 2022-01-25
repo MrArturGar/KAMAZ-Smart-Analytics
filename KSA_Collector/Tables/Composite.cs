@@ -8,5 +8,7 @@ namespace KSA_Collector.Tables
         public int Id { get; set; }
         public string DesignNumber { get; set; } = null!;
         public int IdEcu { get; set; }
+
+        public virtual Ecu IdEcuNavigation { get; set; } = null!;
     }
 }

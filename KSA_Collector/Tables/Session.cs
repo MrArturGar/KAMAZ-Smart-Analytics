@@ -5,6 +5,13 @@ namespace KSA_Collector.Tables
 {
     public partial class Session
     {
+        public Session()
+        {
+            AoglonassReports = new HashSet<AoglonassReport>();
+            ProcedureReports = new HashSet<ProcedureReport>();
+            VehiclesEcus = new HashSet<VehiclesEcu>();
+        }
+
         public int Id { get; set; }
         public int IdVehicle { get; set; }
         public string SessionsName { get; set; } = null!;
@@ -18,6 +25,10 @@ namespace KSA_Collector.Tables
         public bool? HasTests { get; set; }
         public bool? HasFlash { get; set; }
 
+        public virtual ServiceCenter IdServiceCentersNavigation { get; set; } = null!;
         public virtual Vehicle IdVehicleNavigation { get; set; } = null!;
+        public virtual ICollection<AoglonassReport> AoglonassReports { get; set; }
+        public virtual ICollection<ProcedureReport> ProcedureReports { get; set; }
+        public virtual ICollection<VehiclesEcu> VehiclesEcus { get; set; }
     }
 }

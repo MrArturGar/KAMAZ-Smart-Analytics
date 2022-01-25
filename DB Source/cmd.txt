@@ -1,0 +1,8 @@
+dotnet user-secrets set ConnectionStrings:Default "Server=(localdb)\mssqllocaldb;Database=KSA_DB;Trusted_Connection=True;"
+dotnet ef dbcontext scaffold Name=ConnectionStrings:Default Microsoft.EntityFrameworkCore.SqlServer
+
+
+Scaffold-DbContext 'Server=(localdb)\mssqllocaldb;Database=KSA_DB;Trusted_Connection=True;' Microsoft.EntityFrameworkCore.SqlServer
+
+
+Scaffold-DbContext -Connection "Server=(localdb)\mssqllocaldb;Database=KSA_DB;Trusted_Connection=True;" -Provider Microsoft.EntityFrameworkCore.SqlServer -OutputDir RRStoreContext.Models -context RRStoreContext -Project RR.DataAccess -force

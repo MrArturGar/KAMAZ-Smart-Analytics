@@ -19,7 +19,7 @@ namespace KSA_Collector.Tables
         public virtual DbSet<AoglonassReport> AoglonassReports { get; set; } = null!;
         public virtual DbSet<Composite> Composites { get; set; } = null!;
         public virtual DbSet<Ecu> Ecus { get; set; } = null!;
-        public virtual DbSet<EcuIdentidication> EcuIdentidications { get; set; } = null!;
+        public virtual DbSet<EcuIdentification> EcuIdentifications { get; set; } = null!;
         public virtual DbSet<Identification> Identifications { get; set; } = null!;
         public virtual DbSet<ProcedureReport> ProcedureReports { get; set; } = null!;
         public virtual DbSet<ServiceCenter> ServiceCenters { get; set; } = null!;
@@ -43,9 +43,7 @@ namespace KSA_Collector.Tables
             {
                 entity.ToTable("AOGlonassReports");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.DateStart)
                     .HasColumnType("datetime")
@@ -60,16 +58,20 @@ namespace KSA_Collector.Tables
                 entity.Property(e => e.Type)
                     .HasMaxLength(255)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.IdSessionNavigation)
+                    .WithMany(p => p.AoglonassReports)
+                    .HasForeignKey(d => d.IdSession)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("AOGlonassReports_fk0");
             });
 
             modelBuilder.Entity<Composite>(entity =>
             {
-                entity.HasIndex(e => e.DesignNumber, "UQ__Composit__37F5005DF44329D9")
+                entity.HasIndex(e => e.DesignNumber, "UQ__Composit__37F5005D5388D5A3")
                     .IsUnique();
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.DesignNumber)
                     .HasMaxLength(32)
@@ -77,44 +79,62 @@ namespace KSA_Collector.Tables
                     .HasColumnName("Design_Number");
 
                 entity.Property(e => e.IdEcu).HasColumnName("id_ECU");
+
+                entity.HasOne(d => d.IdEcuNavigation)
+                    .WithMany(p => p.Composites)
+                    .HasForeignKey(d => d.IdEcu)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Composites_fk0");
             });
 
             modelBuilder.Entity<Ecu>(entity =>
             {
                 entity.ToTable("ECUs");
 
-                entity.HasIndex(e => e.Codifier, "UQ__ECUs__C912939060EC1BD1")
+                entity.HasIndex(e => e.Codifier, "UQ__ECUs__C91293902F0C678E")
                     .IsUnique();
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Codifier)
                     .HasMaxLength(32)
                     .IsUnicode(false);
 
                 entity.Property(e => e.SystemId).HasColumnName("System_id");
+
+                entity.HasOne(d => d.System)
+                    .WithMany(p => p.Ecus)
+                    .HasForeignKey(d => d.SystemId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("ECUs_fk0");
             });
 
-            modelBuilder.Entity<EcuIdentidication>(entity =>
+            modelBuilder.Entity<EcuIdentification>(entity =>
             {
-                entity.ToTable("ECU_Identidication");
+                entity.ToTable("ECU_Identification");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.IdEcu).HasColumnName("id_ECU");
 
                 entity.Property(e => e.IdIdentifications).HasColumnName("id_Identifications");
+
+                entity.HasOne(d => d.IdEcuNavigation)
+                    .WithMany(p => p.EcuIdentifications)
+                    .HasForeignKey(d => d.IdEcu)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("ECU_Identification_fk0");
+
+                entity.HasOne(d => d.IdIdentificationsNavigation)
+                    .WithMany(p => p.EcuIdentifications)
+                    .HasForeignKey(d => d.IdIdentifications)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("ECU_Identification_fk1");
             });
 
             modelBuilder.Entity<Identification>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(255)
@@ -127,9 +147,7 @@ namespace KSA_Collector.Tables
 
             modelBuilder.Entity<ProcedureReport>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Codifier)
                     .HasMaxLength(32)
@@ -161,11 +179,17 @@ namespace KSA_Collector.Tables
                     .IsUnicode(false)
                     .HasColumnName("Using_VIN")
                     .HasDefaultValueSql("('NULL')");
+
+                entity.HasOne(d => d.IdSessionNavigation)
+                    .WithMany(p => p.ProcedureReports)
+                    .HasForeignKey(d => d.IdSession)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("ProcedureReports_fk0");
             });
 
             modelBuilder.Entity<ServiceCenter>(entity =>
             {
-                entity.HasNoKey();
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Address)
                     .HasMaxLength(255)
@@ -179,8 +203,6 @@ namespace KSA_Collector.Tables
                     .HasMaxLength(255)
                     .IsUnicode(false)
                     .HasColumnName("Diler_tr");
-
-                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(255)
@@ -205,15 +227,13 @@ namespace KSA_Collector.Tables
 
             modelBuilder.Entity<Session>(entity =>
             {
-                entity.HasIndex(e => e.Date, "UQ__Sessions__77387D07C6215104")
+                entity.HasIndex(e => e.Date, "UQ__Sessions__77387D07B600300F")
                     .IsUnique();
 
-                entity.HasIndex(e => e.SessionsName, "UQ__Sessions__FF7910ADA6B4AAF6")
+                entity.HasIndex(e => e.SessionsName, "UQ__Sessions__FF7910AD87AD5E4D")
                     .IsUnique();
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
@@ -255,6 +275,12 @@ namespace KSA_Collector.Tables
                     .IsUnicode(false)
                     .HasColumnName("VersionDB");
 
+                entity.HasOne(d => d.IdServiceCentersNavigation)
+                    .WithMany(p => p.Sessions)
+                    .HasForeignKey(d => d.IdServiceCenters)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Sessions_fk1");
+
                 entity.HasOne(d => d.IdVehicleNavigation)
                     .WithMany(p => p.Sessions)
                     .HasForeignKey(d => d.IdVehicle)
@@ -264,12 +290,10 @@ namespace KSA_Collector.Tables
 
             modelBuilder.Entity<System>(entity =>
             {
-                entity.HasIndex(e => e.Name, "UQ__Systems__737584F666A714C3")
+                entity.HasIndex(e => e.Name, "UQ__Systems__737584F6641F6831")
                     .IsUnique();
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Domain)
                     .HasMaxLength(32)
@@ -282,9 +306,7 @@ namespace KSA_Collector.Tables
 
             modelBuilder.Entity<Vehicle>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.DesignNumber)
                     .HasMaxLength(32)
@@ -320,20 +342,28 @@ namespace KSA_Collector.Tables
             {
                 entity.ToTable("Vehicles_ECUs");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.IdIdentifications).HasColumnName("id_Identifications");
 
-                entity.Property(e => e.IdVehicle).HasColumnName("id_Vehicle");
+                entity.Property(e => e.IdSession).HasColumnName("id_Session");
+
+                entity.HasOne(d => d.IdIdentificationsNavigation)
+                    .WithMany(p => p.VehiclesEcus)
+                    .HasForeignKey(d => d.IdIdentifications)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Vehicles_ECUs_fk0");
+
+                entity.HasOne(d => d.IdSessionNavigation)
+                    .WithMany(p => p.VehiclesEcus)
+                    .HasForeignKey(d => d.IdSession)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Vehicles_ECUs_fk1");
             });
 
             OnModelCreatingPartial(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-
     }
 }

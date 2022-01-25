@@ -11,5 +11,7 @@ namespace KSA_Collector.Tables
         public string Type { get; set; } = null!;
         public string Request { get; set; } = null!;
         public string Response { get; set; } = null!;
+
+        public virtual Session IdSessionNavigation { get; set; } = null!;
     }
 }

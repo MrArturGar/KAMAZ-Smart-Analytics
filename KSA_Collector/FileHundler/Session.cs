@@ -224,7 +224,8 @@ namespace KSA_Collector.FileHundler
             }
             set
             {
-                this.idField = value;
+                DataHandler data = new DataHandler();
+                this.idField = data.RemoveDCPrefix(value);
             }
         }
 
