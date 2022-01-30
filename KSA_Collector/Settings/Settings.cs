@@ -13,7 +13,7 @@ namespace KSA_Collector.Settings
         public object Base;
         public Settings(string _name)
         {
-            path = AppDomain.CurrentDomain.BaseDirectory + _name;
+            path = AppDomain.CurrentDomain.BaseDirectory + _name + ".cfg";
         }
         protected bool Load()
         {

@@ -7,38 +7,14 @@ using System.Security.Cryptography;
 
 using KSA_Collector.Settings;
 
-namespace KSA_Collector.FileHundler
+namespace KSA_Collector.Controllers
 {
-    internal class ServiceCentersHandler
+    internal class ServiceCentersControllers
     {
         string Table = "ServiceCenters";
         string username;
         string tempHashPath = "\\Temp\\ServiceCenters.hash";
         string CSV_Path;
-        public ServiceCentersHandler(string _username)
-        {
-            username = _username;
-        }
-
-
-        internal int GetId_ServiceCenters()
-        {
-            int id;
-            using (var sql = new MySQL())
-            {
-                try
-                {
-                    id= sql.GetServiceCenterByUsername(username);
-                }
-                catch
-                {
-                    CheckValidTable();
-                    id = sql.GetServiceCenterByUsername(username);
-                }
-            }
-
-            return id;
-        }
 
         public void CheckValidTable()
         {
@@ -77,10 +53,13 @@ namespace KSA_Collector.FileHundler
 
         private void Insert_db()
         {
-            using (var sql = new MySQL())
-            {
-                sql.ImportCSV(CSV_Path, Table);
-            }
+            //using (StreamReader reader = new StreamReader(CSV_Path, Encoding.UTF8))
+            //{
+            //    CsvReader csvReader = new CsvReader(reader);
+            //    csvReader.Configuration.WillThrowOnMissingField = false;
+            //    var countries = csvReader.GetRecords<Country>().ToArray();
+            //    context.Countries.AddOrUpdate(c => c.Code, countries);
+            //}
         }
 
         private void Update_db()

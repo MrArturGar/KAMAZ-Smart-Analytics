@@ -18,7 +18,7 @@ namespace KSA_Collector.Settings
 
         public int lastDays;
 
-        private  ServiceSettings() : base("ServiceSettings.cfg") { }
+        private  ServiceSettings() : base("ServiceSettings") { }
 
         protected override void AddDefault()
         {

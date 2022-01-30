@@ -9,7 +9,7 @@ namespace KSA_Collector.Tables
         {
             AoglonassReports = new HashSet<AoglonassReport>();
             ProcedureReports = new HashSet<ProcedureReport>();
-            VehiclesEcus = new HashSet<VehiclesEcu>();
+            SessionEcus = new HashSet<SessionEcu>();
         }
 
         public int Id { get; set; }
@@ -29,6 +29,6 @@ namespace KSA_Collector.Tables
         public virtual Vehicle IdVehicleNavigation { get; set; } = null!;
         public virtual ICollection<AoglonassReport> AoglonassReports { get; set; }
         public virtual ICollection<ProcedureReport> ProcedureReports { get; set; }
-        public virtual ICollection<VehiclesEcu> VehiclesEcus { get; set; }
+        public virtual ICollection<SessionEcu> SessionEcus { get; set; }
     }
 }

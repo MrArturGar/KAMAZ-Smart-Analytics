@@ -9,17 +9,12 @@ namespace KSA_Collector.Settings
 {
     public class IdentificationSettings : Settings
     {
-        Dictionary<string, string[]> SignalNames = new Dictionary<string, string[]>();
+        public SignalName[] SignalNames;
         private IdentificationSettings() : base("IdentificationSettings") { }
-
-        public bool HasChanges()
-        {
-            return true;
-        }
-
 
         protected override void AddDefault()
         {
+            SignalNames = new SignalName[1];
             string[] signals = {"VMSWNumber_0xF188",
                                 "VMSWVersionNumber_0xF189",
                                 "SSECUSWNumber_0xF194",
@@ -29,23 +24,41 @@ namespace KSA_Collector.Settings
                                 "VMSWConfigNumber_0xF1A0",
                                 "VMSWConfigVersionNumber_0xF1A0" };
 
-            SignalNames.Add("default", signals);
+            SignalNames[0] = new SignalName()
+            {
+                ECU = "default",
+                Signals = signals
+            };
         }
 
         public static IdentificationSettings GetSettings()
         {
             IdentificationSettings identificationSettings = new IdentificationSettings();
             identificationSettings.Load();
-            return (IdentificationSettings) identificationSettings.Base;
+            return (IdentificationSettings)identificationSettings.Base;
         }
 
 
         public string[] GetSignalNames(string _codifier)
         {
-            if (SignalNames.ContainsKey(_codifier))
-                return SignalNames[_codifier];
-            else
-                return SignalNames["default"];
+            string[] signals;
+            try
+            {
+                signals = SignalNames.Where(c => c.ECU == _codifier).Single().Signals;
+            }
+            catch
+            {
+                signals = SignalNames.Where(c => c.ECU == "default").Single().Signals;
+            }
+
+            return signals;
         }
     }
+
+    public class SignalName
+    {
+        public string ECU { get; set; }
+        public string[] Signals { get; set; }
+    }
+
 }

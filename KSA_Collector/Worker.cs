@@ -1,5 +1,5 @@
 using KSA_Collector.Settings;
-using KSA_Collector.FileHundler;
+using KSA_Collector.Controllers;
 
 namespace KSA_Collector
 {
@@ -41,7 +41,8 @@ namespace KSA_Collector
                     if (sessions[j].LastWriteTime < lastDate)
                         break;
 
-                    DiagSessionHundler files = new DiagSessionHundler(sessions[j]);
+                    DiagSessionController files = new();
+                    files.Load(sessions[j]);
                     //await
                     //break;////
                 }
