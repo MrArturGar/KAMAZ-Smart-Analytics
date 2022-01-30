@@ -9,12 +9,14 @@ namespace KSA_Collector.Settings
 {
     public class IdentificationSettings : Settings
     {
-        public SignalName[] SignalNames;
+        public ECUSignals[] SignalNames;
+
+        public DBTable[] DBTables;
         private IdentificationSettings() : base("IdentificationSettings") { }
 
         protected override void AddDefault()
         {
-            SignalNames = new SignalName[1];
+            SignalNames = new ECUSignals[1];
             string[] signals = {"VMSWNumber_0xF188",
                                 "VMSWVersionNumber_0xF189",
                                 "SSECUSWNumber_0xF194",
@@ -24,10 +26,46 @@ namespace KSA_Collector.Settings
                                 "VMSWConfigNumber_0xF1A0",
                                 "VMSWConfigVersionNumber_0xF1A0" };
 
-            SignalNames[0] = new SignalName()
+            SignalNames[0] = new ECUSignals()
             {
                 ECU = "default",
                 Signals = signals
+            };
+
+            ColumnSignal[] columnSignals =
+
+            {
+                new ColumnSignal()
+                {
+                    ColumnName = "VIN",
+                    SignalName = ""
+
+                },
+                new ColumnSignal()
+                {
+                    ColumnName = "ICCID",
+                    SignalName = ""
+
+                },
+                new ColumnSignal()
+                {
+                    ColumnName = "ICCIDC",
+                    SignalName = ""
+
+                },
+                new ColumnSignal()
+                {
+                    ColumnName = "IMEI",
+                    SignalName = ""
+
+                }
+            };
+
+            DBTables = new DBTable[1];
+            DBTables[0] = new DBTable()
+            {
+                Name = "Vehicles",
+                Columns = columnSignals
             };
         }
 
@@ -55,10 +93,22 @@ namespace KSA_Collector.Settings
         }
     }
 
-    public class SignalName
+    public class ECUSignals
     {
         public string ECU { get; set; }
         public string[] Signals { get; set; }
     }
 
+    public class ColumnSignal
+    {
+        public string ColumnName { get; set; }
+        public string SignalName { get; set; }
+
+    }
+
+    public class DBTable
+    {
+        public string Name { get; set; }
+        public ColumnSignal[] Columns { get; set; }
+    }
 }
