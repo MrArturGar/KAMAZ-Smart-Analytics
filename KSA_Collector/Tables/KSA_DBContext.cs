@@ -24,7 +24,7 @@ namespace KSA_Collector.Tables
         public virtual DbSet<ProcedureReport> ProcedureReports { get; set; } = null!;
         public virtual DbSet<ServiceCenter> ServiceCenters { get; set; } = null!;
         public virtual DbSet<Session> Sessions { get; set; } = null!;
-        public virtual DbSet<SessionEcu> SessionEcus { get; set; } = null!;
+        public virtual DbSet<SessionEcuidentification> SessionEcuidentifications { get; set; } = null!;
         public virtual DbSet<System> Systems { get; set; } = null!;
         public virtual DbSet<Vehicle> Vehicles { get; set; } = null!;
 
@@ -45,18 +45,22 @@ namespace KSA_Collector.Tables
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.Action)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.DateStart)
                     .HasColumnType("datetime")
                     .HasColumnName("Date_start");
 
                 entity.Property(e => e.IdSession).HasColumnName("id_session");
 
-                entity.Property(e => e.Request).HasColumnType("text");
-
-                entity.Property(e => e.Response).HasColumnType("text");
-
-                entity.Property(e => e.Type)
+                entity.Property(e => e.ParamText)
                     .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Status)
+                    .HasMaxLength(32)
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.IdSessionNavigation)
@@ -68,9 +72,6 @@ namespace KSA_Collector.Tables
 
             modelBuilder.Entity<Composite>(entity =>
             {
-                entity.HasIndex(e => e.DesignNumber, "UQ__Composit__37F5005DEBA4F3AB")
-                    .IsUnique();
-
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.DesignNumber)
@@ -91,7 +92,7 @@ namespace KSA_Collector.Tables
             {
                 entity.ToTable("ECUs");
 
-                entity.HasIndex(e => e.Codifier, "UQ__ECUs__C91293904499E0D0")
+                entity.HasIndex(e => e.Codifier, "UQ__ECUs__C9129390D853AD7B")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -149,10 +150,6 @@ namespace KSA_Collector.Tables
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.Codifier)
-                    .HasMaxLength(32)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.DataFiles).HasColumnType("text");
 
                 entity.Property(e => e.DateEnd)
@@ -163,11 +160,11 @@ namespace KSA_Collector.Tables
                     .HasColumnType("datetime")
                     .HasColumnName("Date_start");
 
+                entity.Property(e => e.IdEcu).HasColumnName("id_ECU");
+
                 entity.Property(e => e.IdSession).HasColumnName("id_session");
 
-                entity.Property(e => e.Name)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.Name).HasMaxLength(255);
 
                 entity.Property(e => e.Result)
                     .IsRequired()
@@ -183,57 +180,47 @@ namespace KSA_Collector.Tables
                     .HasColumnName("Using_VIN")
                     .HasDefaultValueSql("('NULL')");
 
+                entity.HasOne(d => d.IdEcuNavigation)
+                    .WithMany(p => p.ProcedureReports)
+                    .HasForeignKey(d => d.IdEcu)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("ProcedureReports_fk0");
+
                 entity.HasOne(d => d.IdSessionNavigation)
                     .WithMany(p => p.ProcedureReports)
                     .HasForeignKey(d => d.IdSession)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("ProcedureReports_fk0");
+                    .HasConstraintName("ProcedureReports_fk1");
             });
 
             modelBuilder.Entity<ServiceCenter>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.Address)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.Address).HasMaxLength(255);
 
-                entity.Property(e => e.City)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.City).HasMaxLength(255);
+
+                entity.Property(e => e.Country).HasMaxLength(255);
 
                 entity.Property(e => e.DilerTr)
                     .HasMaxLength(255)
-                    .IsUnicode(false)
                     .HasColumnName("Diler_tr");
 
-                entity.Property(e => e.Name)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.Name).HasMaxLength(255);
 
-                entity.Property(e => e.Postcode)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.Postcode).HasMaxLength(255);
 
-                entity.Property(e => e.Region)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.Region).HasMaxLength(255);
 
-                entity.Property(e => e.Status)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.Status).HasMaxLength(255);
 
-                entity.Property(e => e.Username)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.Username).HasMaxLength(255);
             });
 
             modelBuilder.Entity<Session>(entity =>
             {
-                entity.HasIndex(e => e.Date, "UQ__Sessions__77387D074864B061")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.SessionsName, "UQ__Sessions__FF7910AD0A80D3B9")
+                entity.HasIndex(e => e.SessionsName, "UQ__Sessions__FF7910ADFC7B529B")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -291,32 +278,32 @@ namespace KSA_Collector.Tables
                     .HasConstraintName("Sessions_fk0");
             });
 
-            modelBuilder.Entity<SessionEcu>(entity =>
+            modelBuilder.Entity<SessionEcuidentification>(entity =>
             {
-                entity.ToTable("Session_ECU");
+                entity.ToTable("Session_ECUIdentification");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.IdIdentifications).HasColumnName("id_Identifications");
+                entity.Property(e => e.IdEcuidentifications).HasColumnName("id_ECUIdentifications");
 
                 entity.Property(e => e.IdSession).HasColumnName("id_Session");
 
-                entity.HasOne(d => d.IdIdentificationsNavigation)
-                    .WithMany(p => p.SessionEcus)
-                    .HasForeignKey(d => d.IdIdentifications)
+                entity.HasOne(d => d.IdEcuidentificationsNavigation)
+                    .WithMany(p => p.SessionEcuidentifications)
+                    .HasForeignKey(d => d.IdEcuidentifications)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Session_ECU_fk0");
+                    .HasConstraintName("Session_ECUIdentification_fk0");
 
                 entity.HasOne(d => d.IdSessionNavigation)
-                    .WithMany(p => p.SessionEcus)
+                    .WithMany(p => p.SessionEcuidentifications)
                     .HasForeignKey(d => d.IdSession)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Session_ECU_fk1");
+                    .HasConstraintName("Session_ECUIdentification_fk1");
             });
 
             modelBuilder.Entity<System>(entity =>
             {
-                entity.HasIndex(e => e.Name, "UQ__Systems__737584F61BDBF266")
+                entity.HasIndex(e => e.Name, "UQ__Systems__737584F6222DDC69")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");

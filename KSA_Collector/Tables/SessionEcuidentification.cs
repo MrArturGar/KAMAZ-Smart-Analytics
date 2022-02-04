@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace KSA_Collector.Tables
 {
-    public partial class SessionEcu
+    public partial class SessionEcuidentification
     {
         public int Id { get; set; }
-        public int IdIdentifications { get; set; }
+        public int IdEcuidentifications { get; set; }
         public int IdSession { get; set; }
 
-        public virtual EcuIdentification IdIdentificationsNavigation { get; set; } = null!;
+        public virtual EcuIdentification IdEcuidentificationsNavigation { get; set; } = null!;
         public virtual Session IdSessionNavigation { get; set; } = null!;
     }
 }

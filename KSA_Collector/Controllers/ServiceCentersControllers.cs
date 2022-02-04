@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 
 using KSA_Collector.Settings;
+using System.Text.RegularExpressions;
 
 namespace KSA_Collector.Controllers
 {
@@ -13,7 +14,7 @@ namespace KSA_Collector.Controllers
     {
         string Table = "ServiceCenters";
         string username;
-        string tempHashPath = "\\Temp\\ServiceCenters.hash";
+        string tempHashPath = Environment.CurrentDirectory + "\\Temp\\ServiceCenters.hash";
         string CSV_Path;
 
         public void CheckValidTable()
@@ -34,6 +35,7 @@ namespace KSA_Collector.Controllers
             else
             {
                 Insert_db();
+                Directory.CreateDirectory(Environment.CurrentDirectory + "\\Temp");
                 File.WriteAllText(tempHashPath, newHash);
             }
         }
@@ -53,13 +55,47 @@ namespace KSA_Collector.Controllers
 
         private void Insert_db()
         {
-            //using (StreamReader reader = new StreamReader(CSV_Path, Encoding.UTF8))
-            //{
-            //    CsvReader csvReader = new CsvReader(reader);
-            //    csvReader.Configuration.WillThrowOnMissingField = false;
-            //    var countries = csvReader.GetRecords<Country>().ToArray();
-            //    context.Countries.AddOrUpdate(c => c.Code, countries);
-            //}
+            List<Tables.ServiceCenter> serviceCenters = new();
+            using (StreamReader reader = new StreamReader(CSV_Path))
+            {
+                reader.ReadLine();//Titles
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] parts = line.Split(';');
+
+                    if (parts.Length == 10)
+                    {
+                        Regex rg = new Regex(@"^\d{1,}[.]\d{1,}$");
+                        if (rg.IsMatch(parts[4].Trim()) && rg.IsMatch(parts[5].Trim()))
+                        {
+                            List<string> buffer = parts.ToList();
+                            buffer[4] = parts[4].Trim() + ", "+ parts[5].Trim();
+                            buffer.RemoveAt(5);
+                            parts = buffer.ToArray();
+                        }
+                    }
+
+
+                    if (parts.Length != 9)
+                        throw new Exception("CSV file is not validate.");
+
+                    serviceCenters.Add(new Tables.ServiceCenter()
+                    {
+                        Name = parts[0],
+                        Address = parts[1],
+                        City = parts[2],
+                        Country = parts[3],
+                        Postcode = parts[4],
+                        Region = parts[5],
+                        Username = parts[6],
+                        Status = parts[7],
+                        DilerTr = parts[8],
+                    });
+                }
+            }
+            DBController dB = new DBController( new Tables.KSA_DBContext());
+            dB.SaveServiceCenter(serviceCenters.ToArray());
         }
 
         private void Update_db()

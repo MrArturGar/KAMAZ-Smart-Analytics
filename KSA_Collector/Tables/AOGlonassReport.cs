@@ -7,10 +7,10 @@ namespace KSA_Collector.Tables
     {
         public int Id { get; set; }
         public int IdSession { get; set; }
-        public DateTime DateStart { get; set; }
-        public string Type { get; set; } = null!;
-        public string Request { get; set; } = null!;
-        public string Response { get; set; } = null!;
+        public DateTime? DateStart { get; set; }
+        public string Action { get; set; } = null!;
+        public string ParamText { get; set; } = null!;
+        public string Status { get; set; } = null!;
 
         public virtual Session IdSessionNavigation { get; set; } = null!;
     }

@@ -6,22 +6,43 @@ using System.Threading.Tasks;
 
 namespace KSA_Collector.Models
 {
-    public class GlonassLog
-    {
-        public List<Action> Actions;
-    }
+
     // Примечание. Для запуска созданного кода может потребоваться NET Framework версии 4.5 или более поздней версии и .NET Core или Standard версии 2.0 или более поздней.
     /// <remarks/>
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
-    public class Action
+    public partial class GlonassLog
     {
 
-        private string requestField;
+        private GlonassLogAction[] actionField;
 
-        private string responseTableField;
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Action")]
+        public GlonassLogAction[] Action
+        {
+            get
+            {
+                return this.actionField;
+            }
+            set
+            {
+                this.actionField = value;
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    public partial class GlonassLogAction
+    {
+
+        private GlonassLogActionRequest requestField;
+
+        private GlonassLogActionResponse[] responseTableField;
 
         private string dateTimeField;
 
@@ -30,7 +51,7 @@ namespace KSA_Collector.Models
         private string usernameField;
 
         /// <remarks/>
-        public string Request
+        public GlonassLogActionRequest Request
         {
             get
             {
@@ -43,7 +64,8 @@ namespace KSA_Collector.Models
         }
 
         /// <remarks/>
-        public string ResponseTable
+        [System.Xml.Serialization.XmlArrayItemAttribute("Response", IsNullable = false)]
+        public GlonassLogActionResponse[] ResponseTable
         {
             get
             {
@@ -102,65 +124,104 @@ namespace KSA_Collector.Models
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public class ActionRequest
+    public partial class GlonassLogActionRequest
     {
-
-        private ulong iccid1Field;
 
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public ulong Iccid1
-        {
-            get
-            {
-                return this.iccid1Field;
-            }
-            set
-            {
-                this.iccid1Field = value;
-            }
-        }
-    }
-
-    /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public class ActionResponseTable
-    {
-
-        private ActionResponseTableResponse[] responseField;
+        public string Iccid1;
 
         /// <remarks/>
-        public ActionResponseTableResponse[] Response
-        {
-            get
-            {
-                return this.responseField;
-            }
-            set
-            {
-                this.responseField = value;
-            }
-        }
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool Iccid1Specified;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Vin1;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string BrandAndModel;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Color;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Iccid;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool IccidSpecified;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Vbn;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool VbnSpecified;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Vin;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Iccid2;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool Iccid2Specified;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Iccid3;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool Iccid3Specified;
     }
 
     /// <remarks/>
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public class ActionResponseTableResponse
+    public partial class GlonassLogActionResponse
     {
 
-        private ulong iccidField;
+        private string iccidField;
+
+        private bool iccidFieldSpecified;
 
         private string requestProcessingStatusField;
 
         private string requestStatusDetailsField;
 
+        private string requestIdField;
+
+        private bool requestIdFieldSpecified;
+
+        private string requestTypeField;
+
+        private string statusField;
+
+        private string vinField;
+
+        private System.DateTime requestDateTimeField;
+
+        private bool requestDateTimeFieldSpecified;
+
+        private string msisdnField;
+
+        private bool msisdnFieldSpecified;
+
+        private string statusDescrField;
+
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public ulong Iccid
+        public string Iccid
         {
             get
             {
@@ -169,6 +230,20 @@ namespace KSA_Collector.Models
             set
             {
                 this.iccidField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool IccidSpecified
+        {
+            get
+            {
+                return this.iccidFieldSpecified;
+            }
+            set
+            {
+                this.iccidFieldSpecified = value;
             }
         }
 
@@ -197,6 +272,146 @@ namespace KSA_Collector.Models
             set
             {
                 this.requestStatusDetailsField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string RequestId
+        {
+            get
+            {
+                return this.requestIdField;
+            }
+            set
+            {
+                this.requestIdField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool RequestIdSpecified
+        {
+            get
+            {
+                return this.requestIdFieldSpecified;
+            }
+            set
+            {
+                this.requestIdFieldSpecified = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string RequestType
+        {
+            get
+            {
+                return this.requestTypeField;
+            }
+            set
+            {
+                this.requestTypeField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Status
+        {
+            get
+            {
+                return this.statusField;
+            }
+            set
+            {
+                this.statusField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Vin
+        {
+            get
+            {
+                return this.vinField;
+            }
+            set
+            {
+                this.vinField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public System.DateTime RequestDateTime
+        {
+            get
+            {
+                return this.requestDateTimeField;
+            }
+            set
+            {
+                this.requestDateTimeField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool RequestDateTimeSpecified
+        {
+            get
+            {
+                return this.requestDateTimeFieldSpecified;
+            }
+            set
+            {
+                this.requestDateTimeFieldSpecified = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Msisdn
+        {
+            get
+            {
+                return this.msisdnField;
+            }
+            set
+            {
+                this.msisdnField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool MsisdnSpecified
+        {
+            get
+            {
+                return this.msisdnFieldSpecified;
+            }
+            set
+            {
+                this.msisdnFieldSpecified = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string StatusDescr
+        {
+            get
+            {
+                return this.statusDescrField;
+            }
+            set
+            {
+                this.statusDescrField = value;
             }
         }
     }

@@ -15,15 +15,28 @@ namespace KSA_Collector.Controllers
             Context = context;
         }
 
+        internal void SaveSessionEcuIdentification(Tables.SessionEcuidentification sessionEcuidentification)
+        {
+            Tables.SessionEcuidentification tmp = Context.SessionEcuidentifications.Where(c => c.IdSession == sessionEcuidentification.IdSession && c.IdEcuidentifications == sessionEcuidentification.IdEcuidentifications).SingleOrDefault();
+
+            if (tmp == null)
+            {
+                tmp = sessionEcuidentification;
+                Context.SessionEcuidentifications.Add(tmp);
+                Context.SaveChanges();
+            }
+        }
 
         internal void SaveComposite(Tables.Composite composite)
         {
-            Tables.Composite tmp = Context.Composites.Where(c => c.DesignNumber == composite.DesignNumber && c.IdEcu == composite.IdEcu).SingleOrDefault();
+            Tables.Composite tmp = Context.Composites.Where(c => c.DesignNumber == composite.DesignNumber && c.IdEcuNavigation == composite.IdEcuNavigation).SingleOrDefault();
 
             if (tmp == null)
-                tmp=composite;
-            Context.Composites.Add(tmp);
-            Context.SaveChanges();
+            {
+                tmp = composite;
+                Context.Composites.Add(tmp);
+                Context.SaveChanges();
+            }
         }
 
         internal void SaveAoglonassReport(Tables.AoglonassReport aoglonassReport)
@@ -31,10 +44,11 @@ namespace KSA_Collector.Controllers
             Tables.AoglonassReport tmp = Context.AoglonassReports.Where(c => c.IdSession == aoglonassReport.IdSession && c.DateStart == aoglonassReport.DateStart).SingleOrDefault();
 
             if (tmp == null)
-                tmp= aoglonassReport;
-
-            Context.AoglonassReports.Add(tmp);
-            Context.SaveChanges();
+            {
+                tmp = aoglonassReport;
+                Context.AoglonassReports.Add(tmp);
+                Context.SaveChanges();
+            }
         }
 
         internal void SaveProcedureReport(Tables.ProcedureReport procedureReport)
@@ -42,21 +56,23 @@ namespace KSA_Collector.Controllers
             Tables.ProcedureReport tmp = Context.ProcedureReports.Where(c => c.IdSession == procedureReport.IdSession).SingleOrDefault();
 
             if (tmp == null)
-                tmp=procedureReport;
-
-            Context.ProcedureReports.Add(tmp);
-            Context.SaveChanges();
+            {
+                tmp = procedureReport;
+                Context.ProcedureReports.Add(tmp);
+                Context.SaveChanges();
+            }
         }
 
-        internal void GetSessionEcu(Tables.SessionEcu sessionEcu)
+        internal void SaveSessionEcu(Tables.SessionEcuidentification sessionEcu)
         {
-            Tables.SessionEcu tmp = Context.SessionEcus.Where(c => c.IdSession == sessionEcu.IdSession && c.IdIdentifications == sessionEcu.IdIdentifications).SingleOrDefault();
+            Tables.SessionEcuidentification tmp = Context.SessionEcuidentifications.Where(c => c.IdSessionNavigation == sessionEcu.IdSessionNavigation && c.IdEcuidentificationsNavigation == sessionEcu.IdEcuidentificationsNavigation).SingleOrDefault();
 
             if (tmp != null)
+            {
                 tmp = sessionEcu;
-
-            Context.SessionEcus.Add(sessionEcu);
-            Context.SaveChanges();
+                Context.SessionEcuidentifications.Add(sessionEcu);
+                Context.SaveChanges();
+            }
         }
 
         internal Tables.System GetSystem(Tables.System system)
@@ -71,7 +87,7 @@ namespace KSA_Collector.Controllers
 
         internal Tables.Ecu GetECU(Tables.Ecu ecu)
         {
-            Tables.Ecu tmp = Context.Ecus.Where(c => c.Codifier == ecu.Codifier && c.SystemId == ecu.SystemId).SingleOrDefault();
+            Tables.Ecu tmp = Context.Ecus.Where(c => c.Codifier == ecu.Codifier).SingleOrDefault();
 
             if (tmp != null)
                 return tmp;
@@ -101,7 +117,7 @@ namespace KSA_Collector.Controllers
 
         internal Tables.Session GetSession(Tables.Session session)
         {
-            Tables.Session tmp = Context.Sessions.Where(c => c.SessionsName == session.SessionsName && c.Date == session.Date).SingleOrDefault();
+            Tables.Session tmp = Context.Sessions.Where(c => c.SessionsName == session.SessionsName).SingleOrDefault();
 
             if (tmp != null)
                 return tmp;
@@ -122,6 +138,12 @@ namespace KSA_Collector.Controllers
         internal Tables.ServiceCenter GetServiceCenter(string username)
         {
             return Context.ServiceCenters.Where(c => c.Username == username).Single();
+        }
+
+        internal void SaveServiceCenter(Tables.ServiceCenter[] serviceCenters)
+        {
+            Context.ServiceCenters.AddRange(serviceCenters);
+            Context.SaveChanges();
         }
     }
 }

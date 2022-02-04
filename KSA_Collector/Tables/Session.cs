@@ -9,7 +9,7 @@ namespace KSA_Collector.Tables
         {
             AoglonassReports = new HashSet<AoglonassReport>();
             ProcedureReports = new HashSet<ProcedureReport>();
-            SessionEcus = new HashSet<SessionEcu>();
+            SessionEcuidentifications = new HashSet<SessionEcuidentification>();
         }
 
         public int Id { get; set; }
@@ -17,9 +17,9 @@ namespace KSA_Collector.Tables
         public string SessionsName { get; set; } = null!;
         public DateTime Date { get; set; }
         public int IdServiceCenters { get; set; }
-        public string VersionDb { get; set; } = null!;
-        public string Vcisn { get; set; } = null!;
-        public double Mileage { get; set; }
+        public string? VersionDb { get; set; }
+        public string? Vcisn { get; set; }
+        public double? Mileage { get; set; }
         public bool? HasIdentifications { get; set; }
         public bool? HasDtc { get; set; }
         public bool? HasTests { get; set; }
@@ -29,6 +29,6 @@ namespace KSA_Collector.Tables
         public virtual Vehicle IdVehicleNavigation { get; set; } = null!;
         public virtual ICollection<AoglonassReport> AoglonassReports { get; set; }
         public virtual ICollection<ProcedureReport> ProcedureReports { get; set; }
-        public virtual ICollection<SessionEcu> SessionEcus { get; set; }
+        public virtual ICollection<SessionEcuidentification> SessionEcuidentifications { get; set; }
     }
 }

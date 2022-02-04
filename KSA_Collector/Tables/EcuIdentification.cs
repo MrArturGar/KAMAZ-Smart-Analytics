@@ -7,7 +7,7 @@ namespace KSA_Collector.Tables
     {
         public EcuIdentification()
         {
-            SessionEcus = new HashSet<SessionEcu>();
+            SessionEcuidentifications = new HashSet<SessionEcuidentification>();
         }
 
         public int Id { get; set; }
@@ -16,6 +16,6 @@ namespace KSA_Collector.Tables
 
         public virtual Ecu IdEcuNavigation { get; set; } = null!;
         public virtual Identification IdIdentificationsNavigation { get; set; } = null!;
-        public virtual ICollection<SessionEcu> SessionEcus { get; set; }
+        public virtual ICollection<SessionEcuidentification> SessionEcuidentifications { get; set; }
     }
 }

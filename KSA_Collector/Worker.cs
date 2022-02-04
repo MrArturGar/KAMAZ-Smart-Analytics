@@ -43,8 +43,7 @@ namespace KSA_Collector
 
                     DiagSessionController files = new();
                     files.Load(sessions[j]);
-                    //await
-                    //break;////
+                    _logger.LogInformation("{time}: {file} Loaded!!!", DateTimeOffset.Now, sessions[j].Name);
                 }
                 break;////
 

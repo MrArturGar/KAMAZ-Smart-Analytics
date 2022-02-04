@@ -182,7 +182,7 @@ namespace KSA_Collector.Models
 
         private sessionMachineNetworksEcusDtcs[] dtcsField;
 
-        private Identifications[] identificationsField;
+        private Identification[] identificationsField;
 
         private string idField;
 
@@ -204,7 +204,7 @@ namespace KSA_Collector.Models
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("identifications")]
-        public Identifications[] identifications
+        public Identification[] identifications
         {
             get
             {
@@ -492,7 +492,7 @@ namespace KSA_Collector.Models
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    public partial class Identifications
+    public partial class Identification
     {
         public string id;
 
@@ -676,13 +676,14 @@ namespace KSA_Collector.Models
     public class EcuProcedure
     {
         public string name { get; set; }
-        public bool result { get; set; }
+        public string result { get; set; }
         public string timestampStart { get; set; }
         public string timestamp { get; set; }
         public string VIN { get; set; }
         public string VINForFlash { get; set; }
         public string flashDataFile { get; set; }
         public string versionDB { get; set; }
+
     }
 
 }

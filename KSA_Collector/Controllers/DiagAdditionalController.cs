@@ -44,8 +44,11 @@ namespace KSA_Collector.Controllers
         {
             CommonInfo = new CommonInfo();
             string[] lines = source.Split('\n');
-            for (int i = 0; i< lines.Length; i++)
+            for (int i = 0; i < lines.Length; i++)
             {
+                if (lines[i] == "")
+                    continue;
+
                 string[] parts = lines[i].Split(' ');
                 switch (parts[3])
                 {
@@ -81,7 +84,10 @@ namespace KSA_Collector.Controllers
                         }
                     case "Mileage:":
                         {
-                            CommonInfo.Mileage = Convert.ToDouble(parts[4]);
+                            if (parts[4] != "")
+                                CommonInfo.Mileage = Convert.ToDouble(parts[4]);
+                            else
+                                CommonInfo.Mileage = -1.0;
                             break;
                         }
                     case "VersionDatabase:":
@@ -92,23 +98,42 @@ namespace KSA_Collector.Controllers
                 }
             }
         }
-    
+
         private void LoadGlonassLog(string source)
         {
             GlonassLog = new GlonassLog();
-            GlonassLog.Actions = new List<Models.Action>();
             string[] lines = source.Split('\n');
+            GlonassLog.Action = new Models.GlonassLogAction[lines.Length];
             for (int i = 0; i < lines.Length; i++)
             {
                 int startInd = lines[i].IndexOf("<Action");
                 string xml = lines[i].Substring(startInd);
 
-                XmlSerializer serializer = new XmlSerializer(typeof(Models.Action));
-                Models.Action tmp = (Models.Action) serializer.Deserialize(new StringReader(xml));
+                XmlSerializer serializer = new XmlSerializer(typeof(Models.GlonassLogAction));
+                Models.GlonassLogAction tmp = (Models.GlonassLogAction)serializer.Deserialize(new StringReader(xml));
 
                 if (tmp != null)
-                    GlonassLog.Actions.Add(tmp);
+                    GlonassLog.Action[i] = tmp;
             }
+        }
+
+        public string GetGlonassActionResponseParam(GlonassLogActionResponse response)
+        {
+            if (!string.IsNullOrEmpty(response.Iccid))
+                return response.Iccid;
+
+            if (!string.IsNullOrEmpty(response.Vin))
+                return response.Vin;
+
+            return response.RequestId;
+        }
+
+        public string GetGlonassActionResponseStatus(GlonassLogActionResponse response)
+        {
+            if (!string.IsNullOrEmpty(response.Status))
+                return response.Status;
+
+            return response.RequestProcessingStatus;
         }
     }
 }

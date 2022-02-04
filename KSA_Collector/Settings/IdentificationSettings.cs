@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
@@ -11,7 +12,7 @@ namespace KSA_Collector.Settings
     {
         public ECUSignals[] SignalNames;
 
-        public DBTable[] DBTables;
+        public ECU_For_Tables[] TablesSignals;
         private IdentificationSettings() : base("IdentificationSettings") { }
 
         protected override void AddDefault()
@@ -32,40 +33,40 @@ namespace KSA_Collector.Settings
                 Signals = signals
             };
 
-            ColumnSignal[] columnSignals =
+            TablesSignals = new ECU_For_Tables[1];
 
+            TablesSignals[0] = new ECU_For_Tables()
             {
-                new ColumnSignal()
-                {
-                    ColumnName = "VIN",
-                    SignalName = ""
+                EcuCodifierPattern = "K_T_TP_015_",
+                Signals = new ColumnSignal[]
+                    {
+                        new ColumnSignal()
+                        {
+                            TableName = "Vehicles",
+                            ColumnName = "Vin",
+                            SignalName = "Read_VehicleIdentificationNumber"
+                        },
+                        new ColumnSignal()
+                        {
+                            TableName = "Vehicles",
+                            ColumnName = "Iccid",
+                            SignalName = "Read_SimIdentifier"
+                        },
+                        new ColumnSignal()
+                        {
+                            TableName = "Vehicles",
+                            ColumnName = "Iccidc",
+                            SignalName = "Read_CommSimIdentifier"
+                        },
+                        new ColumnSignal()
+                        {
+                            TableName = "Vehicles",
+                            ColumnName="Imei",
+                            SignalName ="Read_IMEI"
+                        }
+                    }
 
-                },
-                new ColumnSignal()
-                {
-                    ColumnName = "ICCID",
-                    SignalName = ""
 
-                },
-                new ColumnSignal()
-                {
-                    ColumnName = "ICCIDC",
-                    SignalName = ""
-
-                },
-                new ColumnSignal()
-                {
-                    ColumnName = "IMEI",
-                    SignalName = ""
-
-                }
-            };
-
-            DBTables = new DBTable[1];
-            DBTables[0] = new DBTable()
-            {
-                Name = "Vehicles",
-                Columns = columnSignals
             };
         }
 
@@ -80,16 +81,44 @@ namespace KSA_Collector.Settings
         public string[] GetSignalNames(string _codifier)
         {
             string[] signals;
-            try
-            {
-                signals = SignalNames.Where(c => c.ECU == _codifier).Single().Signals;
-            }
-            catch
-            {
+            var ecu_sginal = SignalNames.Where(c => c.ECU == _codifier).SingleOrDefault();
+
+            if (ecu_sginal != null)
+                signals = ecu_sginal.Signals;
+            else
                 signals = SignalNames.Where(c => c.ECU == "default").Single().Signals;
-            }
 
             return signals;
+        }
+
+        public bool HasEcuNameForTables(string _codifier)
+        {
+            for (int i = 0; i < TablesSignals.Length; i++)
+            {
+                string name = TablesSignals[i].EcuCodifierPattern;
+                if (Regex.IsMatch(_codifier, name))
+                    return true;
+            }
+            return false;
+        }
+
+        public ColumnSignal GetColumnSignal(string _codifier, string _signalName)
+        {
+            for (int i = 0; i < TablesSignals.Length; i++)
+            {
+                string name = TablesSignals[i].EcuCodifierPattern;
+                if (Regex.IsMatch(_codifier, name))
+                {
+                    var signals = TablesSignals[i].Signals;
+                    for (int j = 0; j < signals.Length; j++)
+                    {
+                        if (signals[j].SignalName == _signalName)
+                            return signals[j];
+                    }
+                    break;
+                }
+            }
+            return null;
         }
     }
 
@@ -99,16 +128,17 @@ namespace KSA_Collector.Settings
         public string[] Signals { get; set; }
     }
 
-    public class ColumnSignal
+    public class ECU_For_Tables
     {
-        public string ColumnName { get; set; }
-        public string SignalName { get; set; }
+        public string EcuCodifierPattern { get; set; }
 
+        public ColumnSignal[] Signals { get; set; }
     }
 
-    public class DBTable
+    public class ColumnSignal
     {
-        public string Name { get; set; }
-        public ColumnSignal[] Columns { get; set; }
+        public string TableName { get; set; }
+        public string SignalName { get; set; }
+        public string ColumnName { get; set; }
     }
 }

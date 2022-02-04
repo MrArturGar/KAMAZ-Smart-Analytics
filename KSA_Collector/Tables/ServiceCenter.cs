@@ -14,6 +14,7 @@ namespace KSA_Collector.Tables
         public string Name { get; set; } = null!;
         public string Address { get; set; } = null!;
         public string City { get; set; } = null!;
+        public string Country { get; set; } = null!;
         public string Postcode { get; set; } = null!;
         public string Region { get; set; } = null!;
         public string Username { get; set; } = null!;
