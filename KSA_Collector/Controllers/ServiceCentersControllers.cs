@@ -102,5 +102,10 @@ namespace KSA_Collector.Controllers
         {
             Insert_db();
         }
+    
+        public void DeleteHash()
+        {
+            File.Delete(tempHashPath);
+        }
     }
 }

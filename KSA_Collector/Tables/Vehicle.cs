@@ -13,10 +13,10 @@ namespace KSA_Collector.Tables
         public int Id { get; set; }
         public string Vin { get; set; } = null!;
         public string DesignNumber { get; set; } = null!;
-        public string Iccid { get; set; } = null!;
-        public string Iccidc { get; set; } = null!;
-        public string Imei { get; set; } = null!;
-        public string Type { get; set; } = null!;
+        public string? Iccid { get; set; }
+        public string? Iccidc { get; set; }
+        public string? Imei { get; set; }
+        public string? Type { get; set; }
 
         public virtual ICollection<Session> Sessions { get; set; }
     }

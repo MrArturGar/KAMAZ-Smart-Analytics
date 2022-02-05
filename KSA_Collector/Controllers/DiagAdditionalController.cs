@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,7 @@ namespace KSA_Collector.Controllers
 
         private void OpenZIP(string path)
         {
+            if (path !=null)
             using (ZipArchive archive = ZipFile.OpenRead(path))
             {
                 var sample = archive.GetEntry("CommonInfo.log");
@@ -85,7 +87,7 @@ namespace KSA_Collector.Controllers
                     case "Mileage:":
                         {
                             if (parts[4] != "")
-                                CommonInfo.Mileage = Convert.ToDouble(parts[4]);
+                                CommonInfo.Mileage = Convert.ToDouble(parts[4], new NumberFormatInfo { NumberDecimalSeparator = "."});
                             else
                                 CommonInfo.Mileage = -1.0;
                             break;

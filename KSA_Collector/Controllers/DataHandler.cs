@@ -71,5 +71,10 @@ namespace KSA_Collector.Controllers
             string[] parts = _codifier.Split('_');
             return parts[parts.Length - 1];
         }
+
+        public string GetSessionVin(string sessionId)
+        {
+            return sessionId.Split('@').First();
+        }
     }
 }

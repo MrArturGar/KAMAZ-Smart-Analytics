@@ -27,26 +27,33 @@ namespace KSA_Collector
             sessionFolders = sessionFolders.OrderByDescending(folder => folder.LastWriteTime).ToArray();
 
             DateTime lastDate = settings.lastDays != 0 ? DateTime.Now.AddDays(-settings.lastDays) : new DateTime();
+            int countFolder = sessionFolders.Length;
 
-            for (int i = 0; i < sessionFolders.Length; i++)
+            for (int i = 0; i < countFolder; i++)
             {
                 if (sessionFolders[i].LastWriteTime < lastDate)
                     break;
 
                 DirectoryInfo[] sessions = sessionFolders[i].GetDirectories();
-                sessionFolders = sessionFolders.OrderByDescending(folder => folder.LastWriteTime).ToArray();
+                sessions = sessions.OrderByDescending(folder => folder.LastWriteTime).ToArray();
 
-                for (int j = 0; j < sessions.Length; j++)
+                _logger.LogInformation($"{DateTimeOffset.Now.ToString("HH:mm:ss")}: ({i+1}/{countFolder}) {sessionFolders[i].Name} Started...");
+
+                int countSessions = sessions.Length;
+                for (int j = 0; j < countSessions; j++)
                 {
                     if (sessions[j].LastWriteTime < lastDate)
                         break;
 
+                    System.Diagnostics.Stopwatch swatch = new System.Diagnostics.Stopwatch();
+                    swatch.Start();
+
                     DiagSessionController files = new();
                     files.Load(sessions[j]);
-                    _logger.LogInformation("{time}: {file} Loaded!!!", DateTimeOffset.Now, sessions[j].Name);
-                }
-                break;////
+                    swatch.Stop();
 
+                    _logger.LogInformation($"{DateTimeOffset.Now.ToString("HH: mm:ss")}: {sessionFolders[i].Name} ({j+1}/{countSessions}) Timer: {swatch.Elapsed}");
+                }
             }
 
             return Task.CompletedTask;
@@ -56,5 +63,6 @@ namespace KSA_Collector
         {
             throw new NotImplementedException();
         }
+
     }
 }

@@ -92,7 +92,7 @@ namespace KSA_Collector.Tables
             {
                 entity.ToTable("ECUs");
 
-                entity.HasIndex(e => e.Codifier, "UQ__ECUs__C9129390D853AD7B")
+                entity.HasIndex(e => e.Codifier, "UQ__ECUs__C9129390AFAE9053")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -135,15 +135,16 @@ namespace KSA_Collector.Tables
 
             modelBuilder.Entity<Identification>(entity =>
             {
+                entity.HasIndex(e => new { e.Name, e.Value }, "Identifications_fk0")
+                    .IsUnique();
+
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Value)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.Value).HasMaxLength(255);
             });
 
             modelBuilder.Entity<ProcedureReport>(entity =>
@@ -220,7 +221,7 @@ namespace KSA_Collector.Tables
 
             modelBuilder.Entity<Session>(entity =>
             {
-                entity.HasIndex(e => e.SessionsName, "UQ__Sessions__FF7910ADFC7B529B")
+                entity.HasIndex(e => e.SessionsName, "UQ__Sessions__FF7910AD0670EF93")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -303,7 +304,7 @@ namespace KSA_Collector.Tables
 
             modelBuilder.Entity<System>(entity =>
             {
-                entity.HasIndex(e => e.Name, "UQ__Systems__737584F6222DDC69")
+                entity.HasIndex(e => e.Name, "UQ__Systems__737584F6B049DA4E")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -319,6 +320,9 @@ namespace KSA_Collector.Tables
 
             modelBuilder.Entity<Vehicle>(entity =>
             {
+                entity.HasIndex(e => new { e.Vin, e.DesignNumber, e.Iccid, e.Iccidc, e.Imei, e.Type }, "Vehicles_fk0")
+                    .IsUnique();
+
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.DesignNumber)

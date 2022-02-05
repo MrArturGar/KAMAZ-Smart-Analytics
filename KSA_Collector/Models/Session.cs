@@ -26,6 +26,8 @@ namespace KSA_Collector.Models
 
         private string usernameField;
 
+        public sessionInfo sessionInfo { get; set; }
+
         /// <remarks/>
         public string id
         {
@@ -77,7 +79,7 @@ namespace KSA_Collector.Models
 
         private sessionMachineNetworks networksField;
 
-        private sessionMachineTestResults testResultsField;
+        private sessionMachineTestResults[] testResultsField;
 
         /// <remarks/>
         public string id
@@ -106,7 +108,8 @@ namespace KSA_Collector.Models
         }
 
         /// <remarks/>
-        public sessionMachineTestResults testResults
+        [System.Xml.Serialization.XmlElementAttribute("testResults")]
+        public sessionMachineTestResults[] testResults
         {
             get
             {
@@ -652,25 +655,83 @@ namespace KSA_Collector.Models
             }
             set
             {
-                try
+                if (value.Length < 150)
+                    this.dataField = value;
+                else
                 {
+
                     string[] temp = value.Split("}, ");
-                    Tests = new EcuProcedure[temp.Length];
+                    var buffer = new EcuProcedure[temp.Length];
                     for (int i = 0; i < temp.Length; i++)
                     {
                         if (i != temp.Length - 1)
                             temp[i] += "}";
 
-                        Tests[i] = JsonSerializer.Deserialize<EcuProcedure>(temp[i]);
+                        buffer[i] = JsonSerializer.Deserialize<EcuProcedure>(temp[i]);
                     }
-                }
-                catch
-                {
-                    this.dataField = value;
+                    Tests = buffer;
                 }
             }
         }
     }
+
+
+    // Примечание. Для запуска созданного кода может потребоваться NET Framework версии 4.5 или более поздней версии и .NET Core или Standard версии 2.0 или более поздней.
+    /// <remarks/>
+    [System.SerializableAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
+    public partial class sessionInfo
+    {
+
+        private string usernameField;
+
+        private string productVersionField;
+
+        private string lastSelectedToolField;
+
+        /// <remarks/>
+        public string username
+        {
+            get
+            {
+                return this.usernameField;
+            }
+            set
+            {
+                this.usernameField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string productVersion
+        {
+            get
+            {
+                return this.productVersionField;
+            }
+            set
+            {
+                this.productVersionField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string lastSelectedTool
+        {
+            get
+            {
+                return this.lastSelectedToolField;
+            }
+            set
+            {
+                this.lastSelectedToolField = value;
+            }
+        }
+    }
+
+
 
 
     public class EcuProcedure

@@ -2,10 +2,10 @@ CREATE TABLE [Vehicles] (
 	id integer IDENTITY(1,1),
 	VIN varchar(32) NOT NULL,
 	Design_Number varchar(32) NOT NULL,
-	ICCID varchar(32) NOT NULL,
-	ICCIDC varchar(32) NOT NULL,
-	IMEI varchar(32) NOT NULL,
-	Type varchar(32) NOT NULL,
+	ICCID varchar(32),
+	ICCIDC varchar(32),
+	IMEI varchar(32),
+	Type varchar(32),
   CONSTRAINT [PK_VEHICLES] PRIMARY KEY CLUSTERED
   (
   [id] ASC
@@ -43,7 +43,7 @@ CREATE TABLE [ProcedureReports] (
 	Date_start datetime,
 	Date_end datetime NOT NULL,
 	Using_VIN varchar(32) DEFAULT 'NULL',
-	DataFiles text NOT NULL,
+	DataFiles text,
   CONSTRAINT [PK_PROCEDUREREPORTS] PRIMARY KEY CLUSTERED
   (
   [id] ASC
@@ -67,7 +67,7 @@ CREATE TABLE [AOGlonassReports] (
 GO
 CREATE TABLE [Systems] (
 	id integer IDENTITY(1,1),
-	Name varchar(32) NOT NULL UNIQUE,
+	Name varchar(32) NOT NULL,
 	Domain varchar(32) NOT NULL,
   CONSTRAINT [PK_SYSTEMS] PRIMARY KEY CLUSTERED
   (
@@ -90,12 +90,11 @@ GO
 CREATE TABLE [Identifications] (
 	id integer IDENTITY(1,1),
 	Name varchar(255) NOT NULL,
-	Value varchar(255) NOT NULL,
+	Value nvarchar(255),
   CONSTRAINT [PK_IDENTIFICATIONS] PRIMARY KEY CLUSTERED
   (
   [id] ASC
   ) WITH (IGNORE_DUP_KEY = OFF)
-
 )
 GO
 CREATE TABLE [ECU_Identification] (
@@ -214,3 +213,17 @@ GO
 ALTER TABLE [Composites] CHECK CONSTRAINT [Composites_fk0]
 GO
 
+ALTER TABLE [Identifications] WITH CHECK ADD CONSTRAINT [Identifications_fk0] UNIQUE (Name, Value)
+GO
+ALTER TABLE [Identifications] CHECK CONSTRAINT [Identifications_fk0]
+GO
+
+ALTER TABLE [Vehicles] WITH CHECK ADD CONSTRAINT [Vehicles_fk0] UNIQUE (VIN, Design_Number, ICCID, ICCIDC, IMEI, Type)
+GO
+ALTER TABLE [Vehicles] CHECK CONSTRAINT [Vehicles_fk0]
+GO
+
+ALTER TABLE [Systems] WITH CHECK ADD CONSTRAINT [Systems_fk0] UNIQUE (Name, Domain)
+GO
+ALTER TABLE [Systems] CHECK CONSTRAINT [Systems_fk0]
+GO

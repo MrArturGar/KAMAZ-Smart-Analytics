@@ -15,8 +15,9 @@ namespace KSA_Collector.Controllers
         DBController DB;
         Settings.IdentificationSettings IdentificationSettings;
         DataHandler Data;
-        Tables.Vehicle Vehicle = new Tables.Vehicle();
-        Tables.Session Session = new Tables.Session();
+        Tables.Vehicle Vehicle = new();
+        Tables.Session Session = new();
+        List<Tables.SessionEcuidentification> sessionEcuidentification = new();
         string AdditionalArchivePath;
 
         public DiagSessionController()
@@ -69,36 +70,39 @@ namespace KSA_Collector.Controllers
             string design_number = session.machine.networks.id;
             var ecus = session.machine.networks.ecus;
 
-            Tables.Ecu[] ecus_tables = new Tables.Ecu[ecus.Count()];
-
-            for (int i = 0; i < ecus.Count(); i++)
+            if (ecus != null)
             {
-                var ecu = ecus[i];
-                string codifier = ecus[i].id;
+                Tables.Ecu[] ecus_tables = new Tables.Ecu[ecus.Count()];
 
-                Tables.System system = new Tables.System()
+                for (int i = 0; i < ecus.Count(); i++)
                 {
-                    Name = Data.GetSystemName(codifier),
-                    Domain = Data.GetDomainName(codifier)
-                };
-                system = DB.GetSystem(system);
+                    var ecu = ecus[i];
+                    string codifier = ecus[i].id;
 
-                ecus_tables[i] = new Tables.Ecu()
-                {
-                    Codifier = codifier,
-                    System = system
-                };
-                ecus_tables[i] = DB.GetECU(ecus_tables[i]);
+                    Tables.System system = new Tables.System()
+                    {
+                        Name = Data.GetSystemName(codifier),
+                        Domain = Data.GetDomainName(codifier)
+                    };
+                    system = DB.GetSystem(system);
 
-                Tables.Composite composite = new Tables.Composite()
-                {
-                    DesignNumber = session.machine.networks.displayName,
-                    IdEcuNavigation = ecus_tables[i]
-                };
-                DB.SaveComposite(composite);
+                    ecus_tables[i] = new Tables.Ecu()
+                    {
+                        Codifier = codifier,
+                        System = system
+                    };
+                    ecus_tables[i] = DB.GetECU(ecus_tables[i]);
 
-                SetEcuIdentifications(ecus[i], ecus_tables[i]);
+                    Tables.Composite composite = new Tables.Composite()
+                    {
+                        DesignNumber = session.machine.networks.displayName,
+                        IdEcuNavigation = ecus_tables[i]
+                    };
+                    DB.SaveComposite(composite);
 
+                    SetEcuIdentifications(ecus[i], ecus_tables[i]);
+
+                }
             }
         }
 
@@ -134,6 +138,7 @@ namespace KSA_Collector.Controllers
                             IdIdentificationsNavigation = ident
                         };
                         ecu_ident = DB.GetEcuIdentification(ecu_ident);
+                        sessionEcuidentification.Add(new Tables.SessionEcuidentification() { IdEcuidentificationsNavigation = ecu_ident });
                     }
 
                     if (hasTable)
@@ -169,32 +174,61 @@ namespace KSA_Collector.Controllers
                     }
                 }
             }
-        } 
+        }
 
         private void LoadSession(Models.session sessionFile)
         {
             DiagAdditionalController diag = new DiagAdditionalController(AdditionalArchivePath);
-            Session = new Tables.Session()
+
+            string username;
+            if (sessionFile.username != null)
+                username = sessionFile.username;
+            else if (sessionFile.sessionInfo != null)
+                username = sessionFile.sessionInfo.username;
+            else
+                username = "";
+
+
+            Session.IdVehicleNavigation = Vehicle;
+            Session.SessionsName = sessionFile.id;
+            Session.Date = Data.GetSessionDate(sessionFile.id);
+            Session.IdServiceCentersNavigation = DB.GetServiceCenter(username);
+            if (diag.CommonInfo != null)
             {
-                IdVehicleNavigation = Vehicle,
-                SessionsName = sessionFile.id,
-                Date = Data.GetSessionDate(sessionFile.id),
-                IdServiceCentersNavigation = DB.GetServiceCenter(sessionFile.username),
-                VersionDb = diag.CommonInfo.VersionDatabase,
-                Vcisn = diag.CommonInfo.VCINumber,
-                Mileage = diag.CommonInfo.Mileage
-            };
+                Session.VersionDb = diag.CommonInfo.VersionDatabase;
+                Session.Vcisn = diag.CommonInfo.VCINumber;
+                Session.Mileage = diag.CommonInfo.Mileage;
+            }
             Session = DB.GetSession(Session);
-            Vehicle = DB.GetVehicle(Vehicle);
+
 
             SetProcedureReport(Session, sessionFile.machine.testResults);
             SetAoglonassReport(Session, diag);
+
+            if (sessionEcuidentification.Count != 0)
+                LoadSessionEcuIdentification();
+            else
+                DB.SaveSession(Session);
+        }
+
+        private void LoadSessionEcuIdentification()
+        {
+            for (int i = 0; i < sessionEcuidentification.Count; i++)
+            {
+                sessionEcuidentification[i].IdSessionNavigation = Session;
+                DB.SaveSessionEcuIdentification(sessionEcuidentification[i]);
+            }
         }
 
         private void LoadVehicle(Models.session session)
         {
             Vehicle.DesignNumber = session.machine.networks.displayName;
             Vehicle.Type = session.machine.networks.id;
+
+            if (Vehicle.Vin == null)
+                Vehicle.Vin = Data.GetSessionVin(session.id);
+
+            Vehicle = DB.GetVehicle(Vehicle);
         }
 
         private void SetAoglonassReport(Tables.Session session, DiagAdditionalController diag)
@@ -221,46 +255,53 @@ namespace KSA_Collector.Controllers
             }
         }
 
-        private void SetProcedureReport(Tables.Session session, Models.sessionMachineTestResults procedures)
+        private void SetProcedureReport(Tables.Session session, Models.sessionMachineTestResults[] procedures)
         {
-            for (int i = 0; i < procedures.Tests.Length; i++)
+            if (procedures != null)
             {
-                string codifier = Data.GetProcedureECUCodifier(procedures.id);
-
-                Tables.System system = new()
+                for (int j = 0; j < procedures.Length; j++)
                 {
-                    Name = Data.GetSystemName(codifier),
-                    Domain = Data.GetDomainName(codifier)
-                };
-                system = DB.GetSystem(system);
+                    if (procedures[j].Tests != null)
+                        for (int i = 0; i < procedures[j].Tests.Length; i++)
+                        {
+                            string codifier = Data.GetProcedureECUCodifier(procedures[j].id);
 
-                Tables.Ecu ecu = new()
-                {
-                    Codifier = codifier,
-                    System = system
-                };
-                ecu = DB.GetECU(ecu);
+                            Tables.System system = new()
+                            {
+                                Name = Data.GetSystemName(codifier),
+                                Domain = Data.GetDomainName(codifier)
+                            };
+                            system = DB.GetSystem(system);
 
-                string type = Data.GetProcedureECUType(procedures.id);
-                var test = procedures.Tests[i];
-                Tables.ProcedureReport report = new()
-                {
-                    IdSessionNavigation = session,
-                    IdEcuNavigation = ecu,
-                    Type = type,
-                    Name = test.name,//////
-                    Result = test.result == "true" ? true : false,
-                    DateStart = Data.GetAOGlonassDate(test.timestampStart),
-                    DateEnd = Data.GetAOGlonassDate(test.timestamp),
-                    UsingVin = String.IsNullOrEmpty(test.VINForFlash) ? test.VIN : test.VINForFlash,
-                    DataFiles = test.flashDataFile
-                };
-                DB.SaveProcedureReport(report);
+                            Tables.Ecu ecu = new()
+                            {
+                                Codifier = codifier,
+                                System = system
+                            };
+                            ecu = DB.GetECU(ecu);
 
-                if (type == "Flash")
-                    Session.HasFlash = true;
-                else if (type == "Test")
-                    Session.HasTests = true;
+                            string type = Data.GetProcedureECUType(procedures[j].id);
+                            var test = procedures[j].Tests[i];
+                            Tables.ProcedureReport report = new()
+                            {
+                                IdSessionNavigation = session,
+                                IdEcuNavigation = ecu,
+                                Type = type,
+                                Name = test.name,//////
+                                Result = test.result == "true" ? true : false,
+                                DateStart = Data.GetAOGlonassDate(test.timestampStart),
+                                DateEnd = Data.GetAOGlonassDate(test.timestamp),
+                                UsingVin = String.IsNullOrEmpty(test.VINForFlash) ? test.VIN : test.VINForFlash,
+                                DataFiles = test.flashDataFile
+                            };
+                            DB.SaveProcedureReport(report);
+
+                            if (type == "Flash")
+                                Session.HasFlash = true;
+                            else if (type == "Test")
+                                Session.HasTests = true;
+                        }
+                }
             }
         }
 
