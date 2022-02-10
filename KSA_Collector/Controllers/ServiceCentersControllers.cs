@@ -55,7 +55,7 @@ namespace KSA_Collector.Controllers
 
         private void Insert_db()
         {
-            List<Tables.ServiceCenter> serviceCenters = new();
+            DBController dB = new DBController(new Tables.KSA_DBContext());
             using (StreamReader reader = new StreamReader(CSV_Path))
             {
                 reader.ReadLine();//Titles
@@ -80,7 +80,7 @@ namespace KSA_Collector.Controllers
                     if (parts.Length != 9)
                         throw new Exception("CSV file is not validate.");
 
-                    serviceCenters.Add(new Tables.ServiceCenter()
+                    var service = new Tables.ServiceCenter()
                     {
                         Name = parts[0],
                         Address = parts[1],
@@ -91,11 +91,10 @@ namespace KSA_Collector.Controllers
                         Username = parts[6],
                         Status = parts[7],
                         DilerTr = parts[8],
-                    });
+                    };
+                    dB.SaveServiceCenter(service);
                 }
             }
-            DBController dB = new DBController( new Tables.KSA_DBContext());
-            dB.SaveServiceCenter(serviceCenters.ToArray());
         }
 
         private void Update_db()

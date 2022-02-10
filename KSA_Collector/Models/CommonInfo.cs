@@ -14,7 +14,7 @@ namespace KSA_Collector.Models
         public string ICCID { get; set; }
         public string User { get; set; }
         public string VCINumber { get; set; }
-        public double Mileage { get; set; }
+        public double? Mileage { get; set; }
         public string VersionDatabase { get; set; }
     }
 }

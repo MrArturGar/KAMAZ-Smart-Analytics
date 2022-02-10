@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace KSA_Collector.Models
 {
@@ -36,7 +37,7 @@ namespace KSA_Collector.Models
     /// <remarks/>
     [System.SerializableAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [XmlRoot("Action"), XmlType("Action")]
     public partial class GlonassLogAction
     {
 
@@ -138,6 +139,14 @@ namespace KSA_Collector.Models
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string Vin1;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Vin2;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Vin3;
 
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
@@ -418,3 +427,5 @@ namespace KSA_Collector.Models
 
 
 }
+
+

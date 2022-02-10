@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace KSA_Collector.Controllers
@@ -50,11 +51,17 @@ namespace KSA_Collector.Controllers
 
             return DateTime.ParseExact(dateString, "yyyy-MM-dd_HH-mm-ss", null);
         }
-        public DateTime? GetAOGlonassDate(string _sessionName)
+        public DateTime? GetProcedureDateOrNull(string _sessionName)
         {
             if (string.IsNullOrEmpty(_sessionName))
                 return null;
             //12.10.2020 14:03:54
+            string dateString = _sessionName.Split('@').Last();
+
+            return DateTime.ParseExact(dateString, "dd.MM.yyyy HH:mm:ss", null);
+        }
+        public DateTime GetProcedureDate(string _sessionName)
+        {
             string dateString = _sessionName.Split('@').Last();
 
             return DateTime.ParseExact(dateString, "dd.MM.yyyy HH:mm:ss", null);

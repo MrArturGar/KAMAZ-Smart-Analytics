@@ -12,7 +12,7 @@ namespace KSA_Collector.Tables
         public string Name { get; set; } = null!;
         public bool? Result { get; set; }
         public DateTime? DateStart { get; set; }
-        public DateTime? DateEnd { get; set; }
+        public DateTime DateEnd { get; set; }
         public string? UsingVin { get; set; }
         public string? DataFiles { get; set; }
 

@@ -7,7 +7,7 @@ namespace KSA_Collector.Tables
     {
         public int Id { get; set; }
         public int IdSession { get; set; }
-        public DateTime? DateStart { get; set; }
+        public DateTime DateStart { get; set; }
         public string Action { get; set; } = null!;
         public string ParamText { get; set; } = null!;
         public string Status { get; set; } = null!;

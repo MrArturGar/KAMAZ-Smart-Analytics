@@ -50,15 +50,23 @@ namespace KSA_Collector.Controllers
             }
         }
 
-        internal void SaveServiceCenter(Tables.ServiceCenter[] serviceCenters)
+        internal void SaveServiceCenter(Tables.ServiceCenter serviceCenter)
         {
-            Context.ServiceCenters.AddRange(serviceCenters);
-            Context.SaveChanges();
+            Tables.ServiceCenter tmp = Context.ServiceCenters.Where(c => c.Name == serviceCenter.Name && c.Address == serviceCenter.Address
+            && c.City == serviceCenter.City && c.Country == serviceCenter.Country && c.Postcode == serviceCenter.Postcode
+            && c.Region == serviceCenter.Region && c.Username == serviceCenter.Username && c.Status == serviceCenter.Status
+            && c.DilerTr == serviceCenter.DilerTr).SingleOrDefault();
+
+            if (tmp == null)
+            {
+                Context.ServiceCenters.Add(serviceCenter);
+                Context.SaveChanges();
+            }
         }
 
         internal void SaveAoglonassReport(Tables.AoglonassReport aoglonassReport)
         {
-            Tables.AoglonassReport tmp = Context.AoglonassReports.Where(c => c.IdSession == aoglonassReport.IdSession && c.DateStart == aoglonassReport.DateStart).SingleOrDefault();
+            Tables.AoglonassReport tmp = Context.AoglonassReports.Where(c => c.IdSessionNavigation == aoglonassReport.IdSessionNavigation && c.DateStart == aoglonassReport.DateStart).SingleOrDefault();
 
             if (tmp == null)
             {
@@ -152,9 +160,9 @@ namespace KSA_Collector.Controllers
             try
             {
                 var users = Context.ServiceCenters.Where(c => c.Username == username).ToList();
-                if (users.Count == 0)
-                    return null;
-                else if (users.Count == 1)
+
+
+                if (users.Count == 1)
                     return users[0];
                 else if (users.Count > 1)
                 {
@@ -166,6 +174,21 @@ namespace KSA_Collector.Controllers
                         if (i + 1 == users.Count)
                             return users[i];
                     }
+                }
+                else if (users.Count == 0)
+                {
+                    return new Tables.ServiceCenter()
+                    {
+                        Name = null,
+                        Address = null,
+                        City = null,
+                        Country = null,
+                        Postcode = null,
+                        Region = null,
+                        Username = username,
+                        Status = null,
+                        DilerTr = null
+                    };
                 }
 
                 return null;

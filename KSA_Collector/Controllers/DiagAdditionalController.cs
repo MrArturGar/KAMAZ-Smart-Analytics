@@ -23,23 +23,23 @@ namespace KSA_Collector.Controllers
 
         private void OpenZIP(string path)
         {
-            if (path !=null)
-            using (ZipArchive archive = ZipFile.OpenRead(path))
-            {
-                var sample = archive.GetEntry("CommonInfo.log");
-                if (sample != null)
-                    using (StreamReader sr = new StreamReader(sample.Open()))
-                    {
-                        LoadCommonInfo(sr.ReadToEnd());
-                    }
+            if (path != null)
+                using (ZipArchive archive = ZipFile.OpenRead(path))
+                {
+                    var sample = archive.GetEntry("CommonInfo.log");
+                    if (sample != null)
+                        using (StreamReader sr = new StreamReader(sample.Open()))
+                        {
+                            LoadCommonInfo(sr.ReadToEnd());
+                        }
 
-                sample = archive.GetEntry("GlonassLog.log");
-                if (sample != null)
-                    using (StreamReader sr = new StreamReader(sample.Open()))
-                    {
-                        LoadGlonassLog(sr.ReadToEnd());
-                    }
-            }
+                    sample = archive.GetEntry("GlonassLog.log");
+                    if (sample != null)
+                        using (StreamReader sr = new StreamReader(sample.Open()))
+                        {
+                            LoadGlonassLog(sr.ReadToEnd());
+                        }
+                }
         }
 
         private void LoadCommonInfo(string source)
@@ -56,45 +56,45 @@ namespace KSA_Collector.Controllers
                 {
                     case "Model:":
                         {
-                            CommonInfo.Model = parts[4];
+                            CommonInfo.Model = parts[4] != "" ? parts[4] : null;
                             break;
                         }
                     case "VIN:":
                         {
-                            CommonInfo.VIN = parts[4];
+                            CommonInfo.VIN = parts[4] != "" ? parts[4] : null;
                             break;
                         }
                     case "VIN_old:":
                         {
-                            CommonInfo.VIN_old = parts[4];
+                            CommonInfo.VIN_old = parts[4] != "" ? parts[4] : null;
                             break;
                         }
                     case "ICCID:":
                         {
-                            CommonInfo.ICCID = parts[4];
+                            CommonInfo.ICCID = parts[4] != "" ? parts[4] : null;
                             break;
                         }
                     case "User:":
                         {
-                            CommonInfo.User = parts[4];
+                            CommonInfo.User = parts[4] != "" ? parts[4] : null;
                             break;
                         }
                     case "VCINumber:":
                         {
-                            CommonInfo.VCINumber = parts[4];
+                            CommonInfo.VCINumber = parts[4] != "" ? parts[4] : null;
                             break;
                         }
                     case "Mileage:":
                         {
                             if (parts[4] != "")
-                                CommonInfo.Mileage = Convert.ToDouble(parts[4], new NumberFormatInfo { NumberDecimalSeparator = "."});
+                                CommonInfo.Mileage = Convert.ToDouble(parts[4], new NumberFormatInfo { NumberDecimalSeparator = "." });
                             else
-                                CommonInfo.Mileage = -1.0;
+                                CommonInfo.Mileage = null;
                             break;
                         }
                     case "VersionDatabase:":
                         {
-                            CommonInfo.VersionDatabase = parts[4];
+                            CommonInfo.VersionDatabase = parts[4] != "" ? parts[4] : null;
                             break;
                         }
                 }
@@ -105,9 +105,12 @@ namespace KSA_Collector.Controllers
         {
             GlonassLog = new GlonassLog();
             string[] lines = source.Split('\n');
-            GlonassLog.Action = new Models.GlonassLogAction[lines.Length];
+            List<Models.GlonassLogAction> action = new();
             for (int i = 0; i < lines.Length; i++)
             {
+                if (lines[i] == "")
+                    continue;
+
                 int startInd = lines[i].IndexOf("<Action");
                 string xml = lines[i].Substring(startInd);
 
@@ -115,8 +118,9 @@ namespace KSA_Collector.Controllers
                 Models.GlonassLogAction tmp = (Models.GlonassLogAction)serializer.Deserialize(new StringReader(xml));
 
                 if (tmp != null)
-                    GlonassLog.Action[i] = tmp;
+                    action.Add(tmp);
             }
+            GlonassLog.Action = action.ToArray();
         }
 
         public string GetGlonassActionResponseParam(GlonassLogActionResponse response)

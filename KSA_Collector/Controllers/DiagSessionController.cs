@@ -244,7 +244,7 @@ namespace KSA_Collector.Controllers
                         Tables.AoglonassReport report = new()
                         {
                             IdSessionNavigation = session,
-                            DateStart = Data.GetAOGlonassDate(action.DateTime),
+                            DateStart = Data.GetProcedureDate(action.DateTime),
                             Action = action.Type,
                             ParamText = diag.GetGlonassActionResponseParam(action.ResponseTable[j]),
                             Status = diag.GetGlonassActionResponseStatus(action.ResponseTable[j])
@@ -289,8 +289,8 @@ namespace KSA_Collector.Controllers
                                 Type = type,
                                 Name = test.name,//////
                                 Result = test.result == "true" ? true : false,
-                                DateStart = Data.GetAOGlonassDate(test.timestampStart),
-                                DateEnd = Data.GetAOGlonassDate(test.timestamp),
+                                DateStart = Data.GetProcedureDateOrNull(test.timestampStart),
+                                DateEnd = Data.GetProcedureDate(test.timestamp),
                                 UsingVin = String.IsNullOrEmpty(test.VINForFlash) ? test.VIN : test.VINForFlash,
                                 DataFiles = test.flashDataFile
                             };
