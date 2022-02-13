@@ -72,9 +72,17 @@ namespace KSA_Collector.Settings
 
         public static IdentificationSettings GetSettings()
         {
-            IdentificationSettings identificationSettings = new IdentificationSettings();
-            identificationSettings.Load();
-            return (IdentificationSettings)identificationSettings.Base;
+            IdentificationSettings identificationSettings = null;
+            try
+            {
+                identificationSettings = new IdentificationSettings();
+                identificationSettings.Load();
+                return (IdentificationSettings)identificationSettings.Base;
+            }
+            finally
+            {
+                identificationSettings.Base = null;
+            }
         }
 
 

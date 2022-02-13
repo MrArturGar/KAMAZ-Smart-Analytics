@@ -15,7 +15,15 @@ namespace KSA_Collector
 
         Task IHostedService.StartAsync(CancellationToken cancellationToken)
         {
-            watch();
+            ServiceSettings settings = ServiceSettings.GetSettings();
+            FileSystemWatcher watcher = new FileSystemWatcher();
+            watcher.Path = settings.SessionPath;
+            watcher.NotifyFilter = NotifyFilters.LastWrite;
+            watcher.Filter = "*.*";
+            watcher.Changed += new FileSystemEventHandler(OnChanged);
+            watcher.EnableRaisingEvents = true;
+            FirstStart();
+
             return Task.CompletedTask;
         }
 
@@ -24,70 +32,59 @@ namespace KSA_Collector
             throw new NotImplementedException();
         }
 
-        private void StartCollector()
+        private void OnChanged(object source, FileSystemEventArgs e)
         {
+            MainController main = null;
             try
             {
-                ServiceSettings settings = ServiceSettings.GetSettings();
+                System.Diagnostics.Stopwatch swatch = new System.Diagnostics.Stopwatch();
+                swatch.Start();
+                _logger.LogInformation("+ch: " + e.Name + "\t" + swatch.Elapsed);
+                main = new MainController();
+                main.LoadSessionFolders(new DirectoryInfo(e.FullPath));
+                swatch.Stop();
+                _logger.LogInformation("-ch: " + e.Name + "\t" + swatch.Elapsed);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex.ToString());
+            }
+            finally
+            {
+                if (main != null)
+                    main.Dispose();
+            }
 
-                DirectoryInfo parentPath = new DirectoryInfo(settings.SessionPath);
-                DirectoryInfo[] sessionFolders = parentPath.GetDirectories();
-                sessionFolders = sessionFolders.OrderByDescending(folder => folder.LastWriteTime).ToArray();
+        }
 
-                DateTime lastDate = settings.lastDays != 0 ? DateTime.Now.AddDays(-settings.lastDays) : new DateTime();
-                int countFolder = sessionFolders.Length;
+        private void FirstStart()
+        {
+            MainController main = null;
+            try
+            {
+                string tempPath = Environment.CurrentDirectory + "\\Temp\\.continue";
 
-                for (int i = 0; i < countFolder; i++)
+                if (!File.Exists(tempPath))
                 {
-                    if (sessionFolders[i].LastWriteTime < lastDate)
-                        break;
-
-                    DirectoryInfo[] sessions = sessionFolders[i].GetDirectories();
-                    sessions = sessions.OrderByDescending(folder => folder.LastWriteTime).ToArray();
-
-                    _logger.LogInformation($"{DateTimeOffset.Now.ToString("HH:mm:ss")}: ({i + 1}/{countFolder}) {sessionFolders[i].Name} Started...");
-
-                    int countSessions = sessions.Length;
-                    for (int j = 0; j < countSessions; j++)
-                    {
-                        if (sessions[j].LastWriteTime < lastDate)
-                            break;
-
-                        _logger.LogInformation($"{DateTimeOffset.Now.ToString("HH:mm:ss")}: ({i + 1}/{countFolder}) - ({j + 1}/{countSessions}) {sessionFolders[i].Name}");
-
-                        System.Diagnostics.Stopwatch swatch = new System.Diagnostics.Stopwatch();
-                        swatch.Start();
-
-                        DiagSessionController files = new();
-                        files.Load(sessions[j]);
-
-
-                        swatch.Stop();
-                        _logger.LogInformation($"{DateTimeOffset.Now.ToString("HH:mm:ss")}: Timer: {swatch.Elapsed}");
-                    }
+                    System.Diagnostics.Stopwatch swatch = new System.Diagnostics.Stopwatch();
+                    swatch.Start();
+                    _logger.LogInformation("+First: " + "\t" + swatch.Elapsed);
+                    main = new MainController();
+                    main.StartAllInsert();
+                    File.Create(tempPath);
+                    swatch.Stop();
+                    _logger.LogInformation("-First: " + "\t" + swatch.Elapsed);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.ToString());
-                File.WriteAllText(Environment.CurrentDirectory + DateTime.Now.ToString("yyyyMMddhhmm") + "_FATAL.log", ex.ToString());
             }
-        }
-
-        private void watch()
-        {
-            ServiceSettings settings = ServiceSettings.GetSettings();
-            FileSystemWatcher watcher = new FileSystemWatcher();
-            watcher.Path = settings.SessionPath;
-            watcher.NotifyFilter = NotifyFilters.LastWrite;
-            watcher.Filter = "*.*";
-            watcher.Changed += new FileSystemEventHandler(OnChanged);
-            watcher.EnableRaisingEvents = true;
-        }
-
-        private void OnChanged(object source, FileSystemEventArgs e)
-        {
-            StartCollector();
+            finally
+            {
+                if (main != null)
+                    main.Dispose();
+            }
         }
     }
 }

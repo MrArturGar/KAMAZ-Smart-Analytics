@@ -10,7 +10,7 @@ using KSA_Collector;
 
 namespace KSA_Collector.Controllers
 {
-    internal class DiagSessionController
+    internal class DiagSessionController :IDisposable
     {
         DBController DB;
         Settings.IdentificationSettings IdentificationSettings;
@@ -24,26 +24,33 @@ namespace KSA_Collector.Controllers
         {
             GetSettings();
         }
+        public void Dispose()
+        {
+            if (DB != null)
+            {
+                DB.Dispose();
+                DB = null;
+            }
+        }
 
         private void GetSettings()
         {
+            UpdateServiceCenters();
             IdentificationSettings = Settings.IdentificationSettings.GetSettings();
             DB = new DBController(new Tables.KSA_DBContext());
             Data = new DataHandler();
         }
 
-        public void Load(DirectoryInfo _path)
+        public void Load(string[] files)
         {
-            UpdateServiceCenters();
-            FileInfo[] files = _path.GetFiles();
             string fileSession = null;
 
             for (int i = 0; i < files.Length; i++)
             {
-                if (files[i].FullName.Contains(".session"))
-                    fileSession = files[i].FullName;
-                else if (files[i].FullName.Contains(".zip"))
-                    AdditionalArchivePath = files[i].FullName;
+                if (files[i].Contains(".session"))
+                    fileSession = files[i];
+                else if (files[i].Contains(".zip"))
+                    AdditionalArchivePath = files[i];
             }
 
             if (fileSession != null)

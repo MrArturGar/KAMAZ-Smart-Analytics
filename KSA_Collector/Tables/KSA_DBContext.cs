@@ -7,6 +7,11 @@ namespace KSA_Collector.Tables
 {
     public partial class KSA_DBContext : DbContext
     {
+        private string ConnectionString;
+        public KSA_DBContext(string connetionString)
+        {
+            ConnectionString = connetionString;
+        }
         public KSA_DBContext()
         {
         }

@@ -30,9 +30,17 @@ namespace KSA_Collector.Settings
 
         public static ServiceSettings GetSettings()
         {
-            ServiceSettings ServiceSettings = new ServiceSettings();
-            ServiceSettings.Load();
-            return (ServiceSettings)ServiceSettings.Base;
+            ServiceSettings ServiceSettings = null;
+            try
+            {
+                ServiceSettings = new ServiceSettings();
+                ServiceSettings.Load();
+                return (ServiceSettings)ServiceSettings.Base;
+            }
+            finally
+            {
+                ServiceSettings = null;
+            }
         }
     }
 }

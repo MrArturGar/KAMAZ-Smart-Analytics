@@ -7,12 +7,22 @@ using KSA_Collector.Tables;
 
 namespace KSA_Collector.Controllers
 {
-    internal class DBController
+    internal class DBController  :IDisposable
     {
         KSA_DBContext Context;
         public DBController(KSA_DBContext context)
         {
             Context = context;
+        }
+        public void Dispose()
+        {
+            if (Context != null)
+            {
+                Context.ChangeTracker.Clear();
+                Context.Dispose();
+                Context = null;
+
+            }
         }
 
         internal void SaveSessionEcuIdentification(Tables.SessionEcuidentification sessionEcuidentification)
