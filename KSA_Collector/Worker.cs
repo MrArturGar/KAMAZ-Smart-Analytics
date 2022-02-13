@@ -12,15 +12,17 @@ namespace KSA_Collector
         {
             _logger = logger;
         }
-
+        FileSystemWatcher watcher;
         Task IHostedService.StartAsync(CancellationToken cancellationToken)
         {
             ServiceSettings settings = ServiceSettings.GetSettings();
-            FileSystemWatcher watcher = new FileSystemWatcher();
+            watcher = new FileSystemWatcher();
             watcher.Path = settings.SessionPath;
             watcher.NotifyFilter = NotifyFilters.LastWrite;
+            watcher.IncludeSubdirectories = true;
             watcher.Filter = "*.*";
             watcher.Changed += new FileSystemEventHandler(OnChanged);
+            watcher.Error += new ErrorEventHandler(OnError);
             watcher.EnableRaisingEvents = true;
             FirstStart();
 
@@ -29,7 +31,11 @@ namespace KSA_Collector
 
         Task IHostedService.StopAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (watcher != null)
+            {
+                watcher.Dispose();
+            }
+            return Task.CompletedTask;
         }
 
         private void OnChanged(object source, FileSystemEventArgs e)
@@ -55,6 +61,10 @@ namespace KSA_Collector
                     main.Dispose();
             }
 
+        }
+        private void OnError(object source, ErrorEventArgs e)
+        {
+            _logger.LogCritical(e.GetException().ToString());
         }
 
         private void FirstStart()

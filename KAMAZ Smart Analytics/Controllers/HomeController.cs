@@ -1,8 +1,8 @@
-﻿using KAMAZ_Smart_Analitics.Models;
+﻿using KAMAZ_Smart_Analytics.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace KAMAZ_Smart_Analitics.Controllers
+namespace KAMAZ_Smart_Analytics.Controllers
 {
     public class HomeController : Controller
     {

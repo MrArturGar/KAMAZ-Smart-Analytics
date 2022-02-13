@@ -1,5 +1,4 @@
-using KAMAZ_Smart_Analitics.Data;
-using Microsoft.AspNetCore.Builder;
+using KAMAZ_Smart_Analytics.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

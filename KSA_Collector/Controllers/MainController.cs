@@ -10,8 +10,6 @@ namespace KSA_Collector.Controllers
 {
     internal class MainController :IDisposable
     {
-
-        private string IsFirstTemp = Environment.CurrentDirectory + "\\Temp\\.continue";
         private DateTime? LastDate;
 
         internal void StartAllInsert()
@@ -43,7 +41,6 @@ namespace KSA_Collector.Controllers
             {
                 if (sessions[j].LastWriteTime < LastDate)
                     break;
-
                 LoadSession(sessions[j].FullName);
             }
         }
@@ -58,7 +55,6 @@ namespace KSA_Collector.Controllers
         public void Dispose()
         {
             GC.Collect();
-            IsFirstTemp = null;
             LastDate = null;
         }
     }

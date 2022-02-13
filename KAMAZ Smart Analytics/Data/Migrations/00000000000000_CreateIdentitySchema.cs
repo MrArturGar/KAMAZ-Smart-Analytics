@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace KAMAZ_Smart_Analitics.Data.Migrations
+namespace KAMAZ_Smart_Analytics.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

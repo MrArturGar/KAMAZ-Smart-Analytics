@@ -1,4 +1,4 @@
-namespace KAMAZ_Smart_Analitics.Models
+namespace KAMAZ_Smart_Analytics.Models
 {
     public class ErrorViewModel
     {
