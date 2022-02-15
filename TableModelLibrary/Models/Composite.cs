@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KSA_API.Views
+namespace TableModelLibrary.Models
 {
     public partial class Composite
     {

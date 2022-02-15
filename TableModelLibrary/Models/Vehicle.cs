@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KSA_Collector.Tables
+namespace TableModelLibrary.Models
 {
     public partial class Vehicle
     {

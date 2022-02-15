@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TableModelLibrary.Models;
 
 namespace KSA_API.Controllers
 {
@@ -6,7 +7,7 @@ namespace KSA_API.Controllers
     [Route("[controller]")]
     public class SessionController
     {
-        Views.KSA_DBContext db = new();
+        KSA_DBContext Context = new();
 
         private readonly ILogger<SessionController> _logger;
 
@@ -16,15 +17,31 @@ namespace KSA_API.Controllers
         }
 
         [HttpGet("{vin}")]
-        public IEnumerable<Views.Session> GetByVin(string vin)
+        public IEnumerable<Session> GetByVin(string vin)
         {
-            return db.Sessions.Where(s => s.IdVehicleNavigation.Vin == vin).ToArray();
+            return Context.Sessions.Where(s => s.IdVehicleNavigation.Vin == vin).ToArray();
         }
 
-        [HttpGet("{fromDate}, {untilDate}")]
-        public IEnumerable<Views.Session> GetByDate(DateTime fromDate, DateTime untilDate)
+        [HttpPost(Name = "PostSession")]
+        public void PostSession(Session session)
         {
-            return db.Sessions.Where(s => s.Date >= fromDate && s.Date <= untilDate).ToArray();
+            if (session != null)
+            {
+                Session tmp = GetSession(session.SessionsName);
+
+                if (tmp == null)
+                {
+                    tmp = session;
+                    Context.Sessions.Add(tmp);
+                    Context.SaveChanges();
+                }
+            }
+        }
+
+        [HttpGet("{sessionName}", Name = "GetSession")]
+        public Session GetSession(string sessionName)
+        {
+            return Context.Sessions.Where(c => c.SessionsName == sessionName).SingleOrDefault();
         }
     }
 

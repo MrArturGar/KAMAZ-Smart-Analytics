@@ -1,0 +1,27 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using TableModelLibrary.Models;
+
+
+namespace KSA_API.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class VehicleController
+    {
+        KSA_DBContext Context = new();
+
+        private readonly ILogger<VehicleController> _logger;
+
+        public VehicleController(ILogger<VehicleController> logger)
+        {
+            _logger = logger;
+        }
+
+        [HttpGet("{vin}, {iccid}, {iccidc}, {imei}, {type}", Name = "GetVehicle")]
+        public Vehicle GetVehicle(string vin, string iccid, string iccidc, string imei, string type)
+        {
+            return Context.Vehicles.Where(c => c.Vin == vin && c.Iccid == iccid && c.Iccidc == iccidc && c.Imei == imei && c.Type == type).SingleOrDefault();
+        }
+
+    }
+}

@@ -1,6 +1,7 @@
 using KSA_Collector.Settings;
 using KSA_Collector.Controllers;
 using System.Xml.Serialization;
+using Microsoft.Extensions.Hosting;
 
 namespace KSA_Collector
 {

@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 
 using KSA_Collector.Settings;
 using System.Text.RegularExpressions;
+using TableModelLibrary.Models;
 
 namespace KSA_Collector.Controllers
 {
@@ -55,7 +56,7 @@ namespace KSA_Collector.Controllers
 
         private void Insert_db()
         {
-            using (DBController dB = new DBController(new Tables.KSA_DBContext()))
+            using (DBController dB = new DBController(new KSA_API.Views.KSA_DBContext()))
             {
 
                 using (StreamReader reader = new StreamReader(CSV_Path))
@@ -82,7 +83,7 @@ namespace KSA_Collector.Controllers
                         if (parts.Length != 9)
                             throw new Exception("CSV file is not validate.");
 
-                        var service = new Tables.ServiceCenter()
+                        var service = new ServiceCenter()
                         {
                             Name = parts[0],
                             Address = parts[1],

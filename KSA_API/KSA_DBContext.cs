@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
+using TableModelLibrary.Models;
 
-namespace KSA_API.Views
+namespace KSA_API
 {
     public partial class KSA_DBContext : DbContext
     {
@@ -30,7 +28,7 @@ namespace KSA_API.Views
         public virtual DbSet<ServiceCenter> ServiceCenters { get; set; } = null!;
         public virtual DbSet<Session> Sessions { get; set; } = null!;
         public virtual DbSet<SessionEcuidentification> SessionEcuidentifications { get; set; } = null!;
-        public virtual DbSet<System> Systems { get; set; } = null!;
+        public virtual DbSet<Gear> Systems { get; set; } = null!;
         public virtual DbSet<Vehicle> Vehicles { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -106,11 +104,11 @@ namespace KSA_API.Views
                     .HasMaxLength(32)
                     .IsUnicode(false);
 
-                entity.Property(e => e.SystemId).HasColumnName("System_id");
+                entity.Property(e => e.GearId).HasColumnName("System_id");
 
-                entity.HasOne(d => d.System)
+                entity.HasOne(d => d.Gear)
                     .WithMany(p => p.Ecus)
-                    .HasForeignKey(d => d.SystemId)
+                    .HasForeignKey(d => d.GearId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("ECUs_fk0");
             });
@@ -307,7 +305,7 @@ namespace KSA_API.Views
                     .HasConstraintName("Session_ECUIdentification_fk1");
             });
 
-            modelBuilder.Entity<System>(entity =>
+            modelBuilder.Entity<TableModelLibrary.Models.Gear>(entity =>
             {
                 entity.HasIndex(e => new { e.Name, e.Domain }, "Systems_fk0")
                     .IsUnique();

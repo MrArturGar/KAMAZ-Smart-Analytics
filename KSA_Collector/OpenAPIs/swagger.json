@@ -1,0 +1,1135 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "KSA_API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/Aoglonass/{aoglonassReport}": {
+      "post": {
+        "tags": [
+          "Aoglonass"
+        ],
+        "operationId": "PostAoglonassReport",
+        "parameters": [
+          {
+            "name": "aoglonassReport",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AoglonassReport"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AoglonassReport"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AoglonassReport"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Composite/{composite}": {
+      "post": {
+        "tags": [
+          "Composite"
+        ],
+        "operationId": "PostComposite",
+        "parameters": [
+          {
+            "name": "composite",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Composite"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Composite"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Composite"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Ecu/{codifier}": {
+      "get": {
+        "tags": [
+          "Ecu"
+        ],
+        "operationId": "GetCodifier",
+        "parameters": [
+          {
+            "name": "codifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ecu"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ecu"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ecu"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/EcuIdentification/{ecu}, {identification}": {
+      "get": {
+        "tags": [
+          "EcuIdentification"
+        ],
+        "operationId": "GetEcuIdentificationController",
+        "parameters": [
+          {
+            "name": "ecuId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "identificationId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "ecu",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "identification",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EcuIdentification"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EcuIdentification"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EcuIdentification"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Gear/{name}, {domain}": {
+      "get": {
+        "tags": [
+          "Gear"
+        ],
+        "operationId": "GetGear",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "domain",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Gear"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Gear"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Gear"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Identification/{identification}": {
+      "post": {
+        "tags": [
+          "Identification"
+        ],
+        "operationId": "PostIdentification",
+        "parameters": [
+          {
+            "name": "identification",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Identification"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Identification"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Identification"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Identification": {
+      "get": {
+        "tags": [
+          "Identification"
+        ],
+        "operationId": "GetIdentification",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Identification"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Identification"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Identification"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ProcedureReport/{procedureReport}": {
+      "post": {
+        "tags": [
+          "ProcedureReport"
+        ],
+        "operationId": "PostProcedureReport",
+        "parameters": [
+          {
+            "name": "procedureReport",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcedureReport"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcedureReport"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcedureReport"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/ServiceCenter/{serviceCenter}": {
+      "post": {
+        "tags": [
+          "ServiceCenter"
+        ],
+        "operationId": "PostServiceCenter",
+        "parameters": [
+          {
+            "name": "serviceCenter",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServiceCenter"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServiceCenter"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServiceCenter"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/ServiceCenter/{username}": {
+      "get": {
+        "tags": [
+          "ServiceCenter"
+        ],
+        "operationId": "GetServiceCenter",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCenter"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCenter"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCenter"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Session/{vin}": {
+      "get": {
+        "tags": [
+          "Session"
+        ],
+        "parameters": [
+          {
+            "name": "vin",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Session"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Session"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Session"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Session/{session}": {
+      "post": {
+        "tags": [
+          "Session"
+        ],
+        "operationId": "PostSession",
+        "parameters": [
+          {
+            "name": "session",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Session"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Session"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Session"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/SessionEcuIdentification": {
+      "post": {
+        "tags": [
+          "SessionEcuIdentification"
+        ],
+        "operationId": "PostSessionEcuIdentification",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionEcuidentification"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionEcuidentification"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionEcuidentification"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/SessionEcuIdentification/{idSession}, {idEcuidentifications}": {
+      "get": {
+        "tags": [
+          "SessionEcuIdentification"
+        ],
+        "operationId": "GetSessionEcuIdentification",
+        "parameters": [
+          {
+            "name": "idSession",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "idEcuidentifications",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionEcuidentification"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionEcuidentification"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionEcuidentification"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Vehicle/{vin}, {iccid}, {iccidc}, {imei}, {type}": {
+      "get": {
+        "tags": [
+          "Vehicle"
+        ],
+        "operationId": "GetVehicle",
+        "parameters": [
+          {
+            "name": "vin",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "iccid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "iccidc",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "imei",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vehicle"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vehicle"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vehicle"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AoglonassReport": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idSession": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dateStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "action": {
+            "type": "string",
+            "nullable": true
+          },
+          "paramText": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "idSessionNavigation": {
+            "$ref": "#/components/schemas/Session"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Composite": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "designNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "idEcu": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEcuNavigation": {
+            "$ref": "#/components/schemas/Ecu"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Ecu": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "codifier": {
+            "type": "string",
+            "nullable": true
+          },
+          "gearId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gear": {
+            "$ref": "#/components/schemas/Gear"
+          },
+          "composites": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Composite"
+            },
+            "nullable": true
+          },
+          "ecuIdentifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EcuIdentification"
+            },
+            "nullable": true
+          },
+          "procedureReports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProcedureReport"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EcuIdentification": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEcu": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idIdentifications": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEcuNavigation": {
+            "$ref": "#/components/schemas/Ecu"
+          },
+          "idIdentificationsNavigation": {
+            "$ref": "#/components/schemas/Identification"
+          },
+          "sessionEcuidentifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionEcuidentification"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Gear": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "domain": {
+            "type": "string",
+            "nullable": true
+          },
+          "ecus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Ecu"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Identification": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "ecuIdentifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EcuIdentification"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProcedureReport": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEcu": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idSession": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "result": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "dateStart": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dateEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usingVin": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataFiles": {
+            "type": "string",
+            "nullable": true
+          },
+          "idEcuNavigation": {
+            "$ref": "#/components/schemas/Ecu"
+          },
+          "idSessionNavigation": {
+            "$ref": "#/components/schemas/Session"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ServiceCenter": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          },
+          "postcode": {
+            "type": "string",
+            "nullable": true
+          },
+          "region": {
+            "type": "string",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "dilerTr": {
+            "type": "string",
+            "nullable": true
+          },
+          "sessions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Session"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idVehicle": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sessionsName": {
+            "type": "string",
+            "nullable": true
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "idServiceCenters": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "versionDb": {
+            "type": "string",
+            "nullable": true
+          },
+          "vcisn": {
+            "type": "string",
+            "nullable": true
+          },
+          "mileage": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "hasIdentifications": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "hasDtc": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "hasTests": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "hasFlash": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "idServiceCentersNavigation": {
+            "$ref": "#/components/schemas/ServiceCenter"
+          },
+          "idVehicleNavigation": {
+            "$ref": "#/components/schemas/Vehicle"
+          },
+          "aoglonassReports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AoglonassReport"
+            },
+            "nullable": true
+          },
+          "procedureReports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProcedureReport"
+            },
+            "nullable": true
+          },
+          "sessionEcuidentifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionEcuidentification"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SessionEcuidentification": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEcuidentifications": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idSession": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEcuidentificationsNavigation": {
+            "$ref": "#/components/schemas/EcuIdentification"
+          },
+          "idSessionNavigation": {
+            "$ref": "#/components/schemas/Session"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Vehicle": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "vin": {
+            "type": "string",
+            "nullable": true
+          },
+          "designNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "iccid": {
+            "type": "string",
+            "nullable": true
+          },
+          "iccidc": {
+            "type": "string",
+            "nullable": true
+          },
+          "imei": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "sessions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Session"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

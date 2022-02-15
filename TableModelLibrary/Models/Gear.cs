@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KSA_API.Views
+namespace TableModelLibrary.Models
 {
-    public partial class System
+    public partial class Gear
     {
-        public System()
+        public Gear()
         {
             Ecus = new HashSet<Ecu>();
         }

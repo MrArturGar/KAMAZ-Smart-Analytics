@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KSA_API.Views
+namespace TableModelLibrary.Models
 {
     public partial class Ecu
     {
@@ -14,9 +14,9 @@ namespace KSA_API.Views
 
         public int Id { get; set; }
         public string Codifier { get; set; } = null!;
-        public int SystemId { get; set; }
+        public int GearId { get; set; }
 
-        public virtual System System { get; set; } = null!;
+        public virtual Gear Gear { get; set; } = null!;
         public virtual ICollection<Composite> Composites { get; set; }
         public virtual ICollection<EcuIdentification> EcuIdentifications { get; set; }
         public virtual ICollection<ProcedureReport> ProcedureReports { get; set; }
