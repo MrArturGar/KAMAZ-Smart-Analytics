@@ -17,10 +17,11 @@ namespace KSA_API.Controllers
             _logger = logger;
         }
 
-        [HttpGet("{vin}, {iccid}, {iccidc}, {imei}, {type}", Name = "GetVehicle")]
+        [HttpGet(Name = "GetVehicle")]
         public Vehicle GetVehicle(string vin, string iccid, string iccidc, string imei, string type)
         {
             return Context.Vehicles.Where(c => c.Vin == vin && c.Iccid == iccid && c.Iccidc == iccidc && c.Imei == imei && c.Type == type).SingleOrDefault();
+        
         }
 
     }

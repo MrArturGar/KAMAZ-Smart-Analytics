@@ -35,4 +35,8 @@
       <SourceUri>https://localhost:7234/swagger/v1/swagger.json</SourceUri>
     </OpenApiReference>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TableModelLibrary\TableModelLibrary.csproj" />
+  </ItemGroup>
 </Project>

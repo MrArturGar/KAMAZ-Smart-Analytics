@@ -5,22 +5,12 @@
     "version": "1.0"
   },
   "paths": {
-    "/Aoglonass/{aoglonassReport}": {
+    "/AoglonassReport": {
       "post": {
         "tags": [
-          "Aoglonass"
+          "AoglonassReport"
         ],
         "operationId": "PostAoglonassReport",
-        "parameters": [
-          {
-            "name": "aoglonassReport",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -47,22 +37,62 @@
         }
       }
     },
-    "/Composite/{composite}": {
+    "/AoglonassReport/{idSession}, {dateStart}": {
+      "get": {
+        "tags": [
+          "AoglonassReport"
+        ],
+        "operationId": "GetAoglonassReport",
+        "parameters": [
+          {
+            "name": "idSession",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "dateStart",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AoglonassReport"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AoglonassReport"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AoglonassReport"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Composite": {
       "post": {
         "tags": [
           "Composite"
         ],
         "operationId": "PostComposite",
-        "parameters": [
-          {
-            "name": "composite",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -85,6 +115,103 @@
         "responses": {
           "200": {
             "description": "Success"
+          }
+        }
+      }
+    },
+    "/Composite/{designNumber}, {idEcu}": {
+      "get": {
+        "tags": [
+          "Composite"
+        ],
+        "operationId": "GetComposite",
+        "parameters": [
+          {
+            "name": "designNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "idEcu",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Composite"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Composite"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Composite"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ControlSystem/{name}, {domain}": {
+      "get": {
+        "tags": [
+          "ControlSystem"
+        ],
+        "operationId": "GetControlSystem",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "domain",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ControlSystem"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ControlSystem"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ControlSystem"
+                }
+              }
+            }
           }
         }
       }
@@ -94,7 +221,7 @@
         "tags": [
           "Ecu"
         ],
-        "operationId": "GetCodifier",
+        "operationId": "GetEcu",
         "parameters": [
           {
             "name": "codifier",
@@ -129,16 +256,17 @@
         }
       }
     },
-    "/EcuIdentification/{ecu}, {identification}": {
+    "/EcuIdentification/{ecuId}, {identificationId}": {
       "get": {
         "tags": [
           "EcuIdentification"
         ],
-        "operationId": "GetEcuIdentificationController",
+        "operationId": "GetEcuIdentification",
         "parameters": [
           {
             "name": "ecuId",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -146,27 +274,12 @@
           },
           {
             "name": "identificationId",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "ecu",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "identification",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -193,70 +306,12 @@
         }
       }
     },
-    "/Gear/{name}, {domain}": {
-      "get": {
-        "tags": [
-          "Gear"
-        ],
-        "operationId": "GetGear",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "domain",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Gear"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Gear"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Gear"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Identification/{identification}": {
+    "/Identification": {
       "post": {
         "tags": [
           "Identification"
         ],
         "operationId": "PostIdentification",
-        "parameters": [
-          {
-            "name": "identification",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -278,12 +333,32 @@
         },
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/Identification": {
+    "/Identification/{name}": {
       "get": {
         "tags": [
           "Identification"
@@ -292,7 +367,8 @@
         "parameters": [
           {
             "name": "name",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -329,22 +405,12 @@
         }
       }
     },
-    "/ProcedureReport/{procedureReport}": {
+    "/ProcedureReport": {
       "post": {
         "tags": [
           "ProcedureReport"
         ],
         "operationId": "PostProcedureReport",
-        "parameters": [
-          {
-            "name": "procedureReport",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -371,22 +437,85 @@
         }
       }
     },
-    "/api/ServiceCenter/{serviceCenter}": {
-      "post": {
+    "/ProcedureReport/{idSession}, {dateEnd}, {type}": {
+      "get": {
         "tags": [
-          "ServiceCenter"
+          "ProcedureReport"
         ],
-        "operationId": "PostServiceCenter",
+        "operationId": "GetProcedureReport",
         "parameters": [
           {
-            "name": "serviceCenter",
+            "name": "idSession",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "dateStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateEnd",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "type",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "result",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcedureReport"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcedureReport"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcedureReport"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ServiceCenter": {
+      "post": {
+        "tags": [
+          "ServiceCenter"
+        ],
+        "operationId": "PostServiceCenter",
         "requestBody": {
           "content": {
             "application/json": {
@@ -501,22 +630,12 @@
         }
       }
     },
-    "/Session/{session}": {
+    "/Session": {
       "post": {
         "tags": [
           "Session"
         ],
         "operationId": "PostSession",
-        "parameters": [
-          {
-            "name": "session",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -539,6 +658,46 @@
         "responses": {
           "200": {
             "description": "Success"
+          }
+        }
+      }
+    },
+    "/Session/{sessionName}": {
+      "get": {
+        "tags": [
+          "Session"
+        ],
+        "operationId": "GetSession",
+        "parameters": [
+          {
+            "name": "sessionName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
           }
         }
       }
@@ -625,7 +784,7 @@
         }
       }
     },
-    "/Vehicle/{vin}, {iccid}, {iccidc}, {imei}, {type}": {
+    "/Vehicle": {
       "get": {
         "tags": [
           "Vehicle"
@@ -634,40 +793,35 @@
         "parameters": [
           {
             "name": "vin",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
             "name": "iccid",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
             "name": "iccidc",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
             "name": "imei",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
             "name": "type",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "string"
             }
@@ -754,6 +908,31 @@
         },
         "additionalProperties": false
       },
+      "ControlSystem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "domain": {
+            "type": "string",
+            "nullable": true
+          },
+          "ecus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Ecu"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Ecu": {
         "type": "object",
         "properties": {
@@ -765,12 +944,12 @@
             "type": "string",
             "nullable": true
           },
-          "gearId": {
+          "idControlSystem": {
             "type": "integer",
             "format": "int32"
           },
-          "gear": {
-            "$ref": "#/components/schemas/Gear"
+          "idControlSystemNavigation": {
+            "$ref": "#/components/schemas/ControlSystem"
           },
           "composites": {
             "type": "array",
@@ -821,31 +1000,6 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SessionEcuidentification"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Gear": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "domain": {
-            "type": "string",
-            "nullable": true
-          },
-          "ecus": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Ecu"
             },
             "nullable": true
           }

@@ -16,6 +16,8 @@ namespace KSA_Collector
         FileSystemWatcher watcher;
         Task IHostedService.StartAsync(CancellationToken cancellationToken)
         {
+            _logger.LogInformation("Wait API-Server (10 sec)");
+            Thread.Sleep(10000);
             ServiceSettings settings = ServiceSettings.GetSettings();
             watcher = new FileSystemWatcher();
             watcher.Path = settings.SessionPath;

@@ -20,7 +20,8 @@ namespace KSA_API.Controllers
         [HttpGet("{codifier}", Name = "GetEcu")]
         public Ecu GetEcu(string codifier)
         {
-            return Context.Ecus.Where(c => c.Codifier == codifier).SingleOrDefault();
+            Ecu tmp =  Context.Ecus.Where(c => c.Codifier == codifier).SingleOrDefault();
+            return tmp;
         }
     }
 }

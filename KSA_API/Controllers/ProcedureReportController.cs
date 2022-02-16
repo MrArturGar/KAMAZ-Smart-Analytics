@@ -17,7 +17,7 @@ namespace KSA_API.Controllers
             _logger = logger;
         }
 
-        [HttpPost("{procedureReport}", Name = "PostProcedureReport")]
+        [HttpPost(Name = "PostProcedureReport")]
         public void PostProcedureReport(ProcedureReport procedureReport)
         {
             if (procedureReport != null)

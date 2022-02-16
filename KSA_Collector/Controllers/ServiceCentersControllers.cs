@@ -56,7 +56,7 @@ namespace KSA_Collector.Controllers
 
         private void Insert_db()
         {
-            using (DBController dB = new DBController(new KSA_API.Views.KSA_DBContext()))
+            using (DBController dB = new DBController())
             {
 
                 using (StreamReader reader = new StreamReader(CSV_Path))

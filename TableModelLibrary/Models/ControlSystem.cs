@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace TableModelLibrary.Models
 {
-    public partial class Gear
+    public partial class ControlSystem
     {
-        public Gear()
+        public ControlSystem()
         {
             Ecus = new HashSet<Ecu>();
         }

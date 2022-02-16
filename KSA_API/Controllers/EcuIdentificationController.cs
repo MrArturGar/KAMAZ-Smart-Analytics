@@ -16,8 +16,8 @@ namespace KSA_API.Controllers
             _logger = logger;
         }
 
-        [HttpGet("{ecu}, {identification}", Name = "GetEcuIdentificationController")]
-        public EcuIdentification GetEcuIdentificationController(int ecuId, int identificationId)
+        [HttpGet("{ecuId}, {identificationId}", Name = "GetEcuIdentification")]
+        public EcuIdentification GetEcuIdentification(int ecuId, int identificationId)
         {
             return Context.EcuIdentifications.Where(c => c.IdEcu == ecuId && c.IdIdentifications == identificationId).SingleOrDefault();
         }

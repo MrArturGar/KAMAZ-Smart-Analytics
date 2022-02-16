@@ -1,15 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using TableModelLibrary.Models;
 
 namespace KSA_API
 {
     public partial class KSA_DBContext : DbContext
     {
-        private string ConnectionString;
-        public KSA_DBContext(string connetionString)
-        {
-            ConnectionString = connetionString;
-        }
         public KSA_DBContext()
         {
         }
@@ -21,6 +19,7 @@ namespace KSA_API
 
         public virtual DbSet<AoglonassReport> AoglonassReports { get; set; } = null!;
         public virtual DbSet<Composite> Composites { get; set; } = null!;
+        public virtual DbSet<ControlSystem> ControlSystems { get; set; } = null!;
         public virtual DbSet<Ecu> Ecus { get; set; } = null!;
         public virtual DbSet<EcuIdentification> EcuIdentifications { get; set; } = null!;
         public virtual DbSet<Identification> Identifications { get; set; } = null!;
@@ -28,7 +27,6 @@ namespace KSA_API
         public virtual DbSet<ServiceCenter> ServiceCenters { get; set; } = null!;
         public virtual DbSet<Session> Sessions { get; set; } = null!;
         public virtual DbSet<SessionEcuidentification> SessionEcuidentifications { get; set; } = null!;
-        public virtual DbSet<Gear> Systems { get; set; } = null!;
         public virtual DbSet<Vehicle> Vehicles { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -78,7 +76,7 @@ namespace KSA_API
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.DesignNumber)
-                    .HasMaxLength(32)
+                    .HasMaxLength(256)
                     .IsUnicode(false)
                     .HasColumnName("Design_Number");
 
@@ -91,11 +89,27 @@ namespace KSA_API
                     .HasConstraintName("Composites_fk0");
             });
 
+            modelBuilder.Entity<ControlSystem>(entity =>
+            {
+                entity.HasIndex(e => new { e.Name, e.Domain }, "ControlSystems_fk0")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Domain)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Ecu>(entity =>
             {
                 entity.ToTable("ECUs");
 
-                entity.HasIndex(e => e.Codifier, "UQ__ECUs__C91293905678DF75")
+                entity.HasIndex(e => e.Codifier, "UQ__ECUs__C9129390709E3DDB")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -104,11 +118,11 @@ namespace KSA_API
                     .HasMaxLength(32)
                     .IsUnicode(false);
 
-                entity.Property(e => e.GearId).HasColumnName("System_id");
+                entity.Property(e => e.IdControlSystem).HasColumnName("id_ControlSystem");
 
-                entity.HasOne(d => d.Gear)
+                entity.HasOne(d => d.IdControlSystemNavigation)
                     .WithMany(p => p.Ecus)
-                    .HasForeignKey(d => d.GearId)
+                    .HasForeignKey(d => d.IdControlSystem)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("ECUs_fk0");
             });
@@ -217,14 +231,16 @@ namespace KSA_API
 
                 entity.Property(e => e.Region).HasMaxLength(256);
 
-                entity.Property(e => e.Status).HasMaxLength(256);
+                entity.Property(e => e.Status)
+                    .HasMaxLength(256)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Username).HasMaxLength(256);
             });
 
             modelBuilder.Entity<Session>(entity =>
             {
-                entity.HasIndex(e => e.SessionsName, "UQ__Sessions__FF7910AD9564BD69")
+                entity.HasIndex(e => e.SessionsName, "UQ__Sessions__FF7910AD51D19F91")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -305,22 +321,6 @@ namespace KSA_API
                     .HasConstraintName("Session_ECUIdentification_fk1");
             });
 
-            modelBuilder.Entity<TableModelLibrary.Models.Gear>(entity =>
-            {
-                entity.HasIndex(e => new { e.Name, e.Domain }, "Systems_fk0")
-                    .IsUnique();
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Domain)
-                    .HasMaxLength(32)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(32)
-                    .IsUnicode(false);
-            });
-
             modelBuilder.Entity<Vehicle>(entity =>
             {
                 entity.HasIndex(e => new { e.Vin, e.DesignNumber, e.Iccid, e.Iccidc, e.Imei, e.Type }, "Vehicles_fk0")
@@ -329,7 +329,7 @@ namespace KSA_API
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.DesignNumber)
-                    .HasMaxLength(32)
+                    .HasMaxLength(256)
                     .IsUnicode(false)
                     .HasColumnName("Design_Number");
 
@@ -349,7 +349,7 @@ namespace KSA_API
                     .HasColumnName("IMEI");
 
                 entity.Property(e => e.Type)
-                    .HasMaxLength(32)
+                    .HasMaxLength(256)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Vin)

@@ -55,21 +55,7 @@ namespace KSA_API.Controllers
                         return users[i];
                 }
             }
-            else if (users.Count == 0)
-            {
-                return new ServiceCenter()
-                {
-                    Name = null,
-                    Address = null,
-                    City = null,
-                    Country = null,
-                    Postcode = null,
-                    Region = null,
-                    Username = username,
-                    Status = null,
-                    DilerTr = null
-                };
-            }
+
             return null;
         }
     }

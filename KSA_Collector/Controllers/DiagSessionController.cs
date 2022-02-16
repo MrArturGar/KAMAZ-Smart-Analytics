@@ -39,7 +39,7 @@ namespace KSA_Collector.Controllers
         {
             UpdateServiceCenters();
             IdentificationSettings = Settings.IdentificationSettings.GetSettings();
-            DB = new DBController(new KSA_API.Views.KSA_DBContext());
+            DB = new DBController();
             Data = new DataHandler();
         }
 
@@ -88,17 +88,17 @@ namespace KSA_Collector.Controllers
                     var ecu = ecus[i];
                     string codifier = ecus[i].id;
 
-                    TableModelLibrary.Models.System system = new()
+                    ControlSystem system = new()
                     {
                         Name = Data.GetSystemName(codifier),
                         Domain = Data.GetDomainName(codifier)
                     };
-                    system = DB.GetSystem(system);
+                    system = DB.GetControlSystem(system);
 
                     ecus_tables[i] = new Ecu()
                     {
                         Codifier = codifier,
-                        System = system
+                        IdControlSystemNavigation = system
                     };
                     ecus_tables[i] = DB.GetECU(ecus_tables[i]);
 
@@ -134,7 +134,7 @@ namespace KSA_Collector.Controllers
 
                     if (signals.Contains(signalName))
                     {
-                        TableModelLibrary.Models.Identification ident = new TableModelLibrary.Models.Identification()
+                        Identification ident = new Identification()
                         {
                             Name = signalName,
                             Value = identifications[i].value
@@ -275,17 +275,17 @@ namespace KSA_Collector.Controllers
                         {
                             string codifier = Data.GetProcedureECUCodifier(procedures[j].id);
 
-                            TableModelLibrary.Models.System system = new()
+                            ControlSystem system = new()
                             {
                                 Name = Data.GetSystemName(codifier),
                                 Domain = Data.GetDomainName(codifier)
                             };
-                            system = DB.GetSystem(system);
+                            system = DB.GetControlSystem(system);
 
                             Ecu ecu = new()
                             {
                                 Codifier = codifier,
-                                System = system
+                                IdControlSystemNavigation = system
                             };
                             ecu = DB.GetECU(ecu);
 

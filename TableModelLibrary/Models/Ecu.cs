@@ -14,9 +14,9 @@ namespace TableModelLibrary.Models
 
         public int Id { get; set; }
         public string Codifier { get; set; } = null!;
-        public int GearId { get; set; }
+        public int IdControlSystem { get; set; }
 
-        public virtual Gear Gear { get; set; } = null!;
+        public virtual ControlSystem IdControlSystemNavigation { get; set; } = null!;
         public virtual ICollection<Composite> Composites { get; set; }
         public virtual ICollection<EcuIdentification> EcuIdentifications { get; set; }
         public virtual ICollection<ProcedureReport> ProcedureReports { get; set; }

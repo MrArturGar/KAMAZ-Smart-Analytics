@@ -16,17 +16,18 @@ namespace KSA_API.Controllers
             _logger = logger;
         }
 
-        [HttpPost("{identification}", Name = "PostIdentification")]
-        public void PostIdentification(Identification identification)
+        [HttpPost(Name = "PostIdentification")]
+        public int PostIdentification(Identification identification)
         {
-                Context.Identifications.Add(identification);
-                Context.SaveChanges();
+            Context.Identifications.Add(identification);
+            Context.SaveChanges();
+            return identification.Id;
         }
 
-        [HttpGet("", Name = "GetIdentification")]
+        [HttpGet("{name}", Name = "GetIdentification")]
         public Identification GetIdentification(string name, string value)
         {
-           return Context.Identifications.Where(c => c.Name == name && c.Value == value).SingleOrDefault();
+            return Context.Identifications.Where(c => c.Name == name && c.Value == value).SingleOrDefault();
         }
     }
 }
