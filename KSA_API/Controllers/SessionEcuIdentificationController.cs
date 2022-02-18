@@ -17,18 +17,17 @@ namespace KSA_API.Controllers
         }
 
         [HttpPost(Name = "PostSessionEcuIdentification")]
-        public void PostSessionEcuIdentification(SessionEcuidentification sessionEcuidentification)
+        public int PostSessionEcuIdentification(SessionEcuidentification sessionEcuidentification)
         {
-            if (sessionEcuidentification != null)
-            {
-                SessionEcuidentification tmp = GetSessionEcuIdentification(sessionEcuidentification.IdSession, sessionEcuidentification.IdEcuidentifications);
+            SessionEcuidentification tmp = GetSessionEcuIdentification(sessionEcuidentification.IdSession, sessionEcuidentification.IdEcuidentifications);
 
-                if (tmp == null)
-                {
-                    Context.SessionEcuidentifications.Add(sessionEcuidentification);
-                    Context.SaveChanges();
-                }
+            if (tmp == null)
+            {
+                tmp = sessionEcuidentification;
+                Context.SessionEcuidentifications.Add(tmp);
+                Context.SaveChanges();
             }
+            return tmp.Id;
         }
 
         [HttpGet("{idSession}, {idEcuidentifications}", Name = "GetSessionEcuIdentification")]

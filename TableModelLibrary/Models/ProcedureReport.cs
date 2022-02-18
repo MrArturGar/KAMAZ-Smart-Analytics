@@ -15,8 +15,5 @@ namespace TableModelLibrary.Models
         public DateTime DateEnd { get; set; }
         public string? UsingVin { get; set; }
         public string? DataFiles { get; set; }
-
-        public virtual Ecu IdEcuNavigation { get; set; } = null!;
-        public virtual Session IdSessionNavigation { get; set; } = null!;
     }
 }

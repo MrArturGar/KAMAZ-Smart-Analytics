@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TableModelLibrary.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace KSA_API.Controllers
 {
@@ -20,8 +21,21 @@ namespace KSA_API.Controllers
         [HttpGet("{codifier}", Name = "GetEcu")]
         public Ecu GetEcu(string codifier)
         {
-            Ecu tmp =  Context.Ecus.Where(c => c.Codifier == codifier).SingleOrDefault();
-            return tmp;
+            return Context.Ecus.Where(c => c.Codifier == codifier).SingleOrDefault();
+        }
+
+        [HttpPost(Name = "PostEcu")]
+        public int PostEcu(Ecu ecu)
+        {
+            Ecu tmp = GetEcu(ecu.Codifier);
+
+            if (tmp == null)
+            {
+                tmp = ecu;
+                Context.Ecus.Add(tmp);
+                Context.SaveChanges();
+            }
+            return tmp.Id;
         }
     }
 }

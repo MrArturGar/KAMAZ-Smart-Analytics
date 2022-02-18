@@ -21,5 +21,19 @@ namespace KSA_API.Controllers
         {
             return Context.ControlSystems.Where(c => c.Name == name && c.Domain == domain).SingleOrDefault();
         }
+
+        [HttpPost(Name = "PostControlSystem")]
+        public int PostControlSystem(ControlSystem controlSystem)
+        {
+            ControlSystem tmp = GetControlSystem(controlSystem.Name, controlSystem.Domain);
+
+            if (tmp == null)
+            {
+                tmp = controlSystem;
+                Context.ControlSystems.Add(tmp);
+                Context.SaveChanges();
+            }
+            return tmp.Id;
+        }
     }
 }

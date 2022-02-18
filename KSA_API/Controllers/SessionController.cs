@@ -16,26 +16,19 @@ namespace KSA_API.Controllers
             _logger = logger;
         }
 
-        [HttpGet("{vin}")]
-        public IEnumerable<Session> GetByVin(string vin)
-        {
-            return Context.Sessions.Where(s => s.IdVehicleNavigation.Vin == vin).ToArray();
-        }
-
         [HttpPost(Name = "PostSession")]
-        public void PostSession(Session session)
+        public int PostSession(Session session)
         {
-            if (session != null)
-            {
-                Session tmp = GetSession(session.SessionsName);
+            Session tmp = GetSession(session.SessionsName);
 
-                if (tmp == null)
-                {
-                    tmp = session;
-                    Context.Sessions.Add(tmp);
-                    Context.SaveChanges();
-                }
+            if (tmp == null)
+            {
+                tmp = session;
+                Context.Sessions.Add(tmp);
+                Context.SaveChanges();
             }
+            return tmp.Id;
+
         }
 
         [HttpGet("{sessionName}", Name = "GetSession")]

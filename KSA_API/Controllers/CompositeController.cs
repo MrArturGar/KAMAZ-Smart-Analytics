@@ -16,19 +16,17 @@ namespace KSA_API.Controllers
         }
 
         [HttpPost(Name = "PostComposite")]
-        public void PostComposite(Composite composite)
+        public int PostComposite(Composite composite)
         {
-            if (composite != null)
-            {
-                Composite tmp = GetComposite(composite.DesignNumber, composite.IdEcu);
+            Composite tmp = GetComposite(composite.DesignNumber, composite.IdEcu);
 
-                if (tmp == null)
-                {
-                    tmp = composite;
-                    Context.Composites.Add(tmp);
-                    Context.SaveChanges();
-                }
+            if (tmp == null)
+            {
+                tmp = composite;
+                Context.Composites.Add(tmp);
+                Context.SaveChanges();
             }
+            return tmp.Id;
         }
 
         [HttpGet("{designNumber}, {idEcu}", Name = "GetComposite")]

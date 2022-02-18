@@ -22,5 +22,19 @@ namespace KSA_API.Controllers
             return Context.EcuIdentifications.Where(c => c.IdEcu == ecuId && c.IdIdentifications == identificationId).SingleOrDefault();
         }
 
+
+        [HttpPost(Name = "PostEcuIdentification")]
+        public int PostEcuIdentification(EcuIdentification ecuIdentification)
+        {
+            EcuIdentification tmp = GetEcuIdentification(ecuIdentification.IdEcu, ecuIdentification.IdIdentifications);
+
+            if (tmp == null)
+            {
+                tmp = ecuIdentification;
+                Context.EcuIdentifications.Add(tmp);
+                Context.SaveChanges();
+            }
+            return tmp.Id;
+        }
     }
 }

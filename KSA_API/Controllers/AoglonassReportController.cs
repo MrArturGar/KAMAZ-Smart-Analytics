@@ -16,20 +16,18 @@ namespace KSA_API.Controllers
             _logger = logger;
         }
 
-        [HttpPost( Name = "PostAoglonassReport")]
-        public void PostAoglonass(AoglonassReport aoglonassReport)
+        [HttpPost(Name = "PostAoglonassReport")]
+        public int PostAoglonass(AoglonassReport aoglonassReport)
         {
-            if (aoglonassReport != null)
-            {
-                AoglonassReport tmp = GetAoglonassReport(aoglonassReport.IdSession, aoglonassReport.DateStart);
+            AoglonassReport tmp = GetAoglonassReport(aoglonassReport.IdSession, aoglonassReport.DateStart);
 
-                if (tmp == null)
-                {
-                    tmp = aoglonassReport;
-                    Context.AoglonassReports.Add(tmp);
-                    Context.SaveChanges();
-                }
+            if (tmp == null)
+            {
+                tmp = aoglonassReport;
+                Context.AoglonassReports.Add(tmp);
+                Context.SaveChanges();
             }
+            return tmp.Id;
         }
 
         [HttpGet("{idSession}, {dateStart}", Name = "GetAoglonassReport")]

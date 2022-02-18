@@ -19,21 +19,21 @@ namespace KSA_API.Controllers
         }
 
         [HttpPost(Name = "PostServiceCenter")]
-        public void PostServiceCenter(ServiceCenter serviceCenter)
+        public int PostServiceCenter(ServiceCenter serviceCenter)
         {
-            if (serviceCenter != null)
-            {
-                ServiceCenter tmp = Context.ServiceCenters.Where(c => c.Name == serviceCenter.Name && c.Address == serviceCenter.Address
-                && c.City == serviceCenter.City && c.Country == serviceCenter.Country && c.Postcode == serviceCenter.Postcode
-                && c.Region == serviceCenter.Region && c.Username == serviceCenter.Username && c.Status == serviceCenter.Status
-                && c.DilerTr == serviceCenter.DilerTr).SingleOrDefault();
+            ServiceCenter tmp = Context.ServiceCenters.Where(c => c.Name == serviceCenter.Name && c.Address == serviceCenter.Address
+            && c.City == serviceCenter.City && c.Country == serviceCenter.Country && c.Postcode == serviceCenter.Postcode
+            && c.Region == serviceCenter.Region && c.Username == serviceCenter.Username && c.Status == serviceCenter.Status
+            && c.DilerTr == serviceCenter.DilerTr).SingleOrDefault();
 
-                if (tmp == null)
-                {
-                    Context.ServiceCenters.Add(serviceCenter);
-                    Context.SaveChanges();
-                }
+            if (tmp == null)
+            {
+                tmp = serviceCenter;
+                Context.ServiceCenters.Add(tmp);
+                Context.SaveChanges();
             }
+            return tmp.Id;
+
         }
 
         [HttpGet("{username}", Name = "GetServiceCenter")]

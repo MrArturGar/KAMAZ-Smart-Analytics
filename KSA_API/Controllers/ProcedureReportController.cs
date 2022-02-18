@@ -18,23 +18,21 @@ namespace KSA_API.Controllers
         }
 
         [HttpPost(Name = "PostProcedureReport")]
-        public void PostProcedureReport(ProcedureReport procedureReport)
+        public int PostProcedureReport(ProcedureReport procedureReport)
         {
-            if (procedureReport != null)
-            {
-                ProcedureReport tmp = GetProcedureReport(procedureReport.IdSession, procedureReport.DateStart, procedureReport.DateEnd, procedureReport.Type, procedureReport.Result); ;
+            ProcedureReport tmp = GetProcedureReport(procedureReport.IdSession, procedureReport.DateStart, procedureReport.DateEnd, procedureReport.Type, procedureReport.Result); ;
 
-                if (tmp == null)
-                {
-                    tmp = procedureReport;
-                    Context.ProcedureReports.Add(tmp);
-                    Context.SaveChanges();
-                }
+            if (tmp == null)
+            {
+                tmp = procedureReport;
+                Context.ProcedureReports.Add(tmp);
+                Context.SaveChanges();
             }
+            return tmp.Id;
         }
 
         [HttpGet("{idSession}, {dateEnd}, {type}", Name = "GetProcedureReport")]
-        public ProcedureReport GetProcedureReport(int idSession,DateTime? dateStart, DateTime dateEnd, string type, bool? result)
+        public ProcedureReport GetProcedureReport(int idSession, DateTime? dateStart, DateTime dateEnd, string type, bool? result)
         {
             return Context.ProcedureReports.Where(c => c.IdSession == idSession && c.DateStart == dateStart
             && c.DateEnd == dateEnd && c.Type == type && c.Result == result).SingleOrDefault();

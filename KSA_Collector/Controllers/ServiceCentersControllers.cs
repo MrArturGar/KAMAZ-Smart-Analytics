@@ -13,8 +13,6 @@ namespace KSA_Collector.Controllers
 {
     internal class ServiceCentersControllers
     {
-        string Table = "ServiceCenters";
-        string username;
         string tempHashPath = Environment.CurrentDirectory + "\\Temp\\ServiceCenters.hash";
         string CSV_Path;
 
@@ -56,7 +54,7 @@ namespace KSA_Collector.Controllers
 
         private void Insert_db()
         {
-            using (DBController dB = new DBController())
+            using (ApiController dB = new ApiController())
             {
 
                 using (StreamReader reader = new StreamReader(CSV_Path))

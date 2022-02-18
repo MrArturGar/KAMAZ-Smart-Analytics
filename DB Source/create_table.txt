@@ -1,7 +1,7 @@
 CREATE TABLE [Vehicles] (
 	id integer IDENTITY(1,1),
 	VIN varchar(32) NOT NULL,
-	Design_Number varchar(256) NOT NULL,
+	Design_Number nvarchar(256) NOT NULL,
 	ICCID varchar(32),
 	ICCIDC varchar(32),
 	IMEI varchar(32),
@@ -69,7 +69,7 @@ CREATE TABLE [ControlSystems] (
 	id integer IDENTITY(1,1),
 	Name varchar(32) NOT NULL,
 	Domain varchar(32) NOT NULL,
-  CONSTRAINT [PK_ControlSystemS] PRIMARY KEY CLUSTERED
+  CONSTRAINT [PK_CONTROLSYSTEMS] PRIMARY KEY CLUSTERED
   (
   [id] ASC
   ) WITH (IGNORE_DUP_KEY = OFF)
@@ -79,7 +79,7 @@ GO
 CREATE TABLE [ECUs] (
 	id integer IDENTITY(1,1),
 	Codifier varchar(32) NOT NULL UNIQUE,
-	ControlSystem_id integer NOT NULL,
+	id_ControlSystem integer NOT NULL,
   CONSTRAINT [PK_ECUS] PRIMARY KEY CLUSTERED
   (
   [id] ASC
@@ -95,6 +95,7 @@ CREATE TABLE [Identifications] (
   (
   [id] ASC
   ) WITH (IGNORE_DUP_KEY = OFF)
+
 )
 GO
 CREATE TABLE [ECU_Identification] (
@@ -121,7 +122,7 @@ CREATE TABLE [Session_ECUIdentification] (
 GO
 CREATE TABLE [Composites] (
 	id integer IDENTITY(1,1),
-	Design_Number varchar(256) NOT NULL,
+	Design_Number nvarchar(256) NOT NULL,
 	id_ECU integer NOT NULL,
   CONSTRAINT [PK_COMPOSITES] PRIMARY KEY CLUSTERED
   (
@@ -139,7 +140,7 @@ CREATE TABLE [ServiceCenters] (
 	Postcode nvarchar(256),
 	Region nvarchar(256),
 	Username nvarchar(256) NOT NULL,
-	Status nvarchar(256),
+	Status varchar(256),
 	Diler_tr nvarchar(256),
   CONSTRAINT [PK_SERVICECENTERS] PRIMARY KEY CLUSTERED
   (
@@ -178,7 +179,7 @@ ALTER TABLE [AOGlonassReports] CHECK CONSTRAINT [AOGlonassReports_fk0]
 GO
 
 
-ALTER TABLE [ECUs] WITH CHECK ADD CONSTRAINT [ECUs_fk0] FOREIGN KEY ([ControlSystem_id]) REFERENCES [ControlSystems]([id])
+ALTER TABLE [ECUs] WITH CHECK ADD CONSTRAINT [ECUs_fk0] FOREIGN KEY ([id_ControlSystem]) REFERENCES [ControlSystems]([id])
 ON UPDATE CASCADE
 GO
 ALTER TABLE [ECUs] CHECK CONSTRAINT [ECUs_fk0]
@@ -226,4 +227,4 @@ GO
 ALTER TABLE [ControlSystems] WITH CHECK ADD CONSTRAINT [ControlSystems_fk0] UNIQUE (Name, Domain)
 GO
 ALTER TABLE [ControlSystems] CHECK CONSTRAINT [ControlSystems_fk0]
-GO
+GO																							  

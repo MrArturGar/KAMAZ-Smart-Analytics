@@ -14,7 +14,7 @@ namespace KSA_Collector.Controllers
 {
     internal class DiagSessionController :IDisposable
     {
-        DBController DB;
+        ApiController DB;
         Settings.IdentificationSettings IdentificationSettings;
         DataHandler Data;
         Vehicle Vehicle = new();
@@ -39,7 +39,7 @@ namespace KSA_Collector.Controllers
         {
             UpdateServiceCenters();
             IdentificationSettings = Settings.IdentificationSettings.GetSettings();
-            DB = new DBController();
+            DB = new ApiController();
             Data = new DataHandler();
         }
 
@@ -81,7 +81,6 @@ namespace KSA_Collector.Controllers
 
             if (ecus != null)
             {
-                Ecu[] ecus_tables = new Ecu[ecus.Count()];
 
                 for (int i = 0; i < ecus.Count(); i++)
                 {
@@ -93,29 +92,28 @@ namespace KSA_Collector.Controllers
                         Name = Data.GetSystemName(codifier),
                         Domain = Data.GetDomainName(codifier)
                     };
-                    system = DB.GetControlSystem(system);
 
-                    ecus_tables[i] = new Ecu()
+                    Ecu ecus_table = new Ecu()
                     {
                         Codifier = codifier,
-                        IdControlSystemNavigation = system
+                        IdControlSystem = DB.GetControlSystemId(system)
                     };
-                    ecus_tables[i] = DB.GetECU(ecus_tables[i]);
+                    ecus_table.Id = DB.GetEcuId(ecus_table);
 
                     Composite composite = new Composite()
                     {
                         DesignNumber = session.machine.networks.displayName,
-                        IdEcuNavigation = ecus_tables[i]
+                        IdEcu = ecus_table.Id
                     };
                     DB.SaveComposite(composite);
 
-                    SetEcuIdentifications(ecus[i], ecus_tables[i]);
+                    SetEcuIdentifications(ecus[i], ecus_table.Id);
 
                 }
             }
         }
 
-        private void SetEcuIdentifications(sessionMachineNetworksEcus ecuFile, Ecu ecu)
+        private void SetEcuIdentifications(sessionMachineNetworksEcus ecuFile, int ecuId)
         {
             var identifications = ecuFile.identifications;
 
@@ -139,15 +137,15 @@ namespace KSA_Collector.Controllers
                             Name = signalName,
                             Value = identifications[i].value
                         };
-                        ident = DB.GetIdentification(ident);
+                        ident.Id = DB.GetIdentificationId(ident);
 
                         EcuIdentification ecu_ident = new EcuIdentification()
                         {
-                            IdEcuNavigation = ecu,
-                            IdIdentificationsNavigation = ident
+                            IdEcu = ecuId,
+                            IdIdentifications = ident.Id
                         };
-                        ecu_ident = DB.GetEcuIdentification(ecu_ident);
-                        sessionEcuidentification.Add(new SessionEcuidentification() { IdEcuidentificationsNavigation = ecu_ident });
+                        ecu_ident.Id = DB.GetEcuIdentificationId(ecu_ident);
+                        sessionEcuidentification.Add(new SessionEcuidentification() { IdEcuidentifications = ecu_ident.Id });
                     }
 
                     if (hasTable)
@@ -198,17 +196,17 @@ namespace KSA_Collector.Controllers
                 username = "";
 
 
-            Session.IdVehicleNavigation = Vehicle;
+            Session.IdVehicle = Vehicle.Id;
             Session.SessionsName = sessionFile.id;
             Session.Date = Data.GetSessionDate(sessionFile.id);
-            Session.IdServiceCentersNavigation = DB.GetServiceCenter(username);
+            Session.IdServiceCenters = DB.GetServiceCenterId(username);
             if (diag.CommonInfo != null)
             {
                 Session.VersionDb = diag.CommonInfo.VersionDatabase;
                 Session.Vcisn = diag.CommonInfo.VCINumber;
                 Session.Mileage = diag.CommonInfo.Mileage;
             }
-            Session = DB.GetSession(Session);
+            Session.Id = DB.GetSessionId(Session);
 
 
             SetProcedureReport(Session, sessionFile.machine.testResults);
@@ -224,7 +222,7 @@ namespace KSA_Collector.Controllers
         {
             for (int i = 0; i < sessionEcuidentification.Count; i++)
             {
-                sessionEcuidentification[i].IdSessionNavigation = Session;
+                sessionEcuidentification[i].IdSession = Session.Id;
                 DB.SaveSessionEcuIdentification(sessionEcuidentification[i]);
             }
         }
@@ -237,7 +235,7 @@ namespace KSA_Collector.Controllers
             if (Vehicle.Vin == null)
                 Vehicle.Vin = Data.GetSessionVin(session.id);
 
-            Vehicle = DB.GetVehicle(Vehicle);
+            Vehicle.Id = DB.GetVehicleId(Vehicle);
         }
 
         private void SetAoglonassReport(Session session, DiagAdditionalController diag)
@@ -252,7 +250,7 @@ namespace KSA_Collector.Controllers
                     {
                         AoglonassReport report = new()
                         {
-                            IdSessionNavigation = session,
+                            IdSession = session.Id,
                             DateStart = Data.GetProcedureDate(action.DateTime),
                             Action = action.Type,
                             ParamText = diag.GetGlonassActionResponseParam(action.ResponseTable[j]),
@@ -280,21 +278,21 @@ namespace KSA_Collector.Controllers
                                 Name = Data.GetSystemName(codifier),
                                 Domain = Data.GetDomainName(codifier)
                             };
-                            system = DB.GetControlSystem(system);
+                            system.Id = DB.GetControlSystemId(system);
 
                             Ecu ecu = new()
                             {
                                 Codifier = codifier,
-                                IdControlSystemNavigation = system
+                                IdControlSystem = system.Id
                             };
-                            ecu = DB.GetECU(ecu);
+                            ecu.Id = DB.GetEcuId(ecu);
 
                             string type = Data.GetProcedureECUType(procedures[j].id);
                             var test = procedures[j].Tests[i];
                             ProcedureReport report = new()
                             {
-                                IdSessionNavigation = session,
-                                IdEcuNavigation = ecu,
+                                IdSession = session.Id,
+                                IdEcu = ecu.Id,
                                 Type = type,
                                 Name = test.name,//////
                                 Result = test.result == "true" ? true : false,

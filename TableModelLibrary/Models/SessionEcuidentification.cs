@@ -8,8 +8,5 @@ namespace TableModelLibrary.Models
         public int Id { get; set; }
         public int IdEcuidentifications { get; set; }
         public int IdSession { get; set; }
-
-        public virtual EcuIdentification IdEcuidentificationsNavigation { get; set; } = null!;
-        public virtual Session IdSessionNavigation { get; set; } = null!;
     }
 }
