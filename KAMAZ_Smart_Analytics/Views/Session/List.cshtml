@@ -1,0 +1,43 @@
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@model IPagedList<Session>
+<link href="~/css/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewData["Title"] = "Sessions";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Сессии</h1>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <td><p>Название сессии</p></td>
+                <td><p>Дата</p></td>
+                <td><p>Идентификация</p></td>
+                <td><p>Неисправности</p></td>
+                <td><p>Тесты</p></td>
+                <td><p>Программирование</p></td>
+                <td></td>
+            </tr>
+        </thead>
+        @foreach (Session s in Model)
+        {
+            <tr>
+                <a>
+                <td><p>@s.SessionsName</p></td>
+                <td><p>@s.Date.ToString("dd.MM.yyyy (hh:mm:ss)")</p></td>
+                <td><p>@s.HasIdentifications</p></td>
+                <td><p>@s.HasDtc</p></td>
+                <td><p>@s.HasTests</p></td>
+                <td><p>@s.HasFlash</p></td>
+                </a>
+            </tr>
+        }
+    </table>
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("List",
+    new { page }))
+</div>

@@ -36,6 +36,32 @@ namespace KSA_API.Controllers
         {
             return Context.Sessions.Where(c => c.SessionsName == sessionName).SingleOrDefault();
         }
+
+        [HttpGet(Name = "GetSessionsCount")]
+        public int GetSessionsCount(string? vin)
+        {
+            if (vin == null)
+                return Context.Sessions.Count();
+            else
+            {
+                int[] vehicles = Context.Vehicles.Where(c => c.Vin == vin).Select(c => c.Id).ToArray();
+
+                return Context.Sessions.Where(c => vehicles.Contains(c.IdVehicle)).Count();
+            }
+        }
+
+        [HttpGet("{take}, {pick}",Name = "GetSessions")]
+        public Session[] GetSessions(string? vin, int take, int pick)
+        {
+            if (vin == null)
+                return Context.Sessions.Skip(pick).Take(take).ToArray();
+            else
+            {
+                int[] vehicles = Context.Vehicles.Where(c => c.Vin == vin).Select(c => c.Id).ToArray();
+
+                return Context.Sessions.Where(c => vehicles.Contains(c.IdVehicle)).Skip(pick).Take(take).ToArray();
+            }
+        }
     }
 
 }

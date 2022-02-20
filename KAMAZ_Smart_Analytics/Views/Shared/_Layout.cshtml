@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - KAMAZ_Smart_Analytics</title>
+    <title>@ViewData["Title"] - KAMAZ Smart Analytics</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/KAMAZ_Smart_Analytics.styles.css" asp-append-version="true" />
@@ -12,7 +12,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">KAMAZ_Smart_Analytics</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">KAMAZ Smart Analytics</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -24,6 +24,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Session" asp-action="List">Sessions</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -39,7 +42,18 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - KAMAZ_Smart_Analytics - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row">
+                <div class="col">
+                    &copy; 2022 - KAMAZ Smart Analytics - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </div>
+                <div class="col">
+                    <img height="200" width="200" src="~/img/ItsMe.png" />
+                </div>
+                <div class="col">
+                    <p class="float-right"><a href="#">Наверх</a></p>
+                </div>
+
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
