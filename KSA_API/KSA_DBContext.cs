@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using TableModelLibrary.Models;
+using TableModelLibrary.Table;
 
 namespace KSA_API
 {

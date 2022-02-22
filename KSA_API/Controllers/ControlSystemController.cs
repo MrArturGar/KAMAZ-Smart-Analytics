@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TableModelLibrary.Models;
+using TableModelLibrary.Table;
 namespace KSA_API.Controllers
 {
 

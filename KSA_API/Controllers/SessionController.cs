@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TableModelLibrary.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using TableModelLibrary.Table;
 
 namespace KSA_API.Controllers
 {
@@ -16,7 +17,7 @@ namespace KSA_API.Controllers
             _logger = logger;
         }
 
-        [HttpPost(Name = "PostSession")]
+        [HttpPost]
         public int PostSession(Session session)
         {
             Session tmp = GetSession(session.SessionsName);
@@ -31,13 +32,13 @@ namespace KSA_API.Controllers
 
         }
 
-        [HttpGet("{sessionName}", Name = "GetSession")]
+        [HttpGet("{sessionName}")]
         public Session GetSession(string sessionName)
         {
             return Context.Sessions.Where(c => c.SessionsName == sessionName).SingleOrDefault();
         }
 
-        [HttpGet(Name = "GetSessionsCount")]
+        [HttpGet]
         public int GetSessionsCount(string? vin)
         {
             if (vin == null)
@@ -50,16 +51,16 @@ namespace KSA_API.Controllers
             }
         }
 
-        [HttpGet("{take}, {pick}",Name = "GetSessions")]
+        [HttpGet("{take}, {pick}")]
         public Session[] GetSessions(string? vin, int take, int pick)
         {
             if (vin == null)
-                return Context.Sessions.Skip(pick).Take(take).ToArray();
+                return Context.Sessions.OrderByDescending(c => c.Date).Skip(pick).Take(take).ToArray();
             else
             {
                 int[] vehicles = Context.Vehicles.Where(c => c.Vin == vin).Select(c => c.Id).ToArray();
 
-                return Context.Sessions.Where(c => vehicles.Contains(c.IdVehicle)).Skip(pick).Take(take).ToArray();
+                return Context.Sessions.Where(c => vehicles.Contains(c.IdVehicle)).OrderByDescending(c=>c.Date).Skip(pick).Take(take).ToArray();
             }
         }
     }

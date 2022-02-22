@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace TableModelLibrary.Models
+namespace TableModelLibrary.Table
 {
     public partial class Ecu
     {

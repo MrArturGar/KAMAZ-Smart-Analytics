@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TableModelLibrary.Models
+namespace TableModelLibrary.Table
 {
     public partial class ProcedureReport
     {

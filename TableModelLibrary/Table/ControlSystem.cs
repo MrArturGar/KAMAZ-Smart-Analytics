@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TableModelLibrary.Models
+namespace TableModelLibrary.Table
 {
-    public partial class Identification
+    public partial class ControlSystem
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public string? Value { get; set; }
+        public string Domain { get; set; } = null!;
     }
 }
