@@ -4,10 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
-
 using KSA_Collector.Settings;
 using System.Text.RegularExpressions;
-using TableModelLibrary.Models;
 
 namespace KSA_Collector.Controllers
 {

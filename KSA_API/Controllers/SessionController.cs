@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TableModelLibrary.Table;
+using TableModelLibrary.Web;
 
 namespace KSA_API.Controllers
 {
@@ -38,7 +39,7 @@ namespace KSA_API.Controllers
             return Context.Sessions.Where(c => c.SessionsName == sessionName).SingleOrDefault();
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetSessionsCount")]
         public int GetSessionsCount(string? vin)
         {
             if (vin == null)
@@ -51,17 +52,53 @@ namespace KSA_API.Controllers
             }
         }
 
-        [HttpGet("{take}, {pick}")]
-        public Session[] GetSessions(string? vin, int take, int pick)
+        [HttpGet("{sortBy}, {take}, {skip}", Name = "GetSessionWeb")]
+        public SessionList GetSessionsList(string? vin, string? versionDb, string sortBy, int take, int skip)
         {
-            if (vin == null)
-                return Context.Sessions.OrderByDescending(c => c.Date).Skip(pick).Take(take).ToArray();
-            else
+            IQueryable<Session> sessions = Context.Sessions;
+
+            if (!String.IsNullOrEmpty(versionDb))
+            {
+                sessions = sessions.Where(p => p.VersionDb == versionDb);
+            }
+            if (!String.IsNullOrEmpty(vin))
             {
                 int[] vehicles = Context.Vehicles.Where(c => c.Vin == vin).Select(c => c.Id).ToArray();
-
-                return Context.Sessions.Where(c => vehicles.Contains(c.IdVehicle)).OrderByDescending(c=>c.Date).Skip(pick).Take(take).ToArray();
+                sessions = sessions.Where(c => vehicles.Contains(c.IdVehicle));
             }
+
+
+            switch (sortBy)
+            {
+                case "DateAsc":
+                    sessions = sessions.OrderBy(s => s.Date);
+                    break;
+                case "DateDesc":
+                    sessions = sessions.OrderByDescending(s => s.Date);
+                    break;
+                case "VersionDbDesc":
+                    sessions = sessions.OrderByDescending(s => s.VersionDb);
+                    break;
+                case "VersionDbAsc":
+                    sessions = sessions.OrderBy(s => s.VersionDb);
+                    break;
+                default:
+                    sessions = sessions.OrderByDescending(s => s.Date);
+                    break;
+            }
+
+
+            return new SessionList
+            {
+                Count = sessions.Count(),
+                Items = sessions.Skip(skip).Take(take).ToArray()
+            };
+        }
+
+        [HttpGet(nameof(GetDbVersions))]
+        public string?[] GetDbVersions()
+        {
+            return Context.Sessions.Select(c => c.VersionDb).Distinct().OrderBy(c => c).ToArray();
         }
     }
 

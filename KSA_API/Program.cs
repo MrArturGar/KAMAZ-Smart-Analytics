@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
-using KSA_API.Services;
 using KSA_API.Middleware;
+using KSA_API.Services;
+using KSA_API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,7 +57,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 builder.Services.AddAuthorization();
-builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<ApiLogin>();
 
 var app = builder.Build();
 
@@ -70,7 +71,10 @@ app.UseMiddleware<JWTMiddleware>();
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();//
+/// <summary>
+/// Авторизация
+/// </summary>
+//app.UseAuthentication();
 
 app.UseAuthorization();
 

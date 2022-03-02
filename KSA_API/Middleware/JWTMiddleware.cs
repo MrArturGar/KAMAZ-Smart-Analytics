@@ -1,4 +1,4 @@
-﻿using KSA_API.Services;
+﻿using KSA_API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TableModelLibrary.Table;
 
 namespace KSA_API.Middleware
 {
@@ -14,13 +15,13 @@ namespace KSA_API.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly IConfiguration _configuration;
-        private readonly IUserService _userService;
+        private readonly ApiLogin _loginModel;
 
-        public JWTMiddleware(RequestDelegate next, IConfiguration configuration, IUserService userService)
+        public JWTMiddleware(RequestDelegate next, IConfiguration configuration, ApiLogin loginModel)
         {
             _next = next;
             _configuration = configuration;
-            _userService = userService;
+            _loginModel = loginModel;
         }
 
         public async Task Invoke(HttpContext context)
@@ -53,7 +54,7 @@ namespace KSA_API.Middleware
                 var accountId = jwtToken.Claims.First(x => x.Type == "id").Value;
 
                 // attach account to context on successful jwt validation
-                context.Items["User"] = "";// _userService.GetUserDetails();
+                context.Items["User"] = _loginModel.Id;// _userService.GetUserDetails();
             }
             catch
             {

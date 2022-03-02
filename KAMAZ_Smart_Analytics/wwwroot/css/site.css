@@ -23,3 +23,6 @@ body {
     right: 20px; /* отступ слева*/
     z-index: 999; /*позиция относительно дальности*/
 }
+.clickable-row {
+    cursor: pointer;
+}

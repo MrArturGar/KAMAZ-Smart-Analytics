@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TableModelLibrary.Models;
 
 namespace KSA_Collector.Controllers
 {
     internal class ApiController : IDisposable
     {
         swaggerClient client;
+        string Token;
 
         public ApiController()
         {
-            client = new swaggerClient("https://localhost:7234/", new HttpClient());
-            //var loginRequest = new LoginRequest();
-            //client.
+            HttpClient httpClient = new HttpClient();
+            //httpClient.DefaultRequestHeaders.Add("Authorization", Token);
+            client = new swaggerClient("https://localhost:7234/", httpClient);
         }
         public void Dispose()
         {

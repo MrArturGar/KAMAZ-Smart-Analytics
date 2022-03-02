@@ -1,6 +1,6 @@
 ﻿namespace KSA_API.Models
 {
-    public class LoginModel
+    public class ApiLogin
     {
         public int Id { get; set; }
         public string UserName { get; set; }

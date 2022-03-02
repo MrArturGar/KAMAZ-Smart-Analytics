@@ -1,5 +1,4 @@
 ﻿using KSA_API.Models;
-using KSA_API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -9,29 +8,35 @@ using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TableModelLibrary.Table;
 
 namespace KSA_API.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : Controller
     {
+        KSA_DBContext Context = new();
+        private readonly ILogger<VehicleController> _logger;
         private readonly IConfiguration _configuration;
-        private readonly IUserService _userService;
-        public AuthController(IConfiguration configuration, IUserService userService)
+
+        public AuthController(ILogger<VehicleController> logger, IConfiguration configuration)
         {
-            _configuration = configuration;
-            _userService = userService;
+            _logger = logger;
+            _configuration= configuration;
         }
 
         [AllowAnonymous]
         [HttpPost(nameof(Auth))]
-        public IActionResult Auth([FromBody] LoginModel data)
+        public IActionResult Auth(string Username, string Password)
         {
-            bool isValid = _userService.IsValidUserInformation(data);
+            //bool isValid = _userService.IsValidUserInformation(data);
+
+            bool isValid = Context.ApiLogins.Where(c => c.UserName == Username && c.Password == Password).SingleOrDefault() != null;
             if (isValid)
             {
-                var tokenString = GenerateJwtToken(data.UserName);
+                var tokenString = GenerateJwtToken(Username);
                 return Ok(new { Token = tokenString, Message = "Success" });
             }
             return BadRequest("Please pass the valid Username and Password");
@@ -54,7 +59,7 @@ namespace KSA_API.Controllers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", userName) }),
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.UtcNow.AddHours(int.Parse(_configuration["Jwt:Expires"])),
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

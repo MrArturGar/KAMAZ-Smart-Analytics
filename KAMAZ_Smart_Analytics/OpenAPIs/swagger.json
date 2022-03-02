@@ -107,6 +107,46 @@
         }
       }
     },
+    "/api/Auth/Auth": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "parameters": [
+          {
+            "name": "Username",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Password",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Auth/GetResult": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/Composite": {
       "post": {
         "tags": [
@@ -823,7 +863,6 @@
         "tags": [
           "Session"
         ],
-        "operationId": "PostSession",
         "requestBody": {
           "content": {
             "application/json": {
@@ -915,7 +954,6 @@
         "tags": [
           "Session"
         ],
-        "operationId": "GetSession",
         "parameters": [
           {
             "name": "sessionName",
@@ -950,16 +988,31 @@
         }
       }
     },
-    "/Session/{take}, {pick}": {
+    "/Session/{sortBy}, {take}, {skip}": {
       "get": {
         "tags": [
           "Session"
         ],
-        "operationId": "GetSessions",
+        "operationId": "GetSessionWeb",
         "parameters": [
           {
             "name": "vin",
             "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "versionDb",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -974,7 +1027,7 @@
             }
           },
           {
-            "name": "pick",
+            "name": "skip",
             "in": "path",
             "required": true,
             "schema": {
@@ -989,9 +1042,38 @@
             "content": {
               "text/plain": {
                 "schema": {
+                  "$ref": "#/components/schemas/SessionList"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionList"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Session/GetDbVersions": {
+      "get": {
+        "tags": [
+          "Session"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Session"
+                    "type": "string"
                   }
                 }
               },
@@ -999,7 +1081,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Session"
+                    "type": "string"
                   }
                 }
               },
@@ -1007,7 +1089,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Session"
+                    "type": "string"
                   }
                 }
               }
@@ -1531,6 +1613,23 @@
         },
         "additionalProperties": false
       },
+      "SessionList": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Session"
+            },
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "Vehicle": {
         "type": "object",
         "properties": {
@@ -1565,6 +1664,19 @@
         },
         "additionalProperties": false
       }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+        "name": "Authorization",
+        "in": "header"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
 }

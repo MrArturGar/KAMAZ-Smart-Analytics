@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using KSA_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using TableModelLibrary.Table;
@@ -28,6 +29,7 @@ namespace KSA_API
         public virtual DbSet<Session> Sessions { get; set; } = null!;
         public virtual DbSet<SessionEcuidentification> SessionEcuidentifications { get; set; } = null!;
         public virtual DbSet<Vehicle> Vehicles { get; set; } = null!;
+        public virtual DbSet<ApiLogin> ApiLogins { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

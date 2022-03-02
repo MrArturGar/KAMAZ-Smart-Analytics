@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
+using TableModelLibrary.Table;
+
 namespace KSA_API.Middleware
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
@@ -10,7 +12,7 @@ namespace KSA_API.Middleware
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var account = (LoginModel)context.HttpContext.Items["User"];
+            var account = (ApiLogin)context.HttpContext.Items["User"];
             if (account == null)
             {
                 // not logged in
