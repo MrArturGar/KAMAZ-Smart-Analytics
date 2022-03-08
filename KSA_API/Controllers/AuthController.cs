@@ -1,20 +1,17 @@
 ﻿using KSA_API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using TableModelLibrary.Table;
 
 namespace KSA_API.Controllers
 {
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AuthController : Controller
     {
         KSA_DBContext Context = new();
@@ -37,11 +34,11 @@ namespace KSA_API.Controllers
             if (isValid)
             {
                 var tokenString = GenerateJwtToken(Username);
+                _logger.LogInformation($"{Username} logged in.");
                 return Ok(new { Token = tokenString, Message = "Success" });
             }
             return BadRequest("Please pass the valid Username and Password");
         }
-        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet(nameof(GetResult))]
         public IActionResult GetResult()
         {

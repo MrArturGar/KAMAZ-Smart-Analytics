@@ -46,6 +46,8 @@ namespace KSA_API.Middleware
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
                     ValidateAudience = true,
+                    ValidIssuer = _configuration["Jwt:Issuer"],
+                    ValidAudience = _configuration["Jwt:Audience"],
                     // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
@@ -54,10 +56,11 @@ namespace KSA_API.Middleware
                 var accountId = jwtToken.Claims.First(x => x.Type == "id").Value;
 
                 // attach account to context on successful jwt validation
-                context.Items["User"] = _loginModel.Id;// _userService.GetUserDetails();
+                context.Items["User"] = accountId;//_loginModel.Id;// _userService.GetUserDetails();
             }
-            catch
+            catch (Exception ex)
             {
+                throw new Exception(ex.Message);
                 // do nothing if jwt validation fails
                 // account is not attached to context so request won't have access to secure routes
             }

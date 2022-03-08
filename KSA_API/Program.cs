@@ -74,7 +74,7 @@ app.UseHttpsRedirection();
 /// <summary>
 /// Авторизация
 /// </summary>
-//app.UseAuthentication();
+app.UseAuthentication();
 
 app.UseAuthorization();
 

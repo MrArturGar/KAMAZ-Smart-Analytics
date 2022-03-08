@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TableModelLibrary.Table;
 
 namespace KSA_API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class AoglonassReportController
     {
         KSA_DBContext Context = new();

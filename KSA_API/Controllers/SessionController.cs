@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using TableModelLibrary.Table;
 using TableModelLibrary.Web;
 
@@ -7,6 +7,7 @@ namespace KSA_API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class SessionController
     {
         KSA_DBContext Context = new();
@@ -52,7 +53,7 @@ namespace KSA_API.Controllers
             }
         }
 
-        [HttpGet("{sortBy}, {take}, {skip}", Name = "GetSessionWeb")]
+        [HttpGet("{sortBy}, {take}, {skip}", Name = "GetSessionsWeb")]
         public SessionList GetSessionsList(string? vin, string? versionDb, string sortBy, int take, int skip)
         {
             IQueryable<Session> sessions = Context.Sessions;
@@ -67,9 +68,20 @@ namespace KSA_API.Controllers
                 sessions = sessions.Where(c => vehicles.Contains(c.IdVehicle));
             }
 
-
             switch (sortBy)
             {
+                case "TypeAsc":
+                    sessions = sessions.OrderBy(s => s.SessionsName);
+                    break;
+                case "TypeDesc":
+                    sessions = sessions.OrderByDescending(s => s.SessionsName);
+                    break;
+                case "VinAsc":
+                    sessions = sessions.OrderBy(s => s.SessionsName);
+                    break;
+                case "VinDesc":
+                    sessions = sessions.OrderByDescending(s => s.SessionsName);
+                    break;
                 case "DateAsc":
                     sessions = sessions.OrderBy(s => s.Date);
                     break;

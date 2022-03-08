@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TableModelLibrary.Table;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KSA_API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class CompositeController
     {
         KSA_DBContext Context = new();

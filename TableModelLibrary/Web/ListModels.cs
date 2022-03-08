@@ -14,4 +14,10 @@ namespace TableModelLibrary.Web
 
         public int Count { get; set; }
     }
+    public class VehicleList
+    {
+        public Vehicle[] Items { get; set; }
+
+        public int Count { get; set; }
+    }
 }
