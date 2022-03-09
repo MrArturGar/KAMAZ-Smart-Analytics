@@ -1,4 +1,5 @@
-﻿using KAMAZ_Smart_Analytics.Models;
+﻿using KAMAZ_Smart_Analytics.Data;
+using KAMAZ_Smart_Analytics.Models.List;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TableModelLibrary.Web;
@@ -7,10 +8,7 @@ namespace KAMAZ_Smart_Analytics.Controllers
 {
     public class VehicleController : Controller
     {
-        swaggerClient client = new swaggerClient("https://localhost:7234/", new HttpClient()
-        {
-
-        });
+        swaggerClient client = new ApiClientContext().GetClient;
 
 
         [Authorize]

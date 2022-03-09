@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace KAMAZ_Smart_Analytics.Models
+namespace KAMAZ_Smart_Analytics.Models.List
 {
     public class FilterSessionViewModel
     {

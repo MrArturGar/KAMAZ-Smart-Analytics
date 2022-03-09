@@ -53,7 +53,7 @@ namespace KSA_API.Middleware
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var accountId = jwtToken.Claims.First(x => x.Type == "id").Value;
+                var accountId = jwtToken.Claims.First(x => x.Type == "Audience").Value;
 
                 // attach account to context on successful jwt validation
                 context.Items["User"] = accountId;//_loginModel.Id;// _userService.GetUserDetails();

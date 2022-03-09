@@ -1,4 +1,6 @@
-﻿namespace KAMAZ_Smart_Analytics.Models
+﻿using KAMAZ_Smart_Analytics.Models.List;
+
+namespace KAMAZ_Smart_Analytics.Models
 {
     public class ListSessionViewModel
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace KAMAZ_Smart_Analytics.Models
+namespace KAMAZ_Smart_Analytics.Models.List
 {
     public class SortSessionViewModel
     {

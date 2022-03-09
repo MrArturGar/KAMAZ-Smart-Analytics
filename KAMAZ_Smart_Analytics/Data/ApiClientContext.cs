@@ -8,7 +8,7 @@ namespace KAMAZ_Smart_Analytics.Data
     {
         string APP_PATH = "https://localhost:7234/";
         swaggerClient Client;
-        
+
         static private string Token;
         public ApiClientContext()
         {
@@ -17,6 +17,7 @@ namespace KAMAZ_Smart_Analytics.Data
             if (!CheckAuth())
             {
                 Auth();
+                Client = Init();
             }
         }
 
@@ -29,7 +30,10 @@ namespace KAMAZ_Smart_Analytics.Data
         {
             HttpClient httpClient = new HttpClient();
             var header = httpClient.DefaultRequestHeaders;
-            header.Add("Authorization", $"Bearer {Token}");
+
+            if (Token != null)
+                header.Add("Authorization", $"Bearer {Token}");
+
             return new swaggerClient(APP_PATH, httpClient);
         }
 
@@ -124,5 +128,6 @@ namespace KAMAZ_Smart_Analytics.Data
             //response_.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         }
+
     }
 }

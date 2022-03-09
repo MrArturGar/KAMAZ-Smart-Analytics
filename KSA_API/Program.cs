@@ -5,7 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using KSA_API.Middleware;
-using KSA_API.Services;
 using KSA_API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +44,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
+    options.RequireHttpsMetadata = true;
     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
     {
         ValidateActor = true,

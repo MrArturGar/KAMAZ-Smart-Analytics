@@ -2,6 +2,7 @@ CREATE TABLE [ApiLogins] (
 	id integer IDENTITY(1,1),
 	UserName varchar(32) NOT NULL,
 	Password varchar(64) NOT NULL,
+	Role varchar(32) NOT NULL,
   CONSTRAINT [PK_VEHICLES] PRIMARY KEY CLUSTERED
   (
   [id] ASC

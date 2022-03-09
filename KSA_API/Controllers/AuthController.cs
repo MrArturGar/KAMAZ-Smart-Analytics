@@ -30,10 +30,10 @@ namespace KSA_API.Controllers
         {
             //bool isValid = _userService.IsValidUserInformation(data);
 
-            bool isValid = Context.ApiLogins.Where(c => c.UserName == Username && c.Password == Password).SingleOrDefault() != null;
-            if (isValid)
+            ApiLogin account = Context.ApiLogins.Where(c => c.UserName == Username && c.Password == Password).SingleOrDefault();
+            if (account != null)
             {
-                var tokenString = GenerateJwtToken(Username);
+                var tokenString = GenerateJwtToken(account);
                 _logger.LogInformation($"{Username} logged in.");
                 return Ok(new { Token = tokenString, Message = "Success" });
             }
@@ -49,16 +49,16 @@ namespace KSA_API.Controllers
         /// </summary>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        private string GenerateJwtToken(string userName)
+        private string GenerateJwtToken(ApiLogin account)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:key"]);
+            var key = Encoding.ASCII.GetBytes(account.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", userName) }),
-                Expires = DateTime.UtcNow.AddHours(int.Parse(_configuration["Jwt:Expires"])),
-                Issuer = _configuration["Jwt:Issuer"],
-                Audience = _configuration["Jwt:Audience"],
+                Subject = new ClaimsIdentity(new[] { new Claim("id", account.UserName) }),
+                Expires = DateTime.UtcNow.AddMinutes(account.TokenLifetime),
+                Issuer = account.Issuer,
+                Audience = account.Audience,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
