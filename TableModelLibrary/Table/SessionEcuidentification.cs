@@ -8,5 +8,6 @@ namespace TableModelLibrary.Table
         public int Id { get; set; }
         public int IdEcuidentifications { get; set; }
         public int IdSession { get; set; }
+
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace KSA_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     [Authorize]
     public class ServiceCenterController
@@ -59,6 +59,12 @@ namespace KSA_API.Controllers
             }
 
             return null;
+        }
+
+        [HttpGet("{id:int}", Name = "GetServiceCenterById")]
+        public ServiceCenter GetServiceCenterById(int id)
+        {
+            return Context.ServiceCenters.Where(c => c.Id == id).Single();
         }
     }
 }

@@ -38,25 +38,25 @@ namespace KSA_API.Middleware
         {
             try
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidIssuer = _configuration["Jwt:Issuer"],
-                    ValidAudience = _configuration["Jwt:Audience"],
-                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
+                //var tokenHandler = new JwtSecurityTokenHandler();
+                //var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+                //tokenHandler.ValidateToken(token, new TokenValidationParameters
+                //{
+                //    ValidateIssuerSigningKey = true,
+                //    IssuerSigningKey = new SymmetricSecurityKey(key),
+                //    ValidateIssuer = true,
+                //    ValidateAudience = true,
+                //    ValidIssuer = _configuration["Jwt:Issuer"],
+                //    ValidAudience = _configuration["Jwt:Audience"],
+                //    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                //    ClockSkew = TimeSpan.Zero
+                //}, out SecurityToken validatedToken);
 
-                var jwtToken = (JwtSecurityToken)validatedToken;
-                var accountId = jwtToken.Claims.First(x => x.Type == "Audience").Value;
+                //var jwtToken = (JwtSecurityToken)validatedToken;
+                //var accountId = jwtToken.Claims.First(x => x.Type == "aud").Value;
 
-                // attach account to context on successful jwt validation
-                context.Items["User"] = accountId;//_loginModel.Id;// _userService.GetUserDetails();
+                //// attach account to context on successful jwt validation
+                //context.Items["User"] = accountId;//_loginModel.Id;// _userService.GetUserDetails();
             }
             catch (Exception ex)
             {

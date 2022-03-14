@@ -5,6 +5,7 @@ namespace TableModelLibrary.Table
 {
     public partial class Session
     {
+
         public int Id { get; set; }
         public int IdVehicle { get; set; }
         public string SessionsName { get; set; } = null!;
@@ -17,5 +18,6 @@ namespace TableModelLibrary.Table
         public bool? HasDtc { get; set; }
         public bool? HasTests { get; set; }
         public bool? HasFlash { get; set; }
+
     }
 }

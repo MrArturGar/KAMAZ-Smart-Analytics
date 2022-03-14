@@ -37,5 +37,12 @@ namespace KSA_API.Controllers
         {
             return Context.AoglonassReports.Where(c => c.IdSession == idSession && c.DateStart == dateStart).SingleOrDefault(); ;
         }
+
+        [HttpGet("{sessionId}", Name = "GetAoglonassReportBySessionId")]
+        public AoglonassReport[] GetAoglonassReportBySessionId(int sessionId)
+        {
+            return Context.AoglonassReports.Where(c=>c.IdSession == sessionId).ToArray();
+        }
+
     }
 }

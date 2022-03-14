@@ -1,19 +1,171 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Index";
+}
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-3">
-            Level 1: .col-sm-3
-        </div>
-        <div class="col-sm-9">
-            <div class="row">
-                <div class="col-8 col-sm-6">
-                    Level 2: .col-8 .col-sm-6
+<div class="text-center">
+    <h1 class="display-4">Сессия</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <img class="img-thumbnail" height="700" width="1300" src="~/img/type/@(ViewBag.Vehicle.Type).webp" />
+            </div>
+            <div class="col-sm-6">
+                <h3>Client</h3>
+                <div class="row p-3 border bg-light">
+                    <p class="lead"><b>User:</b> @(ViewBag.ServiceCenter.Username)</p>
                 </div>
-                <div class="col-4 col-sm-6">
-                    Level 2: .col-4 .col-sm-6
+                <div class="row p-3 border bg-light">
+                    <p class="lead"><b>City:</b> @(ViewBag.ServiceCenter.City)</p>
+                </div>
+                <div class="row p-3 border bg-light">
+                    <p class="lead"><b>Verion data base:</b> @(ViewBag.Session.VersionDb)</p>
+                </div>
+                <div class="row p-3 border bg-light">
+                    <p class="lead"><b>VCI Seria number:</b> @(ViewBag.Session.Vcisn)</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h3>Basic information</h3>
+            <div class="col-sm-6">
+                <div class="row p-3 border bg-light">
+                    <p class="lead"><b>Type:</b> @(ViewBag.Vehicle.Type)</p>
+                </div>
+                <div class="row p-3 border bg-light">
+                    <p class="lead"><b>Design number:</b> @(ViewBag.Vehicle.DesignNumber)</p>
+                </div>
+                <div class="row p-3 border bg-light">
+                    <p class="lead"><b>VIN:</b> @(ViewBag.Vehicle.Vin)</p>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="row p-3 border bg-light">
+                    <p class="lead"><b>ICCID:</b> @(ViewBag.Vehicle.Iccid)</p>
+                </div>
+                <div class="row p-3 border bg-light">
+                    <p class="lead"><b>ICCIDC:</b> @(ViewBag.Vehicle.Iccidc)</p>
+                </div>
+                <div class="row p-3 border bg-light">
+                    <p class="lead"><b>ICCIDC:</b> @(ViewBag.Vehicle.Imei)</p>
                 </div>
             </div>
         </div>
     </div>
+    <br />
+    <h3>Identifications</h3>
+    @if (ViewBag.Identifications.Count != 0)
+    {
+        <div class="accordion" id="accordionIdent">
+            @foreach (string key in ViewBag.Identifications.Keys)
+            {
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id=@("heading" + key)>
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target=@("#collapse" + key) aria-controls=@("collapse" + key)>
+                            @key
+                        </button>
+                    </h2>
+                    <div id=@("collapse" + key) class="accordion-collapse collapse" aria-labelledby=@("heading" + key) data-bs-parent="#accordionIdent">
+                        <table class="table">
+                            <div class="accordion-body">
+                                @foreach (IdentificationWeb ident in ViewBag.Identifications[key])
+                                {
+                                <tr><td align="left"><p class="lead">@ident.Name: </p></td><td align="right"><p class="lead">@ident.Value </p></td></tr>
+                                }
+                    </div>
+                    </table>
+                </div>
+            </div>
+            }
+    </div>
+    }
+    else
+    {
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-sm-9">
+                <div class="row p-9 border bg-light">
+                    <p class="lead">Not found</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+    <br/br>
+<h3>Internal tests</h3>
+    @if (ViewBag.ProcedureReports.Count != 0)
+    {
+    <table id="content-container" class="table">
+        <thead>
+            <tr>
+                <td><h5>ECU</h5></td>
+                <td><h5>Type</h5></td>
+                <td><h5>Name</h5></td>
+                <td><h5>Result</h5></td>
+                <td><h5>Date start</h5></td>
+                <td><h5>Date end</h5></td>
+                <td><h5>VIN</h5></td>
+                <td><h5>File</h5></td>
+            </tr>
+        </thead>
+            @foreach (ProcedureReportWeb proc in ViewBag.ProcedureReports)
+            {
+            <tr>
+                <td><p>@proc.Codifier</p></td>
+                <td><p>@proc.Type</p></td>
+                <td><p>@proc.Name</p></td>
+                <td><p>@proc.Result</p></td>
+                    @if (proc.DateStart != null)
+                    {
+                        DateTimeOffset dateStart = (DateTimeOffset)proc.DateStart;
+                    <td><p>@dateStart.ToString("dd.MM.yyyy (HH:mm:ss)")</p></td>
+                    }
+                    else
+                    {
+                    <td><p>---</p></td>
+                    }
+                <td><p>@proc.DateEnd.ToString("dd.MM.yyyy (HH:mm:ss)")</p></td>
+                <td><p>@proc.UsingVin</p></td>
+                <td><p>@proc.DataFiles</p></td>
+            </tr>
+            }
+    </table>
+    }
+    else
+    {
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-sm-9">
+                <div class="row p-9 border bg-light">
+                    <p class="lead">Not found</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+
+    <br/>
+    @if (ViewBag.AoglonassReports.Count != 0)
+    {
+        <h3>AO Glonass</h3>
+        <table id="content-container" class="table">
+        <thead>
+            <tr>
+                <td><h5>Date start</h5></td>
+                <td><h5>Action</h5></td>
+                <td><h5>Params</h5></td>
+                <td><h5>Status</h5></td>
+            </tr>
+        </thead>
+            @foreach (AoglonassReport aoproc in ViewBag.AoglonassReports)
+            {
+            <tr>
+                <td><p>@aoproc.DateStart.ToString("dd.MM.yyyy (HH:mm:ss)")</p></td>
+                <td><p>@aoproc.Action</p></td>
+                <td><p>@aoproc.ParamText</p></td>
+                <td><p>@aoproc.Status</p></td>
+            </tr>
+            }
+    </table>
+
+    }
 </div>

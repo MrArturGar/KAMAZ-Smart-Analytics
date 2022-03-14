@@ -40,6 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Index\" />
     <Folder Include="wwwroot\img\ico\" />
   </ItemGroup>
 

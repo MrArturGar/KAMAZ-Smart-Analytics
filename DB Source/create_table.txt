@@ -3,7 +3,8 @@ CREATE TABLE [ApiLogins] (
 	UserName varchar(32) NOT NULL,
 	Password varchar(64) NOT NULL,
 	Role varchar(32) NOT NULL,
-  CONSTRAINT [PK_VEHICLES] PRIMARY KEY CLUSTERED
+	TokenLifetime integer NOT NULL,
+  CONSTRAINT [PK_APILOGINS] PRIMARY KEY CLUSTERED
   (
   [id] ASC
   ) WITH (IGNORE_DUP_KEY = OFF)

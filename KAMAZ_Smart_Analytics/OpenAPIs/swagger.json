@@ -107,6 +107,56 @@
         }
       }
     },
+    "/AoglonassReport/{sessionId}": {
+      "get": {
+        "tags": [
+          "AoglonassReport"
+        ],
+        "operationId": "GetAoglonassReportBySessionId",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AoglonassReport"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AoglonassReport"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AoglonassReport"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Auth/Auth": {
       "post": {
         "tags": [
@@ -641,6 +691,56 @@
         }
       }
     },
+    "/Identification/{id}": {
+      "get": {
+        "tags": [
+          "Identification"
+        ],
+        "operationId": "GetIdentificationWeb",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IdentificationWeb"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IdentificationWeb"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IdentificationWeb"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ProcedureReport": {
       "post": {
         "tags": [
@@ -766,7 +866,57 @@
         }
       }
     },
-    "/api/ServiceCenter": {
+    "/ProcedureReport/{sessionId}": {
+      "get": {
+        "tags": [
+          "ProcedureReport"
+        ],
+        "operationId": "GetProcedureReportWeb",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProcedureReportWeb"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProcedureReportWeb"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProcedureReportWeb"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ServiceCenter": {
       "post": {
         "tags": [
           "ServiceCenter"
@@ -818,7 +968,7 @@
         }
       }
     },
-    "/api/ServiceCenter/{username}": {
+    "/ServiceCenter/{username}": {
       "get": {
         "tags": [
           "ServiceCenter"
@@ -831,6 +981,47 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCenter"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCenter"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCenter"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ServiceCenter/{id}": {
+      "get": {
+        "tags": [
+          "ServiceCenter"
+        ],
+        "operationId": "GetServiceCenterById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -954,6 +1145,7 @@
         "tags": [
           "Session"
         ],
+        "operationId": "GetSessionByName",
         "parameters": [
           {
             "name": "sessionName",
@@ -988,12 +1180,53 @@
         }
       }
     },
+    "/Session/{id}": {
+      "get": {
+        "tags": [
+          "Session"
+        ],
+        "operationId": "GetSessionById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Session/{sortBy}, {take}, {skip}": {
       "get": {
         "tags": [
           "Session"
         ],
-        "operationId": "GetSessionsWeb",
+        "operationId": "GetSessionListWeb",
         "parameters": [
           {
             "name": "vin",
@@ -1042,17 +1275,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/SessionList"
+                  "$ref": "#/components/schemas/SessionListWeb"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SessionList"
+                  "$ref": "#/components/schemas/SessionListWeb"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SessionList"
+                  "$ref": "#/components/schemas/SessionListWeb"
                 }
               }
             }
@@ -1324,12 +1557,53 @@
         }
       }
     },
+    "/Vehicle/{id}": {
+      "get": {
+        "tags": [
+          "Vehicle"
+        ],
+        "operationId": "GetVehicleById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vehicle"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vehicle"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vehicle"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Vehicle/{sortBy}, {take}, {skip}": {
       "get": {
         "tags": [
           "Vehicle"
         ],
-        "operationId": "GetVehiclesWeb",
+        "operationId": "GetVehicleListWeb",
         "parameters": [
           {
             "name": "vin",
@@ -1406,17 +1680,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/VehicleList"
+                  "$ref": "#/components/schemas/VehicleListWeb"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/VehicleList"
+                  "$ref": "#/components/schemas/VehicleListWeb"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/VehicleList"
+                  "$ref": "#/components/schemas/VehicleListWeb"
                 }
               }
             }
@@ -1547,6 +1821,28 @@
         },
         "additionalProperties": false
       },
+      "IdentificationWeb": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "codifier": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ProcedureReport": {
         "type": "object",
         "properties": {
@@ -1557,6 +1853,57 @@
           "idEcu": {
             "type": "integer",
             "format": "int32"
+          },
+          "idSession": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "result": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "dateStart": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dateEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usingVin": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataFiles": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProcedureReportWeb": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEcu": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "codifier": {
+            "type": "string",
+            "nullable": true
           },
           "idSession": {
             "type": "integer",
@@ -1713,7 +2060,7 @@
         },
         "additionalProperties": false
       },
-      "SessionList": {
+      "SessionListWeb": {
         "type": "object",
         "properties": {
           "items": {
@@ -1764,7 +2111,7 @@
         },
         "additionalProperties": false
       },
-      "VehicleList": {
+      "VehicleListWeb": {
         "type": "object",
         "properties": {
           "items": {

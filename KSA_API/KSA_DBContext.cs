@@ -4,6 +4,7 @@ using KSA_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using TableModelLibrary.Table;
+using TableModelLibrary.Web;
 
 namespace KSA_API
 {
@@ -19,17 +20,19 @@ namespace KSA_API
         }
 
         public virtual DbSet<AoglonassReport> AoglonassReports { get; set; } = null!;
+        public virtual DbSet<ApiLogin> ApiLogins { get; set; } = null!;
         public virtual DbSet<Composite> Composites { get; set; } = null!;
         public virtual DbSet<ControlSystem> ControlSystems { get; set; } = null!;
         public virtual DbSet<Ecu> Ecus { get; set; } = null!;
         public virtual DbSet<EcuIdentification> EcuIdentifications { get; set; } = null!;
         public virtual DbSet<Identification> Identifications { get; set; } = null!;
+        public virtual DbSet<IdentificationWeb> IdentificationWebs { get; set; } = null!;
         public virtual DbSet<ProcedureReport> ProcedureReports { get; set; } = null!;
+        public virtual DbSet<ProcedureReportWeb> ProcedureReportWebs { get; set; } = null!;
         public virtual DbSet<ServiceCenter> ServiceCenters { get; set; } = null!;
         public virtual DbSet<Session> Sessions { get; set; } = null!;
         public virtual DbSet<SessionEcuidentification> SessionEcuidentifications { get; set; } = null!;
         public virtual DbSet<Vehicle> Vehicles { get; set; } = null!;
-        public virtual DbSet<ApiLogin> ApiLogins { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -65,7 +68,23 @@ namespace KSA_API
                 entity.Property(e => e.Status)
                     .HasMaxLength(32)
                     .IsUnicode(false);
+            });
 
+            modelBuilder.Entity<ApiLogin>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Password)
+                    .HasMaxLength(64)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Role)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UserName)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Composite>(entity =>
@@ -74,7 +93,6 @@ namespace KSA_API
 
                 entity.Property(e => e.DesignNumber)
                     .HasMaxLength(256)
-                    .IsUnicode(false)
                     .HasColumnName("Design_Number");
 
                 entity.Property(e => e.IdEcu).HasColumnName("id_ECU");
@@ -101,7 +119,7 @@ namespace KSA_API
             {
                 entity.ToTable("ECUs");
 
-                entity.HasIndex(e => e.Codifier, "UQ__ECUs__C9129390709E3DDB")
+                entity.HasIndex(e => e.Codifier, "UQ__ECUs__C912939070092D12")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -132,6 +150,25 @@ namespace KSA_API
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(256)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Value).HasMaxLength(512);
+            });
+
+            modelBuilder.Entity<IdentificationWeb>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("IdentificationWeb");
+
+                entity.Property(e => e.Codifier)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IdSession).HasColumnName("id_Session");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(256)
@@ -176,6 +213,45 @@ namespace KSA_API
 
             });
 
+            modelBuilder.Entity<ProcedureReportWeb>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ProcedureReportWeb");
+
+                entity.Property(e => e.Codifier)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DataFiles).HasColumnType("text");
+
+                entity.Property(e => e.DateEnd)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Date_end");
+
+                entity.Property(e => e.DateStart)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Date_start");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.IdEcu).HasColumnName("id_ECU");
+
+                entity.Property(e => e.IdSession).HasColumnName("id_session");
+
+                entity.Property(e => e.Name).HasMaxLength(256);
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(32)
+                    .IsUnicode(false)
+                    .HasColumnName("type");
+
+                entity.Property(e => e.UsingVin)
+                    .HasMaxLength(32)
+                    .IsUnicode(false)
+                    .HasColumnName("Using_VIN");
+            });
+
             modelBuilder.Entity<ServiceCenter>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -205,7 +281,7 @@ namespace KSA_API
 
             modelBuilder.Entity<Session>(entity =>
             {
-                entity.HasIndex(e => e.SessionsName, "UQ__Sessions__FF7910AD51D19F91")
+                entity.HasIndex(e => e.SessionsName, "UQ__Sessions__FF7910AD333F2A38")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -261,7 +337,6 @@ namespace KSA_API
                 entity.Property(e => e.IdEcuidentifications).HasColumnName("id_ECUIdentifications");
 
                 entity.Property(e => e.IdSession).HasColumnName("id_Session");
-
             });
 
             modelBuilder.Entity<Vehicle>(entity =>
@@ -273,7 +348,6 @@ namespace KSA_API
 
                 entity.Property(e => e.DesignNumber)
                     .HasMaxLength(256)
-                    .IsUnicode(false)
                     .HasColumnName("Design_Number");
 
                 entity.Property(e => e.Iccid)

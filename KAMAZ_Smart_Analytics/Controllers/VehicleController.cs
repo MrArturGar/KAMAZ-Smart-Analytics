@@ -16,7 +16,7 @@ namespace KAMAZ_Smart_Analytics.Controllers
         {
             int pageCount, entitesOnPage = 30;
 
-            VehicleList vehicles = await client.GetVehiclesWebAsync(vin, design_number, iccid, iccidc, imei, type, sortOrder.ToString(), entitesOnPage, entitesOnPage * (page - 1));
+            VehicleListWeb vehicles = await client.GetVehicleListWebAsync(vin, design_number, iccid, iccidc, imei, type, sortOrder.ToString(), entitesOnPage, entitesOnPage * (page - 1));
 
             pageCount = (int)Math.Ceiling((double)vehicles.Count / (double)entitesOnPage);
 

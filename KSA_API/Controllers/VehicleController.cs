@@ -38,8 +38,14 @@ namespace KSA_API.Controllers
             return Context.Vehicles.Where(c => c.Vin == vin && c.DesignNumber == designNumber && c.Iccid == iccid && c.Iccidc == iccidc && c.Imei == imei && c.Type == type).SingleOrDefault();
         }
 
-        [HttpGet("{sortBy}, {take}, {skip}", Name = "GetVehiclesWeb")]
-        public VehicleList GetVehicleList(string? vin, string? design_number,string? iccid, string? iccidc, string? imei, string? type, string sortBy, int take, int skip)
+        [HttpGet("{id}", Name = "GetVehicleById")]
+        public Vehicle GetVehicleById(int id)
+        {
+            return Context.Vehicles.Where(c => c.Id == id).Single();
+        }
+
+        [HttpGet("{sortBy}, {take}, {skip}", Name = "GetVehicleListWeb")]
+        public VehicleListWeb GetVehicleListWeb(string? vin, string? design_number,string? iccid, string? iccidc, string? imei, string? type, string sortBy, int take, int skip)
         {
             IQueryable<Vehicle> vehicles = Context.Vehicles;
             if (!String.IsNullOrEmpty(vin))
@@ -112,7 +118,7 @@ namespace KSA_API.Controllers
             }
 
 
-            return new VehicleList
+            return new VehicleListWeb
             {
                 Count = vehicles.Count(),
                 Items = vehicles.Skip(skip).Take(take).ToArray()

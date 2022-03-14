@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TableModelLibrary.Table;
 using Microsoft.AspNetCore.Authorization;
+using TableModelLibrary.Web;
 
 namespace KSA_API.Controllers
 {
@@ -35,6 +36,12 @@ namespace KSA_API.Controllers
         public Identification GetIdentification(string name, string? value)
         {
             return Context.Identifications.Where(c => c.Name == name && c.Value == value).SingleOrDefault();
+        }
+
+        [HttpGet("{id:int}", Name = "GetIdentificationWeb")]
+        public IdentificationWeb[] GetGetIdentificationWeb(int id)
+        {
+            return Context.IdentificationWebs.Where(c => c.IdSession == id).ToArray();
         }
     }
 }

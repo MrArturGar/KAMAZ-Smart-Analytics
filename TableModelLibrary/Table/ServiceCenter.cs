@@ -5,6 +5,7 @@ namespace TableModelLibrary.Table
 {
     public partial class ServiceCenter
     {
+
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Address { get; set; }
@@ -15,5 +16,6 @@ namespace TableModelLibrary.Table
         public string Username { get; set; } = null!;
         public string? Status { get; set; }
         public string? DilerTr { get; set; }
+
     }
 }

@@ -8,13 +8,13 @@ using TableModelLibrary.Table;
 namespace TableModelLibrary.Web
 {
 
-    public class SessionList
+    public class SessionListWeb
     {
         public Session[] Items { get; set; }
 
         public int Count { get; set; }
     }
-    public class VehicleList
+    public class VehicleListWeb
     {
         public Vehicle[] Items { get; set; }
 

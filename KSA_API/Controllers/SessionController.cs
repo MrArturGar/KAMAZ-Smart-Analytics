@@ -22,7 +22,7 @@ namespace KSA_API.Controllers
         [HttpPost]
         public int PostSession(Session session)
         {
-            Session tmp = GetSession(session.SessionsName);
+            Session tmp = GetSessionByName(session.SessionsName);
 
             if (tmp == null)
             {
@@ -34,10 +34,16 @@ namespace KSA_API.Controllers
 
         }
 
-        [HttpGet("{sessionName}")]
-        public Session GetSession(string sessionName)
+        [HttpGet("{sessionName}", Name = "GetSessionByName")]
+        public Session GetSessionByName(string sessionName)
         {
             return Context.Sessions.Where(c => c.SessionsName == sessionName).SingleOrDefault();
+        }
+
+        [HttpGet("{id:int}", Name = "GetSessionById")]
+        public Session GetSessionById(int id)
+        {
+            return Context.Sessions.Where(c => c.Id == id).Single();
         }
 
         [HttpGet(Name = "GetSessionsCount")]
@@ -53,8 +59,8 @@ namespace KSA_API.Controllers
             }
         }
 
-        [HttpGet("{sortBy}, {take}, {skip}", Name = "GetSessionsWeb")]
-        public SessionList GetSessionsList(string? vin, string? versionDb, string sortBy, int take, int skip)
+        [HttpGet("{sortBy}, {take}, {skip}", Name = "GetSessionListWeb")]
+        public SessionListWeb GetSessionListWeb(string? vin, string? versionDb, string sortBy, int take, int skip)
         {
             IQueryable<Session> sessions = Context.Sessions;
 
@@ -100,7 +106,7 @@ namespace KSA_API.Controllers
             }
 
 
-            return new SessionList
+            return new SessionListWeb
             {
                 Count = sessions.Count(),
                 Items = sessions.Skip(skip).Take(take).ToArray()

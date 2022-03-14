@@ -1,5 +1,4 @@
 ﻿using KAMAZ_Smart_Analytics.Data;
-using KAMAZ_Smart_Analytics.Models.Index;
 using KAMAZ_Smart_Analytics.Models.List;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +17,7 @@ namespace KAMAZ_Smart_Analytics.Controllers
             int pageCount, entitesOnPage = 30;
             versionDb = versionDb=="Все"?null: versionDb;
 
-            SessionList sessions = await client.GetSessionsWebAsync(vin, versionDb, sortOrder.ToString(), entitesOnPage, entitesOnPage * (page - 1));
+            SessionListWeb sessions = await client.GetSessionListWebAsync(vin, versionDb, sortOrder.ToString(), entitesOnPage, entitesOnPage * (page - 1));
 
             pageCount = (int)Math.Ceiling((double)sessions.Count / (double)entitesOnPage);
 
@@ -36,13 +35,28 @@ namespace KAMAZ_Smart_Analytics.Controllers
 
         public async Task<IActionResult> Index(int id)
         {
-            //SessionViewModel viewModel = new SessionViewModel()
-            //{
-            //    Session = await client.GetSessionAsync(id)
-            //};
-            //viewModel.Vehicle = await client.GetVehicleAsync(viewModel.Session.IdVehicle);
-            //viewModel.ServiceCenter = await client.GetServiceCenterAsync(viewModel.Session.IdServiceCenters);
-            //viewModel.
+            Session session = await client.GetSessionByIdAsync(id);
+            ViewBag.Session = session;
+            ViewBag.ServiceCenter = await client.GetServiceCenterByIdAsync(session.IdServiceCenters);
+            ViewBag.Vehicle = await client.GetVehicleByIdAsync(session.IdVehicle);
+            Dictionary<string, List<IdentificationWeb>> identifications = new();
+            foreach (IdentificationWeb ident in await client.GetIdentificationWebAsync(id))
+            {
+                if (identifications.ContainsKey(ident.Codifier))
+                {
+                    identifications[ident.Codifier].Add(ident);
+                }
+                else
+                {
+                    identifications.Add(ident.Codifier, new List<IdentificationWeb>());
+                    identifications[ident.Codifier].Add(ident);
+                }
+            }
+            string[] key = identifications.Keys.ToArray();
+            ViewBag.Identifications = identifications;
+
+            ViewBag.ProcedureReports = await client.GetProcedureReportWebAsync(id);
+            ViewBag.AoglonassReports = await client.GetAoglonassReportBySessionIdAsync(id);
 
             return View();
         }

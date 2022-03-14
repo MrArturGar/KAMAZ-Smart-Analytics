@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TableModelLibrary.Table;
+using TableModelLibrary.Web;
 using Microsoft.AspNetCore.Authorization;
 
 namespace KSA_API.Controllers
@@ -39,6 +40,12 @@ namespace KSA_API.Controllers
             return Context.ProcedureReports.Where(c => c.IdSession == idSession && c.DateStart == dateStart
             && c.DateEnd == dateEnd && c.Type == type && c.Result == result).SingleOrDefault();
 
+        }
+
+        [HttpGet("{sessionId:int}", Name = "GetProcedureReportWeb")]
+        public ProcedureReportWeb[] GetProcedureReportWeb(int sessionId)
+        {
+            return Context.ProcedureReportWebs.Where(c=>c.IdSession==sessionId).ToArray();
         }
 
     }

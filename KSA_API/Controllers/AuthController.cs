@@ -52,13 +52,17 @@ namespace KSA_API.Controllers
         private string GenerateJwtToken(ApiLogin account)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(account.Secret);
+            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", account.UserName) }),
-                Expires = DateTime.UtcNow.AddMinutes(account.TokenLifetime),
-                Issuer = account.Issuer,
-                Audience = account.Audience,
+                Subject = new ClaimsIdentity(new[] 
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, account.UserName),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, account.Role)
+                }),
+                Expires = DateTime.UtcNow.AddHours(account.TokenLifetime),
+                Issuer = _configuration["Jwt:Issuer"],
+                Audience = _configuration["Jwt:Audience"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
