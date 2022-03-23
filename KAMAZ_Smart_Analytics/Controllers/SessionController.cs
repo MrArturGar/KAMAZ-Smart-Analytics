@@ -2,6 +2,7 @@
 using KAMAZ_Smart_Analytics.Models.List;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using TableModelLibrary.Web;
 
 namespace KAMAZ_Smart_Analytics.Controllers
@@ -10,12 +11,17 @@ namespace KAMAZ_Smart_Analytics.Controllers
     public class SessionController : Controller
     {
         swaggerClient client = new ApiClientContext().GetClient;
-
+        private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        public SessionController(IStringLocalizer<SharedResource> sharedLocalizer)
+        {
+            _sharedLocalizer = sharedLocalizer;
+        }
 
         public async Task<IActionResult> List(string? vin, string? versionDb, int page = 1, SortSessionState sortOrder = SortSessionState.DateDesc)
         {
             int pageCount, entitesOnPage = 30;
-            versionDb = versionDb=="Все"?null: versionDb;
+            versionDb = versionDb== "Все"? null: versionDb;
+            var sad = _sharedLocalizer["Vin"];
 
             SessionListWeb sessions = await client.GetSessionListWebAsync(vin, versionDb, sortOrder.ToString(), entitesOnPage, entitesOnPage * (page - 1));
 

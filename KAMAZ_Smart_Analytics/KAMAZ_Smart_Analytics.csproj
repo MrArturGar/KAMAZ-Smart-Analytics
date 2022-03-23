@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -41,11 +41,22 @@
 
   <ItemGroup>
     <Folder Include="Models\Index\" />
+    <Folder Include="Views\Procedures\" />
     <Folder Include="wwwroot\img\ico\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TableModelLibrary\TableModelLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\SharedResource.en.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\SharedResource.ru.resx">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Generator></Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

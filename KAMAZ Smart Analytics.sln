@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KSA_Collector", "KSA_Collec
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KSA_API", "KSA_API\KSA_API.csproj", "{36F64DA7-B155-4751-B8F8-C41E42B923A2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KAMAZ Smart Analytics", "KAMAZ_Smart_Analytics\KAMAZ Smart Analytics.csproj", "{52A5C83B-2129-4000-B96C-4A897509B682}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KAMAZ_Smart_Analytics", "KAMAZ_Smart_Analytics\KAMAZ_Smart_Analytics.csproj", "{52A5C83B-2129-4000-B96C-4A897509B682}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TableModelLibrary", "TableModelLibrary\TableModelLibrary.csproj", "{3F0C8C86-546F-4DF5-A5D8-7ED78D735410}"
 EndProject
