@@ -1,0 +1,166 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@using KAMAZ_Smart_Analytics.Models.List;
+
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
+@model ProcedureReportListViewModel
+<link href="~/css/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewData["Title"] = "ProcedureReports";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@SharedLocalizer["ProcedureReports"]</></h1>
+    <form method="get">
+        <div class="container">
+            <div class="row">
+                <div class="col" align="left">
+                    <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseBody" role="button" aria-expanded="false" aria-controls="collapseBody">
+                        @SharedLocalizer["Filter"]
+                    </a>
+                </div>
+                <div class="col" align="center">
+                    <select name="sortOrder" asp-for="SortViewModel.Current" asp-items="Html.GetEnumSelectList<SortProcedureReportState>()" class="form-select"></select>
+                </div>
+                <div class="col" align="right">
+                    <input id="filter" type="submit" value="@SharedLocalizer["Apply"]" class="btn btn-outline-dark" />
+                </div>
+            </div>
+        </div>
+
+        <div class="collapse px-4" id="collapseBody">
+            @*Тело фильтра*@
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <h5>@SharedLocalizer["Type"]: </h5>
+                        <select name="type" asp-items="Model.FilterViewModel.Types" class="form-select"></select>
+                    </div>
+                    <div class="col">
+                        <h5>@SharedLocalizer["Result"]: </h5>
+                        <select name="result" asp-items="Model.FilterViewModel.Results" class="form-select"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h5>@SharedLocalizer["Vin"]: </h5>
+                        <input name="vin" value="@Model.FilterViewModel.SelectedVin" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <h5>@SharedLocalizer["Ecu"]: </h5>
+                        <input name="ecu" value="@Model.FilterViewModel.SelectedEcu" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <h5>@SharedLocalizer["File"]: </h5>
+                        <input name="file" value="@Model.FilterViewModel.SelectedFile" class="form-control" />
+                    </div>
+                    <div class="col">
+                        <h5>@SharedLocalizer["DateStart"]: </h5>
+                        <div class='input-group date' id='datetimepicker'>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h5>@SharedLocalizer["DateEnd"]: </h5>
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <br />
+    <table id="content-container" class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <td><h5>@SharedLocalizer["Ecu"]</h5></td>
+                <td><h5>@SharedLocalizer["Type"]</h5></td>
+                <td><h5>@SharedLocalizer["Name"]</h5></td>
+                <td><h5>@SharedLocalizer["DateStart"]</h5></td>
+                <td><h5>@SharedLocalizer["DateEnd"]</h5></td>
+                <td><h5>@SharedLocalizer["Vin"]</h5></td>
+                <td><h5>@SharedLocalizer["File"]</h5></td>
+                <td><h5>@SharedLocalizer["Result"]</h5></td>
+            </tr>
+        </thead>
+        @foreach (ProcedureReportWeb p in Model.Objects)
+        {
+            <tr>
+                <td><p>@p.Codifier</p></td>
+                <td><p>@p.Type</p></td>
+                <td><p>@p.Name</p></td>
+                @if (p.DateStart != null)
+                {
+                    DateTimeOffset dateStart = (DateTimeOffset)p.DateStart;
+                    <td><p>@dateStart.ToString("dd.MM.yyyy (HH:mm:ss)")</p></td>
+                }
+                else
+                {
+                    <td><p>---</p></td>
+                }
+                <td><p>@p.DateEnd.ToString("dd.MM.yyyy (HH:mm:ss)")</p></td>
+                <td><p>@p.UsingVin</p></td>
+                <td><p>@p.DataFiles</p></td>
+                <td><p>@p.Result</p></td>
+            </tr>
+        }
+    </table>
+    <br />
+
+    @if (Model.PageViewModel.HasPreviousPage)
+    {
+        <a asp-action="List"
+       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+       asp-route-sortOrder="@(Model.SortViewModel.Current)"
+       asp-route-type="@(Model.FilterViewModel.SelectedType)"
+       asp-route-result="@(Model.FilterViewModel.SelectedResult)"
+       asp-route-vin="@(Model.FilterViewModel.SelectedVin)"
+       asp-route-ecu="@(Model.FilterViewModel.SelectedEcu)"
+       asp-route-file="@(Model.FilterViewModel.SelectedFile)"
+       asp-route-dateStart="@(Model.FilterViewModel.DateStart)"
+       asp-route-dateEnd="@(Model.FilterViewModel.DateEnd)"
+       class="btn btn-outline-dark">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+            @SharedLocalizer["Back"]
+        </a>
+    }
+
+    @SharedLocalizer["Page"] @(Model.PageViewModel.TotalPages < Model.PageViewModel.PageNumber ? 0 : Model.PageViewModel.PageNumber) из @Model.PageViewModel.TotalPages
+
+    @if (Model.PageViewModel.HasNextPage)
+    {
+        <a asp-action="List"
+       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+       asp-route-sortOrder="@(Model.SortViewModel.Current)"
+       asp-route-type="@(Model.FilterViewModel.SelectedType)"
+       asp-route-result="@(Model.FilterViewModel.SelectedResult)"
+       asp-route-vin="@(Model.FilterViewModel.SelectedVin)"
+       asp-route-ecu="@(Model.FilterViewModel.SelectedEcu)"
+       asp-route-file="@(Model.FilterViewModel.SelectedFile)"
+       asp-route-dateStart="@(Model.FilterViewModel.DateStart)"
+       asp-route-dateEnd="@(Model.FilterViewModel.DateEnd)"
+       class="btn btn-outline-dark">
+            @SharedLocalizer["Next"]
+            <i class="glyphicon glyphicon-chevron-right"></i>
+        </a>
+    }
+
+</div>
+
+@section Scripts
+{
+      <script type="text/javascript">
+         $(function () {
+             $('.date').datetimepicker({
+                 locale: 'ru'
+             });
+         });
+      </script>
+}

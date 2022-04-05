@@ -11,13 +11,14 @@ namespace KSA_API.Controllers
     [Authorize]
     public class ServiceCenterController
     {
-        KSA_DBContext Context = new();
+        KSA_DBContext Context;
 
         private readonly ILogger<ServiceCenterController> _logger;
 
-        public ServiceCenterController(ILogger<ServiceCenterController> logger)
+        public ServiceCenterController(ILogger<ServiceCenterController> logger, KSA_DBContext context)
         {
             _logger = logger;
+            Context = context;
         }
 
         [HttpPost(Name = "PostServiceCenter")]

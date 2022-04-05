@@ -14,14 +14,15 @@ namespace KSA_API.Controllers
     [Authorize]
     public class AuthController : Controller
     {
-        KSA_DBContext Context = new();
+        KSA_DBContext Context;
         private readonly ILogger<VehicleController> _logger;
         private readonly IConfiguration _configuration;
 
-        public AuthController(ILogger<VehicleController> logger, IConfiguration configuration)
+        public AuthController(ILogger<VehicleController> logger, IConfiguration configuration, KSA_DBContext context)
         {
             _logger = logger;
             _configuration= configuration;
+            Context = context;
         }
 
         [AllowAnonymous]

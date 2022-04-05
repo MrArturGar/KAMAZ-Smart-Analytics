@@ -9,13 +9,14 @@ namespace KSA_API.Controllers
     [Authorize]
     public class AoglonassReportController
     {
-        KSA_DBContext Context = new();
+        KSA_DBContext Context;
 
         private readonly ILogger<AoglonassReportController> _logger;
 
-        public AoglonassReportController(ILogger<AoglonassReportController> logger)
+        public AoglonassReportController(ILogger<AoglonassReportController> logger, KSA_DBContext context)
         {
             _logger = logger;
+            Context = context;
         }
 
         [HttpPost(Name = "PostAoglonassReport")]

@@ -916,6 +916,115 @@
         }
       }
     },
+    "/ProcedureReport/{sortBy}, {take}, {skip}": {
+      "get": {
+        "tags": [
+          "ProcedureReport"
+        ],
+        "operationId": "GetProcedureReportListWeb",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "vin",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ecu",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "result",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "file",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dateStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "take",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcedureReportListWeb"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcedureReportListWeb"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcedureReportListWeb"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ServiceCenter": {
       "post": {
         "tags": [
@@ -1824,7 +1933,7 @@
       "IdentificationWeb": {
         "type": "object",
         "properties": {
-          "id": {
+          "idSession": {
             "type": "integer",
             "format": "int32"
           },
@@ -1890,6 +1999,23 @@
         },
         "additionalProperties": false
       },
+      "ProcedureReportListWeb": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProcedureReportWeb"
+            },
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "ProcedureReportWeb": {
         "type": "object",
         "properties": {
@@ -1929,6 +2055,10 @@
           "dateEnd": {
             "type": "string",
             "format": "date-time"
+          },
+          "vin": {
+            "type": "string",
+            "nullable": true
           },
           "usingVin": {
             "type": "string",

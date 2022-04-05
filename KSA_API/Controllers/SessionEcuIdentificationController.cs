@@ -7,13 +7,14 @@ namespace KSA_API.Controllers
     [Route("[controller]")]
     public class SessionEcuIdentificationController
     {
-        KSA_DBContext Context = new();
+        KSA_DBContext Context;
 
         private readonly ILogger<SessionEcuIdentificationController> _logger;
 
-        public SessionEcuIdentificationController(ILogger<SessionEcuIdentificationController> logger)
+        public SessionEcuIdentificationController(ILogger<SessionEcuIdentificationController> logger, KSA_DBContext context)
         {
             _logger = logger;
+            Context = context;
         }
 
         [HttpPost(Name = "PostSessionEcuIdentification")]

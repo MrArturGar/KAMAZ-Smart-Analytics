@@ -6,8 +6,6 @@ namespace KAMAZ_Smart_Analytics.Models.List
     {
         public FilterSessionViewModel(List<string> VersionDBs, string vin, string versionDb)
         {
-            VersionDBs.Insert(0, "Все");
-
             Versions = new SelectList(VersionDBs, versionDb);
             SelectedVin = vin;
             SelectedVersionDB = versionDb;

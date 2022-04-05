@@ -20,19 +20,21 @@ namespace KAMAZ_Smart_Analytics.Controllers
         public async Task<IActionResult> List(string? vin, string? versionDb, int page = 1, SortSessionState sortOrder = SortSessionState.DateDesc)
         {
             int pageCount, entitesOnPage = 30;
-            versionDb = versionDb== "Все"? null: versionDb;
-            var sad = _sharedLocalizer["Vin"];
+            versionDb = versionDb == _sharedLocalizer["All"] ? null : versionDb;
 
             SessionListWeb sessions = await client.GetSessionListWebAsync(vin, versionDb, sortOrder.ToString(), entitesOnPage, entitesOnPage * (page - 1));
 
             pageCount = (int)Math.Ceiling((double)sessions.Count / (double)entitesOnPage);
+
+            List<string> dbVersionList = (await client.GetDbVersionsAsync()).ToList();
+            dbVersionList.Insert(0, _sharedLocalizer["All"]);
 
             PageViewModel pageViewModel = new PageViewModel(sessions.Count, page, entitesOnPage);
             SessionListViewModel viewModel = new SessionListViewModel
             {
                 PageViewModel = pageViewModel,
                 SortViewModel = new SortSessionViewModel(sortOrder),
-                FilterViewModel = new FilterSessionViewModel((await client.GetDbVersionsAsync()).ToList(), vin, versionDb),
+                FilterViewModel = new FilterSessionViewModel(dbVersionList, vin, versionDb),
                 Objects = sessions.Items
             };
 

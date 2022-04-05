@@ -6,12 +6,16 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using KSA_API.Middleware;
 using KSA_API.Models;
+using KSA_API;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddDbContext<KSA_DBContext>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

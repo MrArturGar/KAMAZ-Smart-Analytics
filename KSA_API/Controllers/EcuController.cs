@@ -10,13 +10,14 @@ namespace KSA_API.Controllers
     [Authorize]
     public class EcuController
     {
-        KSA_DBContext Context = new();
+        KSA_DBContext Context;
 
         private readonly ILogger<EcuController> _logger;
 
-        public EcuController(ILogger<EcuController> logger)
+        public EcuController(ILogger<EcuController> logger, KSA_DBContext context)
         {
             _logger = logger;
+            Context = context;
         }
 
         [HttpGet("{codifier}", Name = "GetEcu")]

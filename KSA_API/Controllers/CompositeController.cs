@@ -9,12 +9,13 @@ namespace KSA_API.Controllers
     [Authorize]
     public class CompositeController
     {
-        KSA_DBContext Context = new();
+        KSA_DBContext Context;
         private readonly ILogger<CompositeController> _logger;
 
-        public CompositeController(ILogger<CompositeController> logger)
+        public CompositeController(ILogger<CompositeController> logger, KSA_DBContext context)
         {
             _logger = logger;
+            Context = context;
         }
 
         [HttpPost(Name = "PostComposite")]

@@ -18,6 +18,7 @@ namespace TableModelLibrary.Web
         public bool? Result { get; set; }
         public DateTime? DateStart { get; set; }
         public DateTime DateEnd { get; set; }
+        public string Vin { get; set; }
         public string? UsingVin { get; set; }
         public string? DataFiles { get; set; }
     }

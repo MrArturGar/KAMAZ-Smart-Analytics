@@ -56,7 +56,7 @@ CREATE TABLE [ProcedureReports] (
 	Date_start datetime,
 	Date_end datetime NOT NULL,
 	Using_VIN varchar(32) DEFAULT 'NULL',
-	DataFiles text,
+	DataFiles nvarchar(256),
   CONSTRAINT [PK_PROCEDUREREPORTS] PRIMARY KEY CLUSTERED
   (
   [id] ASC

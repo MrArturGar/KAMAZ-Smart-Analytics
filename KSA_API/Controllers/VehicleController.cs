@@ -10,12 +10,13 @@ namespace KSA_API.Controllers
     [Authorize]
     public class VehicleController
     {
-        KSA_DBContext Context = new();
+        KSA_DBContext Context;
         private readonly ILogger<VehicleController> _logger;
 
-        public VehicleController(ILogger<VehicleController> logger)
+        public VehicleController(ILogger<VehicleController> logger, KSA_DBContext context)
         {
             _logger = logger;
+            Context = context;
         }
 
         [HttpPost(Name = "PostVehicle")]

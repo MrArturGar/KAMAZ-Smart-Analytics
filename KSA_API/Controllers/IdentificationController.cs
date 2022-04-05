@@ -10,13 +10,14 @@ namespace KSA_API.Controllers
     [Authorize]
     public class IdentificationController
     {
-        KSA_DBContext Context = new();
+        KSA_DBContext Context;
 
         private readonly ILogger<IdentificationController> _logger;
 
-        public IdentificationController(ILogger<IdentificationController> logger)
+        public IdentificationController(ILogger<IdentificationController> logger, KSA_DBContext context)
         {
             _logger = logger;
+            Context = context;
         }
 
         [HttpPost(Name = "PostIdentification")]

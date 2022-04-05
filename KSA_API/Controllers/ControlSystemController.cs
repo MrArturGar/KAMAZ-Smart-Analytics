@@ -10,13 +10,14 @@ namespace KSA_API.Controllers
     [Authorize]
     public class ControlSystemController
     {
-        KSA_DBContext Context = new();
+        KSA_DBContext Context;
 
         private readonly ILogger<ControlSystemController> _logger;
 
-        public ControlSystemController(ILogger<ControlSystemController> logger)
+        public ControlSystemController(ILogger<ControlSystemController> logger, KSA_DBContext context)
         {
             _logger = logger;
+            Context = context;
         }
 
         [HttpGet("{name}, {domain}", Name = "GetControlSystem")]

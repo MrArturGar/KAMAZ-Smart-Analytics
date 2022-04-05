@@ -20,4 +20,10 @@ namespace TableModelLibrary.Web
 
         public int Count { get; set; }
     }
+    public class ProcedureReportListWeb
+    {
+        public ProcedureReportWeb[] Items { get; set; }
+
+        public int Count { get; set; }
+    }
 }

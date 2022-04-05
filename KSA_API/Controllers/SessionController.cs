@@ -10,13 +10,14 @@ namespace KSA_API.Controllers
     [Authorize]
     public class SessionController
     {
-        KSA_DBContext Context = new();
+        KSA_DBContext Context;
 
         private readonly ILogger<SessionController> _logger;
 
-        public SessionController(ILogger<SessionController> logger)
+        public SessionController(ILogger<SessionController> logger, KSA_DBContext context)
         {
             _logger = logger;
+            Context = context;
         }
 
         [HttpPost]
@@ -64,6 +65,7 @@ namespace KSA_API.Controllers
         {
             IQueryable<Session> sessions = Context.Sessions;
 
+            #region Filter
             if (!String.IsNullOrEmpty(versionDb))
             {
                 sessions = sessions.Where(p => p.VersionDb == versionDb);
@@ -73,6 +75,7 @@ namespace KSA_API.Controllers
                 int[] vehicles = Context.Vehicles.Where(c => c.Vin == vin).Select(c => c.Id).ToArray();
                 sessions = sessions.Where(c => vehicles.Contains(c.IdVehicle));
             }
+            #endregion
 
             switch (sortBy)
             {
