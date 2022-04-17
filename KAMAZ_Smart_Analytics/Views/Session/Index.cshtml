@@ -1,4 +1,8 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@using KAMAZ_Smart_Analytics.Models.List;
+
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
+@{
     ViewData["Title"] = "Index";
 }
 
@@ -7,21 +11,21 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
-                <img class="img-thumbnail" height="700" width="1300" src="~/img/type/@(ViewBag.Vehicle.Type).webp" />
+                <img class="img-thumbnail" height="700" width="1300" src="~/img/type/@(ViewBag.Vehicle.Type).webp" onerror="setDefaultImage(this);" />
             </div>
             <div class="col-sm-6">
-                <h3>Client</h3>
+                <h3>@SharedLocalizer["Client"]</h3>
                 <div class="row p-3 border bg-light">
-                    <p class="lead"><b>User:</b> @(ViewBag.ServiceCenter.Username)</p>
+                    <p class="lead"><b>@SharedLocalizer["User"]:</b> @(ViewBag.ServiceCenter.Username)</p>
                 </div>
                 <div class="row p-3 border bg-light">
-                    <p class="lead"><b>City:</b> @(ViewBag.ServiceCenter.City)</p>
+                    <p class="lead"><b>@SharedLocalizer["City"]:</b> @(ViewBag.ServiceCenter.City)</p>
                 </div>
                 <div class="row p-3 border bg-light">
-                    <p class="lead"><b>Verion data base:</b> @(ViewBag.Session.VersionDb)</p>
+                    <p class="lead"><b>@SharedLocalizer["VersionDB"]:</b> @(ViewBag.Session.VersionDb)</p>
                 </div>
                 <div class="row p-3 border bg-light">
-                    <p class="lead"><b>VCI Seria number:</b> @(ViewBag.Session.Vcisn)</p>
+                    <p class="lead"><b>@SharedLocalizer["VCISN"]:</b> @(ViewBag.Session.Vcisn)</p>
                 </div>
             </div>
         </div>
@@ -29,30 +33,30 @@
             <h3>Basic information</h3>
             <div class="col-sm-6">
                 <div class="row p-3 border bg-light">
-                    <p class="lead"><b>Type:</b> @(ViewBag.Vehicle.Type)</p>
+                    <p class="lead"><b>@SharedLocalizer["Type"]:</b> @(ViewBag.Vehicle.Type)</p>
                 </div>
                 <div class="row p-3 border bg-light">
-                    <p class="lead"><b>Design number:</b> @(ViewBag.Vehicle.DesignNumber)</p>
+                    <p class="lead"><b>@SharedLocalizer["DesignNumber"]:</b> @(ViewBag.Vehicle.DesignNumber)</p>
                 </div>
                 <div class="row p-3 border bg-light">
-                    <p class="lead"><b>VIN:</b> @(ViewBag.Vehicle.Vin)</p>
+                    <p class="lead"><b>@SharedLocalizer["Vin"]:</b> @(ViewBag.Vehicle.Vin)</p>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="row p-3 border bg-light">
-                    <p class="lead"><b>ICCID:</b> @(ViewBag.Vehicle.Iccid)</p>
+                    <p class="lead"><b>@SharedLocalizer["Iccid"]:</b> @(ViewBag.Vehicle.Iccid)</p>
                 </div>
                 <div class="row p-3 border bg-light">
-                    <p class="lead"><b>ICCIDC:</b> @(ViewBag.Vehicle.Iccidc)</p>
+                    <p class="lead"><b>@SharedLocalizer["Iccidc"]:</b> @(ViewBag.Vehicle.Iccidc)</p>
                 </div>
                 <div class="row p-3 border bg-light">
-                    <p class="lead"><b>ICCIDC:</b> @(ViewBag.Vehicle.Imei)</p>
+                    <p class="lead"><b>@SharedLocalizer["Imei"]:</b> @(ViewBag.Vehicle.Imei)</p>
                 </div>
             </div>
         </div>
     </div>
     <br />
-    <h3>Identifications</h3>
+    <h3>@SharedLocalizer["Identification"]</h3>
     @if (ViewBag.Identifications.Count != 0)
     {
         <div class="accordion" id="accordionIdent">
@@ -69,12 +73,12 @@
                             <div class="accordion-body">
                                 @foreach (IdentificationWeb ident in ViewBag.Identifications[key])
                                 {
-                                <tr><td align="left"><p class="lead">@ident.Name: </p></td><td align="right"><p class="lead">@ident.Value </p></td></tr>
+                                <tr><td align="left"><p class="lead">@SharedLocalizer[ident.Name]: </p></td><td align="right"><p class="lead">@ident.Value </p></td></tr>
                                 }
+                            </div>
+                        </table>
                     </div>
-                    </table>
                 </div>
-            </div>
             }
     </div>
     }
@@ -84,27 +88,27 @@
         <div class="row justify-content-md-center">
             <div class="col-sm-9">
                 <div class="row p-9 border bg-light">
-                    <p class="lead">Not found</p>
+                    <p class="lead">@SharedLocalizer["NotFound"]</p>
                 </div>
             </div>
         </div>
     </div>
     }
-    <br/br>
-<h3>Internal tests</h3>
+<br /br>
+<h3>@SharedLocalizer["Internal tests"]</h3>
     @if (ViewBag.ProcedureReports.Count != 0)
     {
     <table id="content-container" class="table">
         <thead>
             <tr>
-                <td><h5>ECU</h5></td>
-                <td><h5>Type</h5></td>
-                <td><h5>Name</h5></td>
-                <td><h5>Result</h5></td>
-                <td><h5>Date start</h5></td>
-                <td><h5>Date end</h5></td>
-                <td><h5>VIN</h5></td>
-                <td><h5>File</h5></td>
+                <td><h5>@SharedLocalizer["Ecu"]</h5></td>
+                <td><h5>@SharedLocalizer["Type"]</h5></td>
+                <td><h5>@SharedLocalizer["Name"]</h5></td>
+                <td><h5>@SharedLocalizer["Result"]</h5></td>
+                <td><h5>@SharedLocalizer["DateStart"]</h5></td>
+                <td><h5>@SharedLocalizer["DataEnd"]</h5></td>
+                <td><h5>@SharedLocalizer["Vin"]</h5></td>
+                <td><h5>@SharedLocalizer["File"]</h5></td>
             </tr>
         </thead>
             @foreach (ProcedureReportWeb proc in ViewBag.ProcedureReports)
@@ -136,24 +140,24 @@
         <div class="row justify-content-md-center">
             <div class="col-sm-9">
                 <div class="row p-9 border bg-light">
-                    <p class="lead">Not found</p>
+                    <p class="lead">@SharedLocalizer["NotFound"]</p>
                 </div>
             </div>
         </div>
     </div>
     }
 
-    <br/>
+<br />
     @if (ViewBag.AoglonassReports.Count != 0)
     {
-        <h3>AO Glonass</h3>
-        <table id="content-container" class="table">
+    <h3>@SharedLocalizer["AOGlonass"]</h3>
+    <table id="content-container" class="table">
         <thead>
             <tr>
-                <td><h5>Date start</h5></td>
-                <td><h5>Action</h5></td>
-                <td><h5>Params</h5></td>
-                <td><h5>Status</h5></td>
+                <td><h5>@SharedLocalizer["DateStart"]</h5></td>
+                <td><h5>@SharedLocalizer["Action"]</h5></td>
+                <td><h5>@SharedLocalizer["Params"]</h5></td>
+                <td><h5>@SharedLocalizer["Status"]</h5></td>
             </tr>
         </thead>
             @foreach (AoglonassReport aoproc in ViewBag.AoglonassReports)

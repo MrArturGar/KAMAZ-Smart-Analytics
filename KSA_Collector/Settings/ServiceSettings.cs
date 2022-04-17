@@ -14,17 +14,32 @@ namespace KSA_Collector.Settings
     {
         public string SessionPath;
 
+        public string LicLogFile;
+
         public string ServiceCentersPath;
 
-        public int lastDays;
+        /// <summary>
+        /// If it is zero, then it checks everything.
+        /// </summary>
+        public int CheckLastDaysSession;
+
+        public int PeriodicCheckInMinutes;
+
+        public DayOfWeek DayOfWeekToCheck;
+
+        public int HourOfDayToCheck;
 
         private  ServiceSettings() : base("ServiceSettings") { }
 
         protected override void AddDefault()
         {
-            SessionPath = @"C:\Users\altur\Desktop\КАИ\Диплом\Sessions";
+            SessionPath = @"C:\Users\altur\Desktop\КАИ\Диплом\Sessions\";
+            LicLogFile = @"C:\Users\altur\Desktop\КАИ\Диплом\Logs\waf.xml";
             ServiceCentersPath = @"C:\Users\altur\Desktop\КАИ\Диплом\Sessions\serviceCenters.csv";
-            lastDays = 0;
+            CheckLastDaysSession = 0;
+            PeriodicCheckInMinutes = 5;
+            DayOfWeekToCheck = DayOfWeek.Sunday;
+            HourOfDayToCheck = 19;
         }
 
 

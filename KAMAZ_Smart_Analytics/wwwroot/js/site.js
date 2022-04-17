@@ -2,3 +2,15 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+$(document).ready(function ($) {
+    $(".clickable-row").click(function () {
+        window.document.location = $(this).data("href");
+    });
+});
+
+
+function setDefaultImage(img) {
+    //set default.
+    img.src = "/img/type/NoImg.jpg";
+}

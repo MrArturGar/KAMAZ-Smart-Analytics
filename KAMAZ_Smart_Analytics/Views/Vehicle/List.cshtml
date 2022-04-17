@@ -1,4 +1,7 @@
-﻿@using KAMAZ_Smart_Analytics.Models.List;
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@using KAMAZ_Smart_Analytics.Models.List;
+
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @model VehicleListViewModel
 <link href="~/css/PagedList.css" rel="stylesheet" type="text/css" />
 
@@ -13,7 +16,7 @@
             <div class="row">
                 <div class="col" align="left">
                     <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                        Фильтр
+                        @SharedLocalizer["Filter"]
                     </a>
                 </div>
                 <div class="col" align="center">
@@ -30,27 +33,27 @@
             <div class="container">
                 <div class="row">
                     <div class="col">
-                        <h5>Вин: </h5>
+                        <h5>@SharedLocalizer["Vin"]: </h5>
                         <input name="vin" value="@Model.FilterViewModel.SelectedVin" class="form-control" />
                     </div>
                     <div class="col">
-                        <h5>Коплектация: </h5>
+                        <h5>@SharedLocalizer["DesignNumber"]: </h5>
                         <input name="design_number" value="@Model.FilterViewModel.SelectedDesign_number" class="form-control" />
                     </div>
                     <div class="col">
-                        <h5>ICCID: </h5>
+                        <h5>@SharedLocalizer["Iccid"]: </h5>
                         <input name="iccid" value="@Model.FilterViewModel.SelectedIccid" class="form-control" />
                     </div>
                     <div class="col">
-                        <h5>ICCIDC: </h5>
+                        <h5>@SharedLocalizer["Iccidc"]: </h5>
                         <input name="iccidc" value="@Model.FilterViewModel.SelectedIccidc" class="form-control" />
                     </div>
                     <div class="col">
-                        <h5>IMEI: </h5>
+                        <h5>@SharedLocalizer["Imei"]: </h5>
                         <input name="imei" value="@Model.FilterViewModel.SelectedImei" class="form-control" />
                     </div>
                     <div class="col">
-                        <h5>Тип: </h5>
+                        <h5>@SharedLocalizer["Type"]: </h5>
                         <input name="type" value="@Model.FilterViewModel.SelectedType" class="form-control" />
                     </div>
                 </div>
@@ -61,12 +64,12 @@
     <table id="content-container" class="table table-striped table-hover">
         <thead>
             <tr>
-                <td><h5>Вин</h5></td>
-                <td><h5>Комплектация</h5></td>
-                <td><h5>ICCID</h5></td>
-                <td><h5>ICCIDC</h5></td>
-                <td><h5>IMEI</h5></td>
-                <td><h5>Тип</h5></td>
+                <td><h5>@SharedLocalizer["Vin"]</h5></td>
+                <td><h5>@SharedLocalizer["DesignNumber"]</h5></td>
+                <td><h5>@SharedLocalizer["Iccid"]</h5></td>
+                <td><h5>@SharedLocalizer["Iccidc"]</h5></td>
+                <td><h5>@SharedLocalizer["Imei"]</h5></td>
+                <td><h5>@SharedLocalizer["Type"]</h5></td>
             </tr>
         </thead>
         @foreach (Vehicle s in Model.Objects)

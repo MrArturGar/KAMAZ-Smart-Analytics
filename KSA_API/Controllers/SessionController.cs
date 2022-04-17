@@ -20,7 +20,7 @@ namespace KSA_API.Controllers
             Context = context;
         }
 
-        [HttpPost]
+        [HttpPost(Name = "PostSession")]
         public int PostSession(Session session)
         {
             Session tmp = GetSessionByName(session.SessionsName);
@@ -114,6 +114,12 @@ namespace KSA_API.Controllers
                 Count = sessions.Count(),
                 Items = sessions.Skip(skip).Take(take).ToArray()
             };
+        }
+
+        [HttpGet("{idVehicle:int}/GetSessionsByVehicleId")]
+        public Session[] GetSessionsByVehicleId(int idVehicle)
+        {
+            return Context.Sessions.Where(c => c.IdVehicle == idVehicle).OrderByDescending(c => c.Date).ToArray();
         }
 
         [HttpGet(nameof(GetDbVersions))]

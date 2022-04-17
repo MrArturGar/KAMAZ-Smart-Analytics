@@ -92,7 +92,7 @@
         </thead>
         @foreach (ProcedureReportWeb p in Model.Objects)
         {
-            <tr>
+            <tr class='clickable-row' data-href="/Session/Index?Id=@p.IdSession">
                 <td><p>@p.Codifier</p></td>
                 <td><p>@p.Type</p></td>
                 <td><p>@p.Name</p></td>

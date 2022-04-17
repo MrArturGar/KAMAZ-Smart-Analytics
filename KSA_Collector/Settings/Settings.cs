@@ -9,18 +9,26 @@ namespace KSA_Collector.Settings
 {
     public abstract class Settings
     {
-        string path;
+        string _path;
         public object Base;
         public Settings(string _name)
         {
-            path = AppDomain.CurrentDomain.BaseDirectory + _name + ".cfg";
+            string dir = AppDomain.CurrentDomain.BaseDirectory + "Settings/";
+
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
+            _path = dir + _name + ".cfg";
         }
         protected bool Load()
         {
             try
             {
-                XmlSerializer serializer = new XmlSerializer(GetType());
-                Base = serializer.Deserialize(new StreamReader(path));
+                using (var sr = new StreamReader(_path))
+                {
+                    XmlSerializer serializer = new XmlSerializer(GetType());
+                    Base = serializer.Deserialize(sr);
+                }
 
                 if (Base == null)
                     throw new Exception("Base on abstract class is null");
@@ -30,16 +38,18 @@ namespace KSA_Collector.Settings
             catch (Exception ex)
             {
                 AddDefault();
-                Save(path);
+                Save();
                 Base = this;
                 return false;
             }
         }
 
-        protected void Save(string _path)
+        protected void Save()
         {
-            XmlSerializer serializer = new XmlSerializer(GetType());
-            serializer.Serialize(new StreamWriter(_path), this);
+            using (var sw = new StreamWriter(_path)) {
+                XmlSerializer serializer = new XmlSerializer(GetType());
+                serializer.Serialize(sw, this);
+            }
         }
         protected abstract void AddDefault();
 

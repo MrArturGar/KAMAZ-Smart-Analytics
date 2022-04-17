@@ -67,7 +67,7 @@ namespace KAMAZ_Smart_Analytics.Data
             }
             if (password != null)
             {
-                urlBuilder_.Append(System.Uri.EscapeDataString("Password") + "=").Append(System.Uri.EscapeDataString(username) + "&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("Password") + "=").Append(System.Uri.EscapeDataString(password) + "&");
             }
             urlBuilder_.Length--;
 

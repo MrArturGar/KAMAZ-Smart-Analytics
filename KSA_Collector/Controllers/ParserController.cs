@@ -8,23 +8,30 @@ using System.Threading.Tasks;
 
 namespace KSA_Collector.Controllers
 {
-    internal class MainController :IDisposable
+    internal class ParserController :IDisposable
     {
-        private DateTime? LastDate;
+        private DateTime? _lastDate;
+        private ServiceSettings _settings;
+        ILogger _logger;
+
+        public ParserController(ILogger logger)
+        {
+            _logger = logger;
+            _settings = ServiceSettings.GetSettings();
+            _lastDate = _settings.CheckLastDaysSession != 0 ? DateTime.Now.AddDays(-_settings.CheckLastDaysSession) : new DateTime();
+        }
 
         internal void StartAllInsert()
         {
-            ServiceSettings settings = ServiceSettings.GetSettings();
-            LastDate = settings.lastDays != 0 ? DateTime.Now.AddDays(-settings.lastDays) : new DateTime();
 
-            DirectoryInfo[] sessionFolders = new DirectoryInfo(settings.SessionPath).GetDirectories();
+            DirectoryInfo[] sessionFolders = new DirectoryInfo(_settings.SessionPath).GetDirectories();
             sessionFolders = sessionFolders.OrderByDescending(folder => folder.LastWriteTime).ToArray();
 
             int countFolder = sessionFolders.Length;
 
             for (int i = 0; i < countFolder; i++)
             {
-                if (sessionFolders[i].LastWriteTime < LastDate)
+                if (sessionFolders[i].LastWriteTime < _lastDate)
                     break;
 
                 LoadSessionFolders(sessionFolders[i]);
@@ -39,7 +46,7 @@ namespace KSA_Collector.Controllers
             int countSessions = sessions.Length;
             for (int j = 0; j < countSessions; j++)
             {
-                if (sessions[j].LastWriteTime < LastDate)
+                if (sessions[j].LastWriteTime < _lastDate)
                     break;
                 LoadSession(sessions[j].FullName);
             }
@@ -47,6 +54,7 @@ namespace KSA_Collector.Controllers
 
         private void LoadSession(string path)
         {
+            _logger.LogInformation("LoadSession: " + path);
             DiagSessionController files = new();
             files.Load(Directory.GetFiles(path));
             files.Dispose();
@@ -55,7 +63,7 @@ namespace KSA_Collector.Controllers
         public void Dispose()
         {
             GC.Collect();
-            LastDate = null;
+            _lastDate = null;
         }
     }
 

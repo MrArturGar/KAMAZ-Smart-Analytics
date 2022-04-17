@@ -6,12 +6,12 @@ using TableModelLibrary.Web;
 
 namespace KAMAZ_Smart_Analytics.Controllers
 {
+    [Authorize]
     public class VehicleController : Controller
     {
         swaggerClient client = new ApiClientContext().GetClient;
 
 
-        [Authorize]
         public async Task<IActionResult> List(string? vin, string? design_number, string? iccid, string? iccidc, string? imei, string? type, int page = 1, SortVehicleState sortOrder = SortVehicleState.TypeDesc)
         {
             int pageCount, entitesOnPage = 30;
@@ -30,6 +30,14 @@ namespace KAMAZ_Smart_Analytics.Controllers
             };
 
             return View(viewModel);
+        }
+
+        public async Task<IActionResult> Index(int id)
+        {
+            ViewBag.Vehicle = await client.GetVehicleByIdAsync(id);
+            ViewBag.Sessions = await client.GetSessionsByVehicleIdAsync(id);
+
+            return View();
         }
     }
 }
