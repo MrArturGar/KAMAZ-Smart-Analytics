@@ -6,7 +6,7 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using KSA_API.Middleware;
 using KSA_API.Models;
-using KSA_API;
+using KSA_API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

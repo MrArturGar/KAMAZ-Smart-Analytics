@@ -1,4 +1,5 @@
-﻿using KSA_API.Models;
+﻿using KSA_API.Data;
+using KSA_API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;

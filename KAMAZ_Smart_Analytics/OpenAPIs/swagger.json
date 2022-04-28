@@ -691,10 +691,10 @@
         }
       }
     },
-    "/Identification/{id}": {
+    "/IdentificationWeb/{id}": {
       "get": {
         "tags": [
-          "Identification"
+          "IdentificationWeb"
         ],
         "operationId": "GetIdentificationWeb",
         "parameters": [
@@ -866,10 +866,10 @@
         }
       }
     },
-    "/ProcedureReport/{sessionId}": {
+    "/ProcedureReportWeb/{sessionId}": {
       "get": {
         "tags": [
-          "ProcedureReport"
+          "ProcedureReportWeb"
         ],
         "operationId": "GetProcedureReportWeb",
         "parameters": [
@@ -916,10 +916,10 @@
         }
       }
     },
-    "/ProcedureReport/{sortBy}, {take}, {skip}": {
+    "/ProcedureReportWeb/{sortBy}, {take}, {skip}": {
       "get": {
         "tags": [
-          "ProcedureReport"
+          "ProcedureReportWeb"
         ],
         "operationId": "GetProcedureReportListWeb",
         "parameters": [
@@ -1163,6 +1163,7 @@
         "tags": [
           "Session"
         ],
+        "operationId": "PostSession",
         "requestBody": {
           "content": {
             "application/json": {
