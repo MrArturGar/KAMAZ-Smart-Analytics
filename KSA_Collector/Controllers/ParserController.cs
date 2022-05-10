@@ -34,6 +34,7 @@ namespace KSA_Collector.Controllers
                 if (sessionFolders[i].LastWriteTime < _lastDate)
                     break;
 
+                _logger.LogInformation($"SessionDirectory: {countFolder}/{i+1} {sessionFolders[i].Name}");
                 LoadSessionFolders(sessionFolders[i]);
             }
         }
@@ -48,13 +49,14 @@ namespace KSA_Collector.Controllers
             {
                 if (sessions[j].LastWriteTime < _lastDate)
                     break;
+
+                _logger.LogInformation($"LoadSession: {countSessions}/{j+1} {sessions[j].Name}");
                 LoadSession(sessions[j].FullName);
             }
         }
 
         private void LoadSession(string path)
         {
-            _logger.LogInformation("LoadSession: " + path);
             DiagSessionController files = new();
             files.Load(Directory.GetFiles(path));
             files.Dispose();

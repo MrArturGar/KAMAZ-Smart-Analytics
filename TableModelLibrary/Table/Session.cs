@@ -14,10 +14,10 @@ namespace TableModelLibrary.Table
         public string? VersionDb { get; set; }
         public string? Vcisn { get; set; }
         public double? Mileage { get; set; }
-        public bool? HasIdentifications { get; set; }
-        public bool? HasDtc { get; set; }
-        public bool? HasTests { get; set; }
-        public bool? HasFlash { get; set; }
+        public bool HasIdentifications { get; set; } = false;
+        public bool HasDtc { get; set; } = false;
+        public bool HasTests { get; set; } = false;
+        public bool HasFlash { get; set; } = false;
 
     }
 }

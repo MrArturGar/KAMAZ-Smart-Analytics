@@ -7,12 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using KSA_Collector;
+using KSA_Collector.Handlers;
 using KSA_Collector.Models;
 using TableModelLibrary;
 
 namespace KSA_Collector.Controllers
 {
-    internal class DiagSessionController :IDisposable
+    internal class DiagSessionController : IDisposable
     {
         ApiController _apiClient;
         Settings.IdentificationSettings IdentificationSettings;
@@ -211,11 +212,8 @@ namespace KSA_Collector.Controllers
 
             SetProcedureReport(Session, sessionFile.machine.testResults);
             SetAoglonassReport(Session, diag);
-
-            if (sessionEcuidentification.Count != 0)
-                LoadSessionEcuIdentification();
-            else
-                _apiClient.SaveSession(Session);
+            LoadSessionEcuIdentification();
+            _apiClient.SaveSession(Session);
         }
 
         private void LoadSessionEcuIdentification()

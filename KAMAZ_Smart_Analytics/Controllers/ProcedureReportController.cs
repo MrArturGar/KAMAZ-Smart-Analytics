@@ -29,7 +29,6 @@ namespace KAMAZ_Smart_Analytics.Controllers
             else if (result == "False")
                 resultBool = false;
 
-
             ProcedureReportListWeb procedures = await client.GetProcedureReportListWebAsync(type, vin, ecu, resultBool, file, dateStart, dateEnd, sortOrder.ToString(), entitesOnPage, entitesOnPage * (page - 1));
 
             pageCount = (int)Math.Ceiling((double)procedures.Count / (double)entitesOnPage);

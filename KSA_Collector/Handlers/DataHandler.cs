@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace KSA_Collector.Controllers
+namespace KSA_Collector.Handlers
 {
     internal class DataHandler
     {

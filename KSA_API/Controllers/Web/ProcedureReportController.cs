@@ -57,11 +57,11 @@ namespace KSA_API.Controllers
             }
             if (dateStart != null)
             {
-                procedures = procedures.Where(c => c.DateEnd <= dateStart);
+                procedures = procedures.Where(c => c.DateEnd >= dateStart);
             }
             if (dateEnd != null)
             {
-                procedures = procedures.Where(c => c.DateEnd >= dateEnd);
+                procedures = procedures.Where(c => c.DateEnd <= dateEnd);
             }
             #endregion
 

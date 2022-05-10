@@ -691,10 +691,10 @@
         }
       }
     },
-    "/Identification/{id}": {
+    "/IdentificationWeb/{id}": {
       "get": {
         "tags": [
-          "Identification"
+          "IdentificationWeb"
         ],
         "operationId": "GetIdentificationWeb",
         "parameters": [
@@ -866,10 +866,10 @@
         }
       }
     },
-    "/ProcedureReport/{sessionId}": {
+    "/ProcedureReportWeb/{sessionId}": {
       "get": {
         "tags": [
-          "ProcedureReport"
+          "ProcedureReportWeb"
         ],
         "operationId": "GetProcedureReportWeb",
         "parameters": [
@@ -916,10 +916,10 @@
         }
       }
     },
-    "/ProcedureReport/{sortBy}, {take}, {skip}": {
+    "/ProcedureReportWeb/{sortBy}, {take}, {skip}": {
       "get": {
         "tags": [
-          "ProcedureReport"
+          "ProcedureReportWeb"
         ],
         "operationId": "GetProcedureReportListWeb",
         "parameters": [
@@ -1331,78 +1331,6 @@
         }
       }
     },
-    "/Session/{sortBy}, {take}, {skip}": {
-      "get": {
-        "tags": [
-          "Session"
-        ],
-        "operationId": "GetSessionListWeb",
-        "parameters": [
-          {
-            "name": "vin",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "versionDb",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "sortBy",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "take",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "skip",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/SessionListWeb"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SessionListWeb"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SessionListWeb"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/Session/{idVehicle}/GetSessionsByVehicleId": {
       "get": {
         "tags": [
@@ -1585,6 +1513,159 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SessionEcuidentification"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/SessionListWeb/{sortBy}, {take}, {skip}": {
+      "get": {
+        "tags": [
+          "SessionListWeb"
+        ],
+        "operationId": "GetSessionListWeb",
+        "parameters": [
+          {
+            "name": "vin",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "versionDb",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "vcisn",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mileageStart",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "mileageEnd",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "hasIdentification",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "hasDtc",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "hasTests",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "hasFlash",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "dateStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "take",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionListWeb"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionListWeb"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionListWeb"
                 }
               }
             }
@@ -2204,20 +2285,16 @@
             "nullable": true
           },
           "hasIdentifications": {
-            "type": "boolean",
-            "nullable": true
+            "type": "boolean"
           },
           "hasDtc": {
-            "type": "boolean",
-            "nullable": true
+            "type": "boolean"
           },
           "hasTests": {
-            "type": "boolean",
-            "nullable": true
+            "type": "boolean"
           },
           "hasFlash": {
-            "type": "boolean",
-            "nullable": true
+            "type": "boolean"
           }
         },
         "additionalProperties": false

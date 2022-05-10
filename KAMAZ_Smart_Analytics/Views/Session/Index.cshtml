@@ -3,15 +3,18 @@
 
 @inject IHtmlLocalizer<SharedResource> SharedLocalizer
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = SharedLocalizer["Session"];
 }
 
 <div class="text-center">
-    <h1 class="display-4">Сессия</h1>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6">
-                <img class="img-thumbnail" height="700" width="1300" src="~/img/type/@(ViewBag.Vehicle.Type).webp" onerror="setDefaultImage(this);" />
+    <div class="container-fluid py-4">
+        <div class="row mt-4">
+            <div class="col-lg-7 mb-lg-0 mb-4">
+                <div class="card">
+                    <dib class="card-body p-3">
+                        <img class="img-thumbnail" height="700" width="1300" src="~/img/type/@(ViewBag.Vehicle.Type).webp" onerror="setDefaultImage(this);" />
+                    </dib>
+                </div>
             </div>
             <div class="col-sm-6">
                 <h3>@SharedLocalizer["Client"]</h3>
@@ -75,10 +78,10 @@
                                 {
                                 <tr><td align="left"><p class="lead">@SharedLocalizer[ident.Name]: </p></td><td align="right"><p class="lead">@ident.Value </p></td></tr>
                                 }
-                            </div>
-                        </table>
                     </div>
+                    </table>
                 </div>
+            </div>
             }
     </div>
     }

@@ -241,3 +241,13 @@ ALTER TABLE [ControlSystems] WITH CHECK ADD CONSTRAINT [ControlSystems_fk0] UNIQ
 GO
 ALTER TABLE [ControlSystems] CHECK CONSTRAINT [ControlSystems_fk0]
 GO																							  
+
+CREATE VIEW [dbo].[IdentificationWeb]
+	AS select id_Session, Codifier, Name, Value from Sessions, Session_ECUIdentification, ECU_Identification,ECUs, Identifications
+where Sessions.id = id_Session and id_ECUIdentifications =ECU_Identification.id and id_ECU = ECUs.id and  id_Identifications = Identifications.id
+GO
+
+CREATE VIEW [dbo].[ProcedureReportWeb]
+	AS SELECT ProcedureReports.id, ProcedureReports.id_ECU, Codifier, id_session, ProcedureReports.Type, Name, Result, Date_start,Date_end, Vin, Using_VIN, DataFiles FROM [ProcedureReports], [ECUs], [Vehicles], [Sessions]
+	where id_ECU = ECUs.id and id_session = Sessions.id and id_Vehicle = Vehicles.id
+GO

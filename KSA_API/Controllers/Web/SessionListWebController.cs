@@ -9,60 +9,20 @@ namespace KSA_API.Controllers
     [ApiController]
     [Route("[controller]")]
     [Authorize]
-    public class SessionController
+    public class SessionListWebController
     {
         KSA_DBContext Context;
 
-        private readonly ILogger<SessionController> _logger;
+        private readonly ILogger<SessionListWebController> _logger;
 
-        public SessionController(ILogger<SessionController> logger, KSA_DBContext context)
+        public SessionListWebController(ILogger<SessionListWebController> logger, KSA_DBContext context)
         {
             _logger = logger;
             Context = context;
         }
-
-        [HttpPost(Name = "PostSession")]
-        public int PostSession(Session session)
-        {
-            Session tmp = GetSessionByName(session.SessionsName);
-
-            if (tmp == null)
-            {
-                tmp = session;
-                Context.Sessions.Add(tmp);
-                Context.SaveChanges();
-            }
-            return tmp.Id;
-
-        }
-
-        [HttpGet("{sessionName}", Name = "GetSessionByName")]
-        public Session GetSessionByName(string sessionName)
-        {
-            return Context.Sessions.Where(c => c.SessionsName == sessionName).SingleOrDefault();
-        }
-
-        [HttpGet("{id:int}", Name = "GetSessionById")]
-        public Session GetSessionById(int id)
-        {
-            return Context.Sessions.Where(c => c.Id == id).Single();
-        }
-
-        [HttpGet(Name = "GetSessionsCount")]
-        public int GetSessionsCount(string? vin)
-        {
-            if (vin == null)
-                return Context.Sessions.Count();
-            else
-            {
-                int[] vehicles = Context.Vehicles.Where(c => c.Vin == vin).Select(c => c.Id).ToArray();
-
-                return Context.Sessions.Where(c => vehicles.Contains(c.IdVehicle)).Count();
-            }
-        }
-
         [HttpGet("{sortBy}, {take}, {skip}", Name = "GetSessionListWeb")]
-        public SessionListWeb GetSessionListWeb(string? vin, string? versionDb, string sortBy, int take, int skip)
+        public SessionListWeb GetSessionListWeb(string? vin, string? versionDb, string? type, string? username, string? vcisn,
+            double? mileageStart, double? mileageEnd, bool? hasIdentification, bool? hasDtc, bool? hasTests, bool? hasFlash, DateTime? dateStart, DateTime? dateEnd, string sortBy, int take, int skip)
         {
             IQueryable<Session> sessions = Context.Sessions;
 
@@ -75,6 +35,52 @@ namespace KSA_API.Controllers
             {
                 int[] vehicles = Context.Vehicles.Where(c => c.Vin == vin).Select(c => c.Id).ToArray();
                 sessions = sessions.Where(c => vehicles.Contains(c.IdVehicle));
+            }
+            if(type != null)
+            {
+                int[] vehicles = Context.Vehicles.Where(c => c.Type == type).Select(c => c.Id).ToArray();
+                sessions = sessions.Where(c => vehicles.Contains(c.IdVehicle));
+            }
+            if (username != null)
+            {
+                int[] users = Context.ServiceCenters.Where(c => c.Username == username).Select(c => c.Id).ToArray();
+                sessions = sessions.Where(c => users.Contains(c.IdServiceCenters));
+            }
+            if (vcisn != null)
+            {
+                sessions = sessions.Where(c=>c.Vcisn == vcisn);
+            }
+            if (mileageStart != null)
+            {
+                sessions = sessions.Where(c => c.Mileage >= mileageStart);
+            }
+            if (mileageEnd != null)
+            {
+                sessions = sessions.Where(c => c.Mileage <= mileageEnd);
+            }
+            if (hasIdentification != null)
+            {
+                sessions = sessions.Where(c => c.HasIdentifications == hasIdentification);
+            }
+            if (hasDtc != null)
+            {
+                sessions = sessions.Where(c => c.HasDtc == hasDtc);
+            }
+            if (hasTests != null)
+            {
+                sessions = sessions.Where(c => c.HasTests == hasTests);
+            }
+            if (hasFlash != null)
+            {
+                sessions = sessions.Where(c => c.HasFlash == hasFlash);
+            }
+            if (dateStart != null)
+            {
+                sessions = sessions.Where(c=>c.Date >= dateStart);
+            }
+            if (dateEnd != null)
+            {
+                sessions = sessions.Where(c => c.Date <= dateEnd);
             }
             #endregion
 
@@ -117,17 +123,6 @@ namespace KSA_API.Controllers
             };
         }
 
-        [HttpGet("{idVehicle:int}/GetSessionsByVehicleId")]
-        public Session[] GetSessionsByVehicleId(int idVehicle)
-        {
-            return Context.Sessions.Where(c => c.IdVehicle == idVehicle).OrderByDescending(c => c.Date).ToArray();
-        }
-
-        [HttpGet(nameof(GetDbVersions))]
-        public string?[] GetDbVersions()
-        {
-            return Context.Sessions.Select(c => c.VersionDb).Distinct().OrderBy(c => c).ToArray();
-        }
     }
 
 }

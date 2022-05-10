@@ -181,7 +181,7 @@ namespace KSA_API.Data
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.DataFiles).HasColumnType("text");
+                entity.Property(e => e.DataFiles).HasMaxLength(256);
 
                 entity.Property(e => e.DateEnd)
                     .HasColumnType("datetime")
@@ -223,7 +223,7 @@ namespace KSA_API.Data
                     .HasMaxLength(32)
                     .IsUnicode(false);
 
-                entity.Property(e => e.DataFiles).HasColumnType("text");
+                entity.Property(e => e.DataFiles).HasMaxLength(256);
 
                 entity.Property(e => e.DateEnd)
                     .HasColumnType("datetime")

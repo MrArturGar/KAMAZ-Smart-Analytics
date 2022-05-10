@@ -13,6 +13,8 @@ namespace KAMAZ_Smart_Analytics.Models.List
             SelectedEcu = ecu;
             SelectedResult = result;
             SelectedFile = file;
+            SelectedDateStart = dateStart;
+            SelectedDateEnd = dateEnd;
         }
         public SelectList Types { get; private set; }
         public SelectList Results { get; private set; }
@@ -21,7 +23,7 @@ namespace KAMAZ_Smart_Analytics.Models.List
         public string? SelectedEcu { get; private set; }
         public string? SelectedResult { get; private set; }
         public string? SelectedFile { get; private set; }
-        public DateTime? DateStart { get; private set; }
-        public DateTime? DateEnd { get; private set; }
+        public DateTime? SelectedDateStart { get; private set; }
+        public DateTime? SelectedDateEnd { get; private set; }
     }
 }

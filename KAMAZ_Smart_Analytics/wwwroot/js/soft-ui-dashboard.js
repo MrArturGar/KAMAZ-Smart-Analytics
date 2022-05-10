@@ -45,7 +45,6 @@ if (document.querySelector('.fixed-plugin')) {
   var fixedPluginCard = document.querySelector('.fixed-plugin .card');
   var fixedPluginCloseButton = document.querySelectorAll('.fixed-plugin-close-button');
   var navbar = document.getElementById('navbarBlur');
-  var buttonNavbarFixed = document.getElementById('navbarFixed');
 
   if (fixedPluginButton) {
     fixedPluginButton.onclick = function() {
@@ -76,12 +75,6 @@ if (document.querySelector('.fixed-plugin')) {
   document.querySelector('body').onclick = function(e) {
     if (e.target != fixedPluginButton && e.target != fixedPluginButtonNav && e.target.closest('.fixed-plugin .card') != fixedPluginCard) {
       fixedPlugin.classList.remove('show');
-    }
-  }
-
-  if (navbar) {
-    if (navbar.getAttribute('navbar-scroll') == 'true') {
-      buttonNavbarFixed.setAttribute("checked", "true");
     }
   }
 
@@ -233,24 +226,6 @@ function sidebarColor(a) {
   }
 
 }
-
-// Set Navbar Fixed
-function navbarFixed(el) {
-  let classes = ['position-sticky', 'blur', 'shadow-blur', 'mt-4', 'left-auto', 'top-1', 'z-index-sticky'];
-  const navbar = document.getElementById('navbarBlur');
-
-  if (!el.getAttribute("checked")) {
-    navbar.classList.add(...classes);
-    navbar.setAttribute('navbar-scroll', 'true');
-    navbarBlurOnScroll('navbarBlur');
-    el.setAttribute("checked", "true");
-  } else {
-    navbar.classList.remove(...classes);
-    navbar.setAttribute('navbar-scroll', 'false');
-    navbarBlurOnScroll('navbarBlur');
-    el.removeAttribute("checked");
-  }
-};
 
 // Navbar blur on scroll
 

@@ -1,67 +1,73 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+﻿using KSA_Collector.Handlers;
 
 namespace KSA_Collector.Controllers
 {
     internal class LicWatcherController
     {
-        string TempFile;
-        string LastLine="";
-        string SessionsPath;
+        string PathTempLogFile;
+        string PathSourceLogFile;
+        string LastLine = "";
+        string SessionsPath;//
+        static DateTime LastWriteTime;
         ILogger _logger;
         public LicWatcherController(string pathLog, string sessionsPath, ILogger logger)
         {
-            TempFile = AppDomain.CurrentDomain.BaseDirectory + "\\Temp\\tempLog.xml";
-            File.Copy(pathLog, TempFile, true);
+            PathTempLogFile = AppDomain.CurrentDomain.BaseDirectory + "\\Temp\\tempLog.xml";
+            //File.Copy(pathLog, TempFile, true);
+            PathSourceLogFile = pathLog;
             SessionsPath = sessionsPath;
             _logger = logger;
         }
 
 
-        public void ReadNewSessions()
+        public void ReadNewSessions(ParserController parser)
         {
-            using (StreamReader sr = new StreamReader(TempFile))
+            string startLine = "";
+            string markerLine = @"<log4j:message><![CDATA[persistVehicleSessionFile: request=/flashserver_kamaz/postVehicleSession/";
+            using (FileLogHandler getFileReverse = new FileLogHandler(PathTempLogFile))
             {
-                ParserController main = new ParserController(_logger);
-                string line;
-                string startLine = "";
-                while ((line = sr.ReadLine()) != null)
+                string line = "";
+
+                while ((line = getFileReverse.ReadLine()) != null)
                 {
-                    if (line.Contains(LastLine) == false|| LastLine=="")
-                    {
-                        string searchText = @"[CDATA[persistVehicleSessionFile: request=/flashserver_kamaz/postVehicleSession/";
-
-                        if (line.Contains(searchText))
-                        {
-                            string[] sessionParams = line.Split(searchText)[1]
-                                .Split('/');
-
-                            string fullPath = SessionsPath + sessionParams[0] + "\\" + sessionParams[1] + "\\";
-
-                            if (Directory.Exists(fullPath))
-                            {////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                main.LoadSessionFolders(new DirectoryInfo(fullPath));
-                                _logger.LogInformation("ReadNewSessions: " + sessionParams[1]);
-                            }
-                        }
-
-
-                        if (startLine == "")
-                        {
-                            startLine = line.Trim();
-                        }
-                    }
-                    else
-                    {
-                        LastLine = startLine;
+                    if (LastLine != "" && line.Contains(LastLine))
                         break;
+
+
+                    //Запись только первой строки
+                    if (!string.IsNullOrEmpty(line) && startLine == "")
+                    {
+                        if (line.Contains(@"<log4j:event"))
+                            startLine = line.Trim();
                     }
+
+                    if (line.Contains(markerLine))
+                    {
+                        string[] sessionParams = line.Split('/');
+
+                        string fullPath = SessionsPath + sessionParams[3] + "\\" + sessionParams[4] + "\\";
+                        parser.LoadSessionFolders(new DirectoryInfo(fullPath));
+                    }
+
                 }
+                LastLine = startLine;
             }
+        }
+
+        public bool LogFileChanged()
+        {
+            string TempFile = AppDomain.CurrentDomain.BaseDirectory + "Log.temp";
+
+            DateTime lastWriteTimeSource = File.GetLastWriteTime(PathSourceLogFile);
+
+            if (lastWriteTimeSource > LastWriteTime)
+            {
+                LastWriteTime = lastWriteTimeSource;
+
+                File.Copy(PathSourceLogFile, PathTempLogFile, true);
+                return true;
+            }
+            return false;
         }
     }
 }

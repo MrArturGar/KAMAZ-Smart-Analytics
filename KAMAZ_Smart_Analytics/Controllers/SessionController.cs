@@ -17,12 +17,14 @@ namespace KAMAZ_Smart_Analytics.Controllers
             _sharedLocalizer = sharedLocalizer;
         }
 
-        public async Task<IActionResult> List(string? vin, string? versionDb, int page = 1, SortSessionState sortOrder = SortSessionState.DateDesc)
+        public async Task<IActionResult> List(string? vin, string? versionDb, string? type, string? username, string? vcisn,
+            double? mileageStart, double? mileageEnd, bool? hasIdentification, bool? hasDtc, bool? hasTests, bool? hasFlash,
+            DateTime? dateStart, DateTime? dateEnd, int page = 1, SortSessionState sortOrder = SortSessionState.DateDesc)
         {
             int pageCount, entitesOnPage = 30;
             versionDb = versionDb == _sharedLocalizer["All"] ? null : versionDb;
 
-            SessionListWeb sessions = await client.GetSessionListWebAsync(vin, versionDb, sortOrder.ToString(), entitesOnPage, entitesOnPage * (page - 1));
+            SessionListWeb sessions = await client.GetSessionListWebAsync(vin, versionDb, type, username, vcisn, mileageStart,mileageEnd,hasIdentification,hasDtc,hasTests,hasFlash,dateStart,dateEnd, sortOrder.ToString(), entitesOnPage, entitesOnPage * (page - 1));
 
             pageCount = (int)Math.Ceiling((double)sessions.Count / (double)entitesOnPage);
 
@@ -34,7 +36,7 @@ namespace KAMAZ_Smart_Analytics.Controllers
             {
                 PageViewModel = pageViewModel,
                 SortViewModel = new SortSessionViewModel(sortOrder),
-                FilterViewModel = new FilterSessionViewModel(dbVersionList, vin, versionDb),
+                FilterViewModel = new FilterSessionViewModel(dbVersionList, versionDb, vin, type, username, vcisn, mileageStart, mileageEnd, hasIdentification, hasDtc, hasTests, hasFlash, dateStart, dateEnd),
                 Objects = sessions.Items
             };
 
