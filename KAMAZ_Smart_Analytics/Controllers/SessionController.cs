@@ -62,8 +62,23 @@ namespace KAMAZ_Smart_Analytics.Controllers
                     identifications[ident.Codifier].Add(ident);
                 }
             }
-            string[] key = identifications.Keys.ToArray();
             ViewBag.Identifications = identifications;
+
+
+            Dictionary<string, List<DtcWeb>> dtcs = new();
+            foreach (DtcWeb dtc in await client.GetDtcWebAsync(id))
+            {
+                if (dtcs.ContainsKey(dtc.Codifier))
+                {
+                    dtcs[dtc.Codifier].Add(dtc);
+                }
+                else
+                {
+                    dtcs.Add(dtc.Codifier, new List<DtcWeb>());
+                    dtcs[dtc.Codifier].Add(dtc);
+                }
+            }
+            ViewBag.Dtcs = dtcs;
 
             ViewBag.ProcedureReports = await client.GetProcedureReportWebAsync(id);
             ViewBag.AoglonassReports = await client.GetAoglonassReportBySessionIdAsync(id);

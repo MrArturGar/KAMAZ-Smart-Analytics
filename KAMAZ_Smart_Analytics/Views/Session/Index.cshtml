@@ -6,173 +6,423 @@
     ViewData["Title"] = SharedLocalizer["Session"];
 }
 
-<div class="text-center">
-    <div class="container-fluid py-4">
-        <div class="row mt-4">
-            <div class="col-lg-7 mb-lg-0 mb-4">
-                <div class="card">
-                    <dib class="card-body p-3">
-                        <img class="img-thumbnail" height="700" width="1300" src="~/img/type/@(ViewBag.Vehicle.Type).webp" onerror="setDefaultImage(this);" />
-                    </dib>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <h3>@SharedLocalizer["Client"]</h3>
-                <div class="row p-3 border bg-light">
-                    <p class="lead"><b>@SharedLocalizer["User"]:</b> @(ViewBag.ServiceCenter.Username)</p>
-                </div>
-                <div class="row p-3 border bg-light">
-                    <p class="lead"><b>@SharedLocalizer["City"]:</b> @(ViewBag.ServiceCenter.City)</p>
-                </div>
-                <div class="row p-3 border bg-light">
-                    <p class="lead"><b>@SharedLocalizer["VersionDB"]:</b> @(ViewBag.Session.VersionDb)</p>
-                </div>
-                <div class="row p-3 border bg-light">
-                    <p class="lead"><b>@SharedLocalizer["VCISN"]:</b> @(ViewBag.Session.Vcisn)</p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <h3>Basic information</h3>
-            <div class="col-sm-6">
-                <div class="row p-3 border bg-light">
-                    <p class="lead"><b>@SharedLocalizer["Type"]:</b> @(ViewBag.Vehicle.Type)</p>
-                </div>
-                <div class="row p-3 border bg-light">
-                    <p class="lead"><b>@SharedLocalizer["DesignNumber"]:</b> @(ViewBag.Vehicle.DesignNumber)</p>
-                </div>
-                <div class="row p-3 border bg-light">
-                    <p class="lead"><b>@SharedLocalizer["Vin"]:</b> @(ViewBag.Vehicle.Vin)</p>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="row p-3 border bg-light">
-                    <p class="lead"><b>@SharedLocalizer["Iccid"]:</b> @(ViewBag.Vehicle.Iccid)</p>
-                </div>
-                <div class="row p-3 border bg-light">
-                    <p class="lead"><b>@SharedLocalizer["Iccidc"]:</b> @(ViewBag.Vehicle.Iccidc)</p>
-                </div>
-                <div class="row p-3 border bg-light">
-                    <p class="lead"><b>@SharedLocalizer["Imei"]:</b> @(ViewBag.Vehicle.Imei)</p>
-                </div>
-            </div>
+<div class="row">
+    <div class="col-lg-5 mb-lg-0 mb-4">
+        <div class="card">
+            <dib class="card-body p-3">
+                <img class="img-thumbnail" height="700" width="1300" src="~/img/type/@(ViewBag.Vehicle.Type).webp" onerror="setDefaultImage(this);" />
+            </dib>
         </div>
     </div>
-    <br />
-    <h3>@SharedLocalizer["Identification"]</h3>
-    @if (ViewBag.Identifications.Count != 0)
-    {
-        <div class="accordion" id="accordionIdent">
-            @foreach (string key in ViewBag.Identifications.Keys)
-            {
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id=@("heading" + key)>
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target=@("#collapse" + key) aria-controls=@("collapse" + key)>
-                            @key
-                        </button>
-                    </h2>
-                    <div id=@("collapse" + key) class="accordion-collapse collapse" aria-labelledby=@("heading" + key) data-bs-parent="#accordionIdent">
-                        <table class="table">
-                            <div class="accordion-body">
-                                @foreach (IdentificationWeb ident in ViewBag.Identifications[key])
-                                {
-                                <tr><td align="left"><p class="lead">@SharedLocalizer[ident.Name]: </p></td><td align="right"><p class="lead">@ident.Value </p></td></tr>
-                                }
+    <div class="col-lg-7 mb-lg-0 mb-4">
+        <div class="card">
+            <div class="card-header pb-0">
+                <div class="row">
+                    <div class="text-center">
+                        <h5>@SharedLocalizer["Client"]</h5>
                     </div>
+                </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+                <div class="table-responsive">
+                    <table class="table align-items-center mb-0">
+                        <tr>
+                            <td>
+                                <div class="d-flex px-2 py-1">
+                                    <div class="d-flex flex-column justify-content-center">
+                                        <h6 class="mb-0 text-xl">@SharedLocalizer["User"]:</h6>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary  text-xl font-weight-bold"> @(ViewBag.ServiceCenter.Username)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex px-2 py-1">
+                                    <div class="d-flex flex-column justify-content-center">
+                                        <h6 class="mb-0  text-xl">@SharedLocalizer["City"]:</h6>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary  text-xl font-weight-bold"> @(ViewBag.ServiceCenter.City)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex px-2 py-1">
+                                    <div class="d-flex flex-column justify-content-center">
+                                        <h6 class="mb-0  text-xl">@SharedLocalizer["VersionDB"]:</h6>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary  text-xl font-weight-bold"> @(ViewBag.Session.VersionDb)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex px-2 py-1">
+                                    <div class="d-flex flex-column justify-content-center">
+                                        <h6 class="mb-0  text-xl">@SharedLocalizer["VCISN"]:</h6>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xl font-weight-bold"> @(ViewBag.Session.Vcisn)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex px-2 py-1">
+                                    <div class="d-flex flex-column justify-content-center">
+                                        <h6 class="mb-0  text-xl">@SharedLocalizer["DateSession"]:</h6>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xl font-weight-bold"> @(ViewBag.Session.Date.ToString("dd.MM.yyyy (HH:mm:ss)"))</span>
+                            </td>
+                        </tr>
+                        @*<div class="row p-3 border bg-light">
+                        <p class="lead"><b>@SharedLocalizer["User"]:</b> @(ViewBag.ServiceCenter.Username)</p>
+                        </div>*@
                     </table>
                 </div>
             </div>
-            }
+        </div>
     </div>
-    }
-    else
-    {
-    <div class="container">
-        <div class="row justify-content-md-center">
-            <div class="col-sm-9">
-                <div class="row p-9 border bg-light">
-                    <p class="lead">@SharedLocalizer["NotFound"]</p>
+</div>
+<div class="row mt-4">
+    <div class="col-lg-12 mb-lg-0 mb-4">
+        <div class="card">
+            <div class="card-header pb-0">
+                <div class="row">
+                    <div class="text-center">
+                        <h5>@SharedLocalizer["BasicInformation"]</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+                <div class="row row-cols-2">
+                    <div class="col col-sm-6">
+                        <div class="table-responsive">
+                            <table class="table align-items-center mb-0">
+                                <tr>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-xl">@SharedLocalizer["Type"]:</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle text-end">
+                                        <span class="text-secondary  text-xl font-weight-bold">@(ViewBag.Vehicle.Type)</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-xl">@SharedLocalizer["DesignNumber"]:</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle text-end">
+                                        <span class="text-secondary  text-xl font-weight-bold">@(ViewBag.Vehicle.DesignNumber)</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-xl">@SharedLocalizer["Vin"]:</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle text-end">
+                                        <span class="text-secondary  text-xl font-weight-bold">@(ViewBag.Vehicle.Vin)</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6">
+                        <div class="table-responsive">
+                            <table class="table align-items-center mb-0">
+                                <tr>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-xl">@SharedLocalizer["Iccid"]:</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle text-end">
+                                        <span class="text-secondary  text-xl font-weight-bold">@(ViewBag.Vehicle.Iccid)</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-xl">@SharedLocalizer["Iccidc"]:</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle text-end">
+                                        <span class="text-secondary  text-xl font-weight-bold">@(ViewBag.Vehicle.Iccidc)</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-xl">@SharedLocalizer["Imei"]:</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle text-end">
+                                        <span class="text-secondary  text-xl font-weight-bold">@(ViewBag.Vehicle.Imei)</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    }
-<br /br>
-<h3>@SharedLocalizer["Internal tests"]</h3>
-    @if (ViewBag.ProcedureReports.Count != 0)
-    {
-    <table id="content-container" class="table">
-        <thead>
-            <tr>
-                <td><h5>@SharedLocalizer["Ecu"]</h5></td>
-                <td><h5>@SharedLocalizer["Type"]</h5></td>
-                <td><h5>@SharedLocalizer["Name"]</h5></td>
-                <td><h5>@SharedLocalizer["Result"]</h5></td>
-                <td><h5>@SharedLocalizer["DateStart"]</h5></td>
-                <td><h5>@SharedLocalizer["DataEnd"]</h5></td>
-                <td><h5>@SharedLocalizer["Vin"]</h5></td>
-                <td><h5>@SharedLocalizer["File"]</h5></td>
-            </tr>
-        </thead>
-            @foreach (ProcedureReportWeb proc in ViewBag.ProcedureReports)
-            {
-            <tr>
-                <td><p>@proc.Codifier</p></td>
-                <td><p>@proc.Type</p></td>
-                <td><p>@proc.Name</p></td>
-                <td><p>@proc.Result</p></td>
-                    @if (proc.DateStart != null)
+</div>
+
+<div class="row mt-4">
+    <div class="col-lg-6 mb-lg-0 mb-4">
+        <div class="card">
+
+            <div class="accordion-1">
+                <div class="container">
+                    <div class="row my-5">
+                        <div class="col-md-6 mx-auto text-center">
+                            <h5>@SharedLocalizer["Identification"]</h5>
+                            <p> </p>
+                        </div>
+                    </div>
+                    @if (ViewBag.Identifications.Count != 0)
                     {
-                        DateTimeOffset dateStart = (DateTimeOffset)proc.DateStart;
-                    <td><p>@dateStart.ToString("dd.MM.yyyy (HH:mm:ss)")</p></td>
+                        <div class="row">
+                            <div class="col-md-12 mx-auto">
+                                <div class="accordion" id="accordionIdent">
+                                    @foreach (string key in ViewBag.Identifications.Keys)
+                                    {
+                                        <div class="accordion-item mb-3">
+                                            <h5 class="accordion-header" id="@("identHeading" + key)">
+                                                <button class="accordion-button border-bottom border-info font-weight-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@("identCollapse" + key)" aria-expanded="false" aria-controls="collapseOne">
+                                                    @key
+                                                </button>
+                                            </h5>
+                                            <div id="@("identCollapse" + key)" class="accordion-collapse collapse" aria-labelledby="@("identHeading" + key)" data-bs-parent="#accordionIdent" style="">
+                                                <div class="accordion-body text-sm opacity-8">
+                                                    <table class="table">
+                                                        @foreach (IdentificationWeb ident in ViewBag.Identifications[key])
+                                                        {
+                                                            <tr><td align="left"><h7>@SharedLocalizer[ident.Name]: </h7></td><td align="right"><h7>@ident.Value </h7></td></tr>
+                                                        }
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     }
                     else
                     {
-                    <td><p>---</p></td>
+                        <div class="container">
+                            <div class="row justify-content-md-center">
+                                <div class="col-sm-9">
+                                    <div class="row p-9 border bg-light">
+                                        <p class="lead">@SharedLocalizer["NotFound"]</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
-                <td><p>@proc.DateEnd.ToString("dd.MM.yyyy (HH:mm:ss)")</p></td>
-                <td><p>@proc.UsingVin</p></td>
-                <td><p>@proc.DataFiles</p></td>
-            </tr>
-            }
-    </table>
-    }
-    else
-    {
-    <div class="container">
-        <div class="row justify-content-md-center">
-            <div class="col-sm-9">
-                <div class="row p-9 border bg-light">
-                    <p class="lead">@SharedLocalizer["NotFound"]</p>
                 </div>
             </div>
         </div>
     </div>
-    }
 
-<br />
-    @if (ViewBag.AoglonassReports.Count != 0)
-    {
-    <h3>@SharedLocalizer["AOGlonass"]</h3>
-    <table id="content-container" class="table">
-        <thead>
-            <tr>
-                <td><h5>@SharedLocalizer["DateStart"]</h5></td>
-                <td><h5>@SharedLocalizer["Action"]</h5></td>
-                <td><h5>@SharedLocalizer["Params"]</h5></td>
-                <td><h5>@SharedLocalizer["Status"]</h5></td>
-            </tr>
-        </thead>
-            @foreach (AoglonassReport aoproc in ViewBag.AoglonassReports)
-            {
-            <tr>
-                <td><p>@aoproc.DateStart.ToString("dd.MM.yyyy (HH:mm:ss)")</p></td>
-                <td><p>@aoproc.Action</p></td>
-                <td><p>@aoproc.ParamText</p></td>
-                <td><p>@aoproc.Status</p></td>
-            </tr>
-            }
-    </table>
+    <div class="col-lg-6 mb-lg-0 mb-4">
+        <div class="card">
 
-    }
+            <div class="accordion-1">
+                <div class="container">
+                    <div class="row my-5">
+                        <div class="col-md-6 mx-auto text-center">
+                            <h5>@SharedLocalizer["Dtcs"]</h5>
+                            <p> </p>
+                        </div>
+                    </div>
+                    @if (ViewBag.Identifications.Count != 0)
+                    {
+                        <div class="row">
+                            <div class="col-md-12 mx-auto">
+                                <div class="accordion" id="accordionDtc">
+                                    @foreach (string key in ViewBag.Dtcs.Keys)
+                                    {
+                                        <div class="accordion-item mb-3">
+                                            <h5 class="accordion-header" id="@("dtcHeading" + key)">
+                                                <button class="accordion-button border-bottom border-info font-weight-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@("dtcCollapse" + key)" aria-expanded="false" aria-controls="collapseOne">
+                                                    @key
+                                                </button>
+                                            </h5>
+                                            <div id="@("dtcCollapse" + key)" class="accordion-collapse collapse" aria-labelledby="@("dtcHeading" + key)" data-bs-parent="#accordionDtc" style="">
+                                                <div class="accordion-body text-sm opacity-8">
+                                                    <table class="table">
+                                                        @foreach (DtcWeb dtc in ViewBag.Dtcs[key])
+                                                        {
+                                                            <tr>
+                                                                <td align="left">
+                                                                    <h7>@dtc.Code</h7>
+                                                                </td>
+                                                                <td align="left">
+                                                                    <h7>@SharedLocalizer[dtc.TroubleCode] </h7>
+                                                                </td>
+                                                                <td align="right"><h7>@dtc.Status </h7></td>
+                                                            </tr>
+                                                        }
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="container">
+                            <div class="row justify-content-md-center">
+                                <div class="col-sm-9">
+                                    <div class="row p-9 border bg-light">
+                                        <p class="lead">@SharedLocalizer["NotFound"]</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+<div class="row mt-4">
+    <div class="col-lg-12 mb-lg-0 mb-4">
+        <div class="card">
+            <div class="card-header pb-0">
+                <div class="row">
+                    <div class="text-center">
+                        <h5>@SharedLocalizer["Internal tests"]</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+                @if (ViewBag.ProcedureReports.Count != 0)
+                {
+                    <table id="content-container" class="table">
+                        <thead>
+                            <tr>
+                                <td><h5>@SharedLocalizer["Ecu"]</h5></td>
+                                <td><h5>@SharedLocalizer["Type"]</h5></td>
+                                <td><h5>@SharedLocalizer["Name"]</h5></td>
+                                <td><h5>@SharedLocalizer["Result"]</h5></td>
+                                <td><h5>@SharedLocalizer["DateStart"]</h5></td>
+                                <td><h5>@SharedLocalizer["DataEnd"]</h5></td>
+                                <td><h5>@SharedLocalizer["Vin"]</h5></td>
+                                <td><h5>@SharedLocalizer["File"]</h5></td>
+                            </tr>
+                        </thead>
+                        @foreach (ProcedureReportWeb proc in ViewBag.ProcedureReports)
+                        {
+                            <tr>
+                                <td><p>@proc.Codifier</p></td>
+                                <td><p>@proc.Type</p></td>
+                                <td><p>@proc.Name</p></td>
+                                <td><p>@proc.Result</p></td>
+                                @if (proc.DateStart != null)
+                                {
+                                    DateTimeOffset dateStart = (DateTimeOffset)proc.DateStart;
+                                    <td><p>@dateStart.ToString("dd.MM.yyyy (HH:mm:ss)")</p></td>
+                                }
+                                else
+                                {
+                                    <td><p>---</p></td>
+                                }
+                                <td><p>@proc.DateEnd.ToString("dd.MM.yyyy (HH:mm:ss)")</p></td>
+                                <td><p>@proc.UsingVin</p></td>
+                                <td><p>@proc.DataFiles</p></td>
+                            </tr>
+                        }
+                    </table>
+                }
+                else
+                {
+                    <div class="container">
+                        <div class="row justify-content-md-center">
+                            <div class="col-sm-9">
+                                <div class="row p-9 border bg-light">
+                                    <p class="lead">@SharedLocalizer["NotFound"]</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.AoglonassReports.Count != 0)
+{
+    <div class="row mt-4">
+        <div class="col-lg-12 mb-lg-0 mb-4">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="row">
+                        <div class="text-center">
+                            <h5>@SharedLocalizer["AOGlonass"]</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-2">
+                    <table id="content-container" class="table">
+                        <thead>
+                            <tr>
+                                <td><h5>@SharedLocalizer["DateStart"]</h5></td>
+                                <td><h5>@SharedLocalizer["Action"]</h5></td>
+                                <td><h5>@SharedLocalizer["Params"]</h5></td>
+                                <td><h5>@SharedLocalizer["Status"]</h5></td>
+                            </tr>
+                        </thead>
+                        @foreach (AoglonassReport aoproc in ViewBag.AoglonassReports)
+                        {
+                            <tr>
+                                <td><p>@aoproc.DateStart.ToString("dd.MM.yyyy (HH:mm:ss)")</p></td>
+                                <td><p>@aoproc.Action</p></td>
+                                <td><p>@aoproc.ParamText</p></td>
+                                <td><p>@aoproc.Status</p></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

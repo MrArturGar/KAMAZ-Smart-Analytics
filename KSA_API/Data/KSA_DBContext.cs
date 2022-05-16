@@ -23,6 +23,8 @@ namespace KSA_API.Data
         public virtual DbSet<ApiLogin> ApiLogins { get; set; } = null!;
         public virtual DbSet<Composite> Composites { get; set; } = null!;
         public virtual DbSet<ControlSystem> ControlSystems { get; set; } = null!;
+        public virtual DbSet<Dtc> Dtcs { get; set; } = null!;
+        public virtual DbSet<DtcWeb> DtcWebs { get; set; } = null!;
         public virtual DbSet<Ecu> Ecus { get; set; } = null!;
         public virtual DbSet<EcuIdentification> EcuIdentifications { get; set; } = null!;
         public virtual DbSet<Identification> Identifications { get; set; } = null!;
@@ -31,6 +33,7 @@ namespace KSA_API.Data
         public virtual DbSet<ProcedureReportWeb> ProcedureReportWebs { get; set; } = null!;
         public virtual DbSet<ServiceCenter> ServiceCenters { get; set; } = null!;
         public virtual DbSet<Session> Sessions { get; set; } = null!;
+        public virtual DbSet<SessionDtc> SessionDtcs { get; set; } = null!;
         public virtual DbSet<SessionEcuidentification> SessionEcuidentifications { get; set; } = null!;
         public virtual DbSet<Vehicle> Vehicles { get; set; } = null!;
 
@@ -115,11 +118,49 @@ namespace KSA_API.Data
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<Dtc>(entity =>
+            {
+                entity.ToTable("DTCs");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.IdEcu).HasColumnName("id_ECU");
+
+                entity.Property(e => e.TroubleCode)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.VehicleType)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<DtcWeb>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("DtcWeb");
+
+                entity.Property(e => e.Codifier)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IdSession).HasColumnName("id_Session");
+
+                entity.Property(e => e.TroubleCode)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.VehicleType)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Ecu>(entity =>
             {
                 entity.ToTable("ECUs");
 
-                entity.HasIndex(e => e.Codifier, "UQ__ECUs__C912939070092D12")
+                entity.HasIndex(e => e.Codifier, "UQ__ECUs__C9129390C5894DE1")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -243,13 +284,16 @@ namespace KSA_API.Data
 
                 entity.Property(e => e.Type)
                     .HasMaxLength(32)
-                    .IsUnicode(false)
-                    .HasColumnName("type");
+                    .IsUnicode(false);
 
                 entity.Property(e => e.UsingVin)
                     .HasMaxLength(32)
                     .IsUnicode(false)
                     .HasColumnName("Using_VIN");
+
+                entity.Property(e => e.Vin)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<ServiceCenter>(entity =>
@@ -281,7 +325,7 @@ namespace KSA_API.Data
 
             modelBuilder.Entity<Session>(entity =>
             {
-                entity.HasIndex(e => e.SessionsName, "UQ__Sessions__FF7910AD333F2A38")
+                entity.HasIndex(e => e.SessionsName, "UQ__Sessions__FF7910AD96C81A96")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -328,6 +372,18 @@ namespace KSA_API.Data
 
             });
 
+            modelBuilder.Entity<SessionDtc>(entity =>
+            {
+                entity.ToTable("Session_DTC");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.IdDtc).HasColumnName("id_DTC");
+
+                entity.Property(e => e.IdSession).HasColumnName("id_Session");
+
+            });
+
             modelBuilder.Entity<SessionEcuidentification>(entity =>
             {
                 entity.ToTable("Session_ECUIdentification");
@@ -337,6 +393,7 @@ namespace KSA_API.Data
                 entity.Property(e => e.IdEcuidentifications).HasColumnName("id_ECUIdentifications");
 
                 entity.Property(e => e.IdSession).HasColumnName("id_Session");
+
             });
 
             modelBuilder.Entity<Vehicle>(entity =>

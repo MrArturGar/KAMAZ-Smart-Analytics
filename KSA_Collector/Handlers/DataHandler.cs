@@ -83,5 +83,10 @@ namespace KSA_Collector.Handlers
         {
             return sessionId.Split('@').First();
         }
+
+        public string GetVehicleType(string type)
+        {
+            return Regex.Split(type, "(?<!^)(?=[A-Z])")[0];
+        }
     }
 }

@@ -146,6 +146,13 @@ namespace KSA_Collector.Controllers
             return response.Result;
         }
 
+        internal int SaveSessionDtc(SessionDtc sessionDtc)
+        {
+            Task<int> response = _client.PostSessionDtcAsync(sessionDtc);
+            response.Wait();
+            return response.Result;
+        }
+
         internal int SaveSession(Session session)
         {
             Task<int> response = _client.PostSessionAsync(session);
@@ -205,6 +212,12 @@ namespace KSA_Collector.Controllers
             response.Wait();
             return response.Result;
         }
+        internal int SaveDtc(Dtc dtc)
+        {
+            Task<int> response = _client.PostDtcAsync(dtc);
+            response.Wait();
+            return response.Result;
+        }
         internal int SaveIdentification(Identification identification)
         {
             Task<int> response = _client.PostIdentificationAsync(identification);
@@ -256,6 +269,22 @@ namespace KSA_Collector.Controllers
                 ExceptionResponse(ex);
 
                 return SaveIdentification(identification);
+            }
+        }
+        internal int GetDtcId(Dtc dtc)
+        {
+            Task<Dtc> response = _client.GetDtcAsync(dtc.Code, dtc.TroubleCode, dtc.VehicleType);
+            try
+            {
+                response.Wait();
+                return response.Result.Id;
+
+            }
+            catch (AggregateException ex)
+            {
+                ExceptionResponse(ex);
+
+                return SaveDtc(dtc);
             }
         }
 

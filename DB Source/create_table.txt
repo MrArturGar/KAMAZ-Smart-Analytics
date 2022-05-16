@@ -162,6 +162,31 @@ CREATE TABLE [ServiceCenters] (
 
 )
 GO
+CREATE TABLE [DTCs] (
+	id integer IDENTITY(1,1),
+	id_ECU integer NOT NULL,
+	VehicleType varchar(32) NOT NULL,
+	Code integer NOT NULL,
+	TroubleCode varchar(255) NOT NULL,
+  CONSTRAINT [PK_DTCS] PRIMARY KEY CLUSTERED
+  (
+  [id] ASC
+  ) WITH (IGNORE_DUP_KEY = OFF)
+
+)
+GO
+CREATE TABLE [Session_DTC] (
+	id integer IDENTITY(1,1),
+	id_DTC integer NOT NULL,
+	id_Session integer NOT NULL,
+	Status bit,
+  CONSTRAINT [PK_SESSION_DTC] PRIMARY KEY CLUSTERED
+  (
+  [id] ASC
+  ) WITH (IGNORE_DUP_KEY = OFF)
+
+)
+GO
 
 ALTER TABLE [Sessions] WITH CHECK ADD CONSTRAINT [Sessions_fk0] FOREIGN KEY ([id_Vehicle]) REFERENCES [Vehicles]([id])
 ON UPDATE CASCADE
@@ -242,6 +267,23 @@ GO
 ALTER TABLE [ControlSystems] CHECK CONSTRAINT [ControlSystems_fk0]
 GO																							  
 
+ALTER TABLE [DTCs] WITH CHECK ADD CONSTRAINT [DTCs_fk0] FOREIGN KEY ([id_ECU]) REFERENCES [ECUs]([id])
+ON UPDATE CASCADE
+GO
+ALTER TABLE [DTCs] CHECK CONSTRAINT [DTCs_fk0]
+GO
+
+ALTER TABLE [Session_DTC] WITH CHECK ADD CONSTRAINT [Session_DTC_fk0] FOREIGN KEY ([id_DTC]) REFERENCES [DTCs]([id])
+ON UPDATE CASCADE
+GO
+ALTER TABLE [Session_DTC] CHECK CONSTRAINT [Session_DTC_fk0]
+GO
+ALTER TABLE [Session_DTC] WITH CHECK ADD CONSTRAINT [Session_DTC_fk1] FOREIGN KEY ([id_Session]) REFERENCES [Sessions]([id])
+ON UPDATE CASCADE
+GO
+ALTER TABLE [Session_DTC] CHECK CONSTRAINT [Session_DTC_fk1]
+GO
+
 CREATE VIEW [dbo].[IdentificationWeb]
 	AS select id_Session, Codifier, Name, Value from Sessions, Session_ECUIdentification, ECU_Identification,ECUs, Identifications
 where Sessions.id = id_Session and id_ECUIdentifications =ECU_Identification.id and id_ECU = ECUs.id and  id_Identifications = Identifications.id
@@ -250,4 +292,9 @@ GO
 CREATE VIEW [dbo].[ProcedureReportWeb]
 	AS SELECT ProcedureReports.id, ProcedureReports.id_ECU, Codifier, id_session, ProcedureReports.Type, Name, Result, Date_start,Date_end, Vin, Using_VIN, DataFiles FROM [ProcedureReports], [ECUs], [Vehicles], [Sessions]
 	where id_ECU = ECUs.id and id_session = Sessions.id and id_Vehicle = Vehicles.id
+GO
+
+CREATE VIEW [dbo].[DtcWeb]
+	AS select id_Session, Codifier, VehicleType, Code, TroubleCode, Status from Sessions, ECUs, DTCs, Session_DTC
+where Sessions.id = id_Session and id_ECU = ECUs.id and  id_DTC = DTCs.id
 GO

@@ -20,10 +20,10 @@ namespace KSA_API.Controllers
             _logger = logger;
             Context = context;
         }
-        [HttpGet("{id:int}", Name = "GetIdentificationWeb")]
-        public IdentificationWeb[] GetGetIdentificationWeb(int id)
+        [HttpGet("{sessionId:int}", Name = "GetIdentificationWeb")]
+        public IdentificationWeb[] GetIdentificationWeb(int sessionId)
         {
-            return Context.IdentificationWebs.Where(c => c.IdSession == id).ToArray();
+            return Context.IdentificationWebs.Where(c => c.IdSession == sessionId).ToArray();
         }
     }
 }

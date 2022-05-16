@@ -398,6 +398,160 @@
         }
       }
     },
+    "/Dtc": {
+      "post": {
+        "tags": [
+          "Dtc"
+        ],
+        "operationId": "PostDtc",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Dtc"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Dtc"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Dtc"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Dtc"
+        ],
+        "operationId": "GetDtc",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "troubleCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "vehicleType",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Dtc"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Dtc"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Dtc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/DtcWeb/{sessionId}": {
+      "get": {
+        "tags": [
+          "DtcWeb"
+        ],
+        "operationId": "GetDtcWeb",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DtcWeb"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DtcWeb"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DtcWeb"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Ecu/{codifier}": {
       "get": {
         "tags": [
@@ -691,7 +845,7 @@
         }
       }
     },
-    "/IdentificationWeb/{id}": {
+    "/IdentificationWeb/{sessionId}": {
       "get": {
         "tags": [
           "IdentificationWeb"
@@ -699,7 +853,7 @@
         "operationId": "GetIdentificationWeb",
         "parameters": [
           {
-            "name": "id",
+            "name": "sessionId",
             "in": "path",
             "required": true,
             "schema": {
@@ -1418,6 +1572,121 @@
         }
       }
     },
+    "/SessionDtcs": {
+      "post": {
+        "tags": [
+          "SessionDtcs"
+        ],
+        "operationId": "PostSessionDtc",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionDtc"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionDtc"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionDtc"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/SessionDtcs/{name}": {
+      "get": {
+        "tags": [
+          "SessionDtcs"
+        ],
+        "operationId": "GetSessionDtc",
+        "parameters": [
+          {
+            "name": "idDtc",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "idSession",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDtc"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDtc"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDtc"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/SessionEcuIdentification": {
       "post": {
         "tags": [
@@ -2007,6 +2276,62 @@
         },
         "additionalProperties": false
       },
+      "Dtc": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEcu": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "vehicleType": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "troubleCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DtcWeb": {
+        "type": "object",
+        "properties": {
+          "idSession": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "codifier": {
+            "type": "string",
+            "nullable": true
+          },
+          "vehicleType": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "troubleCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Ecu": {
         "type": "object",
         "properties": {
@@ -2295,6 +2620,28 @@
           },
           "hasFlash": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SessionDtc": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idDtc": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idSession": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "boolean",
+            "nullable": true
           }
         },
         "additionalProperties": false

@@ -21,6 +21,7 @@ namespace KSA_Collector.Controllers
         Vehicle Vehicle = new();
         Session Session = new();
         List<SessionEcuidentification> sessionEcuidentification = new();
+        List<SessionDtc> sessionDtcs = new();
         string AdditionalArchivePath;
 
         public DiagSessionController()
@@ -109,6 +110,7 @@ namespace KSA_Collector.Controllers
                     _apiClient.SaveComposite(composite);
 
                     SetEcuIdentifications(ecus[i], ecus_table.Id);
+                    SetSessionDtcs(ecus[i], ecus_table.Id, session.machine.id);
 
                 }
             }
@@ -153,6 +155,49 @@ namespace KSA_Collector.Controllers
                     {
                         LoadIdentificationFromTable(ecuFile.id, identifications[i]);
                     }
+                }
+            }
+        }
+
+        private void SetSessionDtcs(sessionMachineNetworksEcus ecuFile, int ecuId, string type)
+        {
+            var dtcs = ecuFile.dtcs;
+
+            if (dtcs != null)
+            {
+                Session.HasDtc = true;
+                for (int i = 0; i < dtcs.Length; i++)
+                {
+                    var dtcFile = dtcs[i];
+                    Dtc dtc = new Dtc
+                    {
+                        IdEcu = ecuId,
+                        VehicleType = Data.GetVehicleType(type),///
+                        Code = (int)dtcFile.troubleCode,///
+                        TroubleCode = dtcFile.displayTroubleCode
+                    };
+                    dtc.Id = _apiClient.GetDtcId(dtc);
+
+                    SessionDtc sessionDtc = new SessionDtc
+                    {
+                        IdDtc = dtc.Id
+                    };
+
+                    if (dtcFile.statusText.Contains("Активная"))
+                    {
+                        sessionDtc.Status = true;
+                    }
+                    else if (dtcFile.statusText.Contains("Пассивная"))
+                    {
+                        sessionDtc.Status = false;
+                    }
+                    else
+                    {
+                        sessionDtc.Status = null;
+                    }
+                    sessionDtcs.Add(sessionDtc);
+
+
                 }
             }
         }
@@ -213,6 +258,7 @@ namespace KSA_Collector.Controllers
             SetProcedureReport(Session, sessionFile.machine.testResults);
             SetAoglonassReport(Session, diag);
             LoadSessionEcuIdentification();
+            LoadSessionDtc();
             _apiClient.SaveSession(Session);
         }
 
@@ -222,6 +268,15 @@ namespace KSA_Collector.Controllers
             {
                 sessionEcuidentification[i].IdSession = Session.Id;
                 _apiClient.SaveSessionEcuIdentification(sessionEcuidentification[i]);
+            }
+        }
+
+        private void LoadSessionDtc()
+        {
+            for (int i = 0; i < sessionDtcs.Count; i++)
+            {
+                sessionDtcs[i].IdSession = Session.Id;
+                _apiClient.SaveSessionDtc(sessionDtcs[i]);
             }
         }
 
