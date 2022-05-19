@@ -43,5 +43,28 @@ namespace KSA_API.Controllers
             && c.DateEnd == dateEnd && c.Type == type && c.Result == result).SingleOrDefault();
 
         }
+
+        [HttpGet(nameof(GetProcedureReportCount))]
+        public int GetProcedureReportCount(DateTime? dateStart, DateTime? dateEnd, bool? flash)
+        {
+            IQueryable<ProcedureReport> procedureReports = Context.ProcedureReports;
+
+
+            if (dateStart != null)
+            {
+                procedureReports = procedureReports.Where(c => c.DateEnd >= dateStart);
+            }
+            if (dateEnd != null)
+            {
+                procedureReports = procedureReports.Where(c => c.DateEnd <= dateEnd);
+            }
+            if (flash != null)
+            {
+                procedureReports = flash==true ? procedureReports.Where(c => c.Type == "Flash") : procedureReports.Where(c => c.Type == "Test");
+            }
+
+            return procedureReports.Count();
+
+        }
     }
 }

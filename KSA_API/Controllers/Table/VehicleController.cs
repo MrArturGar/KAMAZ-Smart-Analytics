@@ -126,5 +126,24 @@ namespace KSA_API.Controllers
                 Items = vehicles.Skip(skip).Take(take).ToArray()
             };
         }
+
+        [HttpGet(nameof(GetVehicleCount))]
+        public int GetVehicleCount(DateTime? dateStart, DateTime? dateEnd)
+        {
+            IQueryable<Session> sessions = Context.Sessions;
+
+
+            if (dateStart != null)
+            {
+                sessions = sessions.Where(c => c.Date >= dateStart);
+            }
+            if (dateEnd != null)
+            {
+                sessions = sessions.Where(c => c.Date <= dateEnd);
+            }
+
+            return sessions.Select(c => c.IdVehicle).Distinct().Count();
+
+        }
     }
 }

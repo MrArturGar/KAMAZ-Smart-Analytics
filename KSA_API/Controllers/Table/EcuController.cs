@@ -21,12 +21,6 @@ namespace KSA_API.Controllers
             Context = context;
         }
 
-        [HttpGet("{codifier}", Name = "GetEcu")]
-        public Ecu GetEcu(string codifier)
-        {
-            return Context.Ecus.Where(c => c.Codifier == codifier).SingleOrDefault();
-        }
-
         [HttpPost(Name = "PostEcu")]
         public int PostEcu(Ecu ecu)
         {
@@ -39,6 +33,18 @@ namespace KSA_API.Controllers
                 Context.SaveChanges();
             }
             return tmp.Id;
+        }
+
+        [HttpGet("{codifier}", Name = "GetEcu")]
+        public Ecu GetEcu(string codifier)
+        {
+            return Context.Ecus.Where(c => c.Codifier == codifier).SingleOrDefault();
+        }
+
+        [HttpGet(Name = "GetEcuCount")]
+        public int GetEcuCount()
+        {
+            return Context.Ecus.Count();
         }
     }
 }

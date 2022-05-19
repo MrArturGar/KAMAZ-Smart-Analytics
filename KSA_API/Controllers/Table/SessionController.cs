@@ -53,23 +53,35 @@ namespace KSA_API.Controllers
             return Context.Sessions.Where(c => c.Id == id).Single();
         }
 
-        [HttpGet(Name = "GetSessionsCount")]
-        public int GetSessionsCount(string? vin)
+        [HttpGet(nameof(GetSessionsCount))]
+        public int GetSessionsCount(string? vin, DateTime? dateStart, DateTime? dateEnd)
         {
+            IQueryable<Session> sessions = Context.Sessions;
+
+
+            if (dateStart != null)
+            {
+                sessions = sessions.Where(c => c.Date >= dateStart);
+            }
+            if (dateEnd != null)
+            {
+                sessions = sessions.Where(c => c.Date <= dateEnd);
+            }
+
             if (vin == null)
-                return Context.Sessions.Count();
+                return sessions.Count();
             else
             {
                 int[] vehicles = Context.Vehicles.Where(c => c.Vin == vin).Select(c => c.Id).ToArray();
 
-                return Context.Sessions.Where(c => vehicles.Contains(c.IdVehicle)).Count();
+                return sessions.Where(c => vehicles.Contains(c.IdVehicle)).Count();
             }
         }
 
-        [HttpGet("{idVehicle:int}/GetSessionsByVehicleId")]
-        public Session[] GetSessionsByVehicleId(int idVehicle)
+        [HttpGet("{vehicleId:int}/GetSessionsByVehicleId")]
+        public Session[] GetSessionsByVehicleId(int vehicleId)
         {
-            return Context.Sessions.Where(c => c.IdVehicle == idVehicle).OrderByDescending(c => c.Date).ToArray();
+            return Context.Sessions.Where(c => c.IdVehicle == vehicleId).OrderByDescending(c => c.Date).ToArray();
         }
 
         [HttpGet(nameof(GetDbVersions))]
