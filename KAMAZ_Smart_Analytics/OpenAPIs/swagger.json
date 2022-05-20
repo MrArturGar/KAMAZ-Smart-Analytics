@@ -157,27 +157,30 @@
         }
       }
     },
-    "/api/Auth/Auth": {
+    "/Auth/Auth": {
       "post": {
         "tags": [
           "Auth"
         ],
-        "parameters": [
-          {
-            "name": "Username",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Password",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Success"
@@ -185,7 +188,7 @@
         }
       }
     },
-    "/api/Auth/GetResult": {
+    "/Auth/GetResult": {
       "get": {
         "tags": [
           "Auth"
@@ -2557,6 +2560,20 @@
             "nullable": true
           },
           "value": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
             "type": "string",
             "nullable": true
           }

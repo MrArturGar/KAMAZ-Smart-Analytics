@@ -74,8 +74,8 @@
                            asp-route-hasDtc="@Model.FilterViewModel.SelectedHasDtc"
                            asp-route-hasTests="@Model.FilterViewModel.SelectedHasTests"
                            asp-route-hasFlash="@Model.FilterViewModel.SelectedHasFlash"
-                           asp-route-dateStart="@Model.FilterViewModel.SelectedDateStart"
-                           asp-route-dateEnd="@Model.FilterViewModel.SelectedDateEnd"
+                           asp-route-dateStart="@(Model.FilterViewModel.SelectedDateStart!=null?((DateTime)Model.FilterViewModel.SelectedDateStart).ToString("yyyy-MM-ddTHH:mm:ss"):"")"
+                           asp-route-dateEnd="@(Model.FilterViewModel.SelectedDateEnd!=null?((DateTime)Model.FilterViewModel.SelectedDateEnd).ToString("yyyy-MM-ddTHH:mm:ss"):"")"
                            class="page-link">
                                 <i class="fa fa-angle-left"></i>
                                 <span class="sr-only">@SharedLocalizer["Back"]</span>
@@ -104,8 +104,8 @@
                            asp-route-hasDtc="@Model.FilterViewModel.SelectedHasDtc"
                            asp-route-hasTests="@Model.FilterViewModel.SelectedHasTests"
                            asp-route-hasFlash="@Model.FilterViewModel.SelectedHasFlash"
-                           asp-route-dateStart="@Model.FilterViewModel.SelectedDateStart"
-                           asp-route-dateEnd="@Model.FilterViewModel.SelectedDateEnd"
+                           asp-route-dateStart="@(Model.FilterViewModel.SelectedDateStart!=null?((DateTime)Model.FilterViewModel.SelectedDateStart).ToString("yyyy-MM-ddTHH:mm:ss"):"")"
+                           asp-route-dateEnd="@(Model.FilterViewModel.SelectedDateEnd!=null?((DateTime)Model.FilterViewModel.SelectedDateEnd).ToString("yyyy-MM-ddTHH:mm:ss"):"")"
                            class="page-link">
                                 <i class="fa fa-angle-right"></i>
                                 <span class="sr-only">

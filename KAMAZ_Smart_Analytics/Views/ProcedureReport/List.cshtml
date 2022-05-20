@@ -17,7 +17,6 @@
                         <td><h5>@SharedLocalizer["Ecu"]</h5></td>
                         <td><h5>@SharedLocalizer["Type"]</h5></td>
                         <td><h5>@SharedLocalizer["Name"]</h5></td>
-                        <td><h5>@SharedLocalizer["DateStart"]</h5></td>
                         <td><h5>@SharedLocalizer["DateEnd"]</h5></td>
                         <td><h5>@SharedLocalizer["Vin"]</h5></td>
                         <td><h5>@SharedLocalizer["File"]</h5></td>
@@ -30,19 +29,27 @@
                         <td><p>@SharedLocalizer[p.Codifier]</p></td>
                         <td><p>@p.Type</p></td>
                         <td><p>@p.Name</p></td>
-                        @if (p.DateStart != null)
-                        {
-                            DateTimeOffset dateStart = (DateTimeOffset)p.DateStart;
-                            <td><p>@dateStart.ToString("dd.MM.yyyy (HH:mm:ss)")</p></td>
-                        }
-                        else
-                        {
-                            <td><p>---</p></td>
-                        }
                         <td><p>@p.DateEnd.ToString("dd.MM.yyyy (HH:mm:ss)")</p></td>
                         <td><p>@p.UsingVin</p></td>
                         <td><p>@p.DataFiles</p></td>
-                        <td><p>@p.Result</p></td>
+                        @if (p.Result == true)
+                        {
+                            <td class="align-middle text-center text-sm">
+                                <span class="badge badge-sm bg-gradient-success">@SharedLocalizer["Success"]</span>
+                            </td>
+                        }
+                        else if (p.Result == false)
+                        {
+                            <td class="align-middle text-center text-sm">
+                                <span class="badge badge-sm bg-gradient-faded-danger">@SharedLocalizer["Failed"]</span>
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="align-middle text-center text-sm">
+                                <span class="badge badge-sm bg-gradient-secondary">@SharedLocalizer["Unknown"]</span>
+                            </td>
+                        }
                     </tr>
                 }
             </table>
@@ -54,15 +61,15 @@
                     {
                         <li class="page-item">
                             <a asp-action="List"
-                           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-                           asp-route-sortOrder="@(Model.SortViewModel.Current)"
                            asp-route-type="@(Model.FilterViewModel.SelectedType)"
                            asp-route-result="@(Model.FilterViewModel.SelectedResult)"
                            asp-route-vin="@(Model.FilterViewModel.SelectedVin)"
                            asp-route-ecu="@(Model.FilterViewModel.SelectedEcu)"
                            asp-route-file="@(Model.FilterViewModel.SelectedFile)"
-                           asp-route-dateStart="@(Model.FilterViewModel.SelectedDateStart)"
-                           asp-route-dateEnd="@(Model.FilterViewModel.SelectedDateEnd)"
+                           asp-route-dateStart="@(Model.FilterViewModel.SelectedDateStart!=null?((DateTime)Model.FilterViewModel.SelectedDateStart).ToString("yyyy-MM-ddTHH:mm:ss"):"")"
+                           asp-route-dateEnd="@(Model.FilterViewModel.SelectedDateEnd!=null?((DateTime)Model.FilterViewModel.SelectedDateEnd).ToString("yyyy-MM-ddTHH:mm:ss"):"")"
+                           asp-route-sortOrder="@(Model.SortViewModel.Current)"
+                           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
                            class="page-link">
                                 <i class="fa fa-angle-left"></i>
                                 <span class="sr-only">@SharedLocalizer["Back"]</span>
@@ -78,15 +85,15 @@
                     {
                         <li class="page-item">
                             <a asp-action="List"
-                           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-                           asp-route-sortOrder="@(Model.SortViewModel.Current)"
                            asp-route-type="@(Model.FilterViewModel.SelectedType)"
                            asp-route-result="@(Model.FilterViewModel.SelectedResult)"
                            asp-route-vin="@(Model.FilterViewModel.SelectedVin)"
                            asp-route-ecu="@(Model.FilterViewModel.SelectedEcu)"
                            asp-route-file="@(Model.FilterViewModel.SelectedFile)"
-                           asp-route-dateStart="@(Model.FilterViewModel.SelectedDateStart)"
-                           asp-route-dateEnd="@(Model.FilterViewModel.SelectedDateEnd)"
+                           asp-route-dateStart="@(Model.FilterViewModel.SelectedDateStart!=null?((DateTime)Model.FilterViewModel.SelectedDateStart).ToString("yyyy-MM-ddTHH:mm:ss"):"")"
+                           asp-route-dateEnd="@(Model.FilterViewModel.SelectedDateEnd!=null?((DateTime)Model.FilterViewModel.SelectedDateEnd).ToString("yyyy-MM-ddTHH:mm:ss"):"")"
+                           asp-route-sortOrder="@(Model.SortViewModel.Current)"
+                           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
                            class="page-link">
                                 <i class="fa fa-angle-right"></i>
                                 <span class="sr-only">
@@ -133,7 +140,7 @@
                 </div>
                 <div>
                     <label class="form-control-label">@SharedLocalizer["Type"]:</label>
-                    <select name="type" asp-items="Model.FilterViewModel.Types" class="form-select"></select>
+                    <select name="type" asp-items="Model.FilterViewModel.Types" class="form-select form-select-sm"></select>
                 </div>
                 <div>
                     <label class="form-control-label">@SharedLocalizer["Result"]:</label>
@@ -148,16 +155,16 @@
                     <label class="form-control-label">@SharedLocalizer["File"]: </label>
                     <input class="form-control form-control-sm" name="file" value="@Model.FilterViewModel.SelectedFile" type="text" />
                 </div>
-                <div class="container" style="padding-right:0;padding-left:0;">
-                    <label class="form-control-label">@SharedLocalizer["Date"]:</label>
-                    <div class="row">
-                        <div class="col">
-                            <input type="datetime-local" aria-label="Start date" class="form-control form-control-sm" name="dateStart" value="@(Model.FilterViewModel.SelectedDateStart!=null?((DateTime)Model.FilterViewModel.SelectedDateStart).ToString("yyyy-MM-ddTHH:mm:ss"):"")" />
-                        </div>
-                        <div class="col">
-                            <input type="datetime-local" aria-label="End date" class="form-control form-control-sm" name="dateEnd" value="@(Model.FilterViewModel.SelectedDateEnd!=null?((DateTime)Model.FilterViewModel.SelectedDateEnd).ToString("yyyy-MM-ddTHH:mm:ss"):"")" />
-                        </div>
-                    </div>
+
+                <div>
+                    <label for="edateStart" class="form-control-label">@SharedLocalizer["Date"]:</label>
+                    <input id="dateStart" type="datetime-local" aria-label="Start date" class="form-control form-control-sm" name="dateStart" value="@(Model.FilterViewModel.SelectedDateStart!=null?((DateTime)Model.FilterViewModel.SelectedDateStart).ToString("yyyy-MM-ddTHH:mm:ss"):"")" />
+
+                </div>
+
+                <div>
+                    <input id="dateEnd" type="datetime-local" aria-label="End date" class="form-control form-control-sm" name="dateEnd" value="@(Model.FilterViewModel.SelectedDateEnd!=null?((DateTime)Model.FilterViewModel.SelectedDateEnd).ToString("yyyy-MM-ddTHH:mm:ss"):"")" />
+
                 </div>
                 <hr class="horizontal dark my-2"><!--Line-->
                 <input id="filter" type="submit" value="Применить" class="btn btn-outline-dark" />

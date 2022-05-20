@@ -354,7 +354,24 @@
                                 <td><p>@proc.Codifier</p></td>
                                 <td><p>@proc.Type</p></td>
                                 <td><p>@proc.Name</p></td>
-                                <td><p>@proc.Result</p></td>
+                                @if (proc.Result == true)
+                                {
+                                    <td class="align-middle text-center text-sm">
+                                        <span class="badge badge-sm bg-gradient-success">@SharedLocalizer["Success"]</span>
+                                    </td>
+                                }
+                                else if (proc.Result == false)
+                                {
+                                    <td class="align-middle text-center text-sm">
+                                        <span class="badge badge-sm bg-gradient-faded-danger">@SharedLocalizer["Failed"]</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="align-middle text-center text-sm">
+                                        <span class="badge badge-sm bg-gradient-secondary">@SharedLocalizer["Unknown"]</span>
+                                    </td>
+                                }
                                 @if (proc.DateStart != null)
                                 {
                                     DateTimeOffset dateStart = (DateTimeOffset)proc.DateStart;

@@ -6,11 +6,12 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TableModelLibrary;
 
 namespace KSA_API.Controllers
 {
 
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     [Authorize]
     public class AuthController : Controller
@@ -28,15 +29,15 @@ namespace KSA_API.Controllers
 
         [AllowAnonymous]
         [HttpPost(nameof(Auth))]
-        public IActionResult Auth(string Username, string Password)
+        public IActionResult Auth(Login login)
         {
             //bool isValid = _userService.IsValidUserInformation(data);
 
-            ApiLogin account = Context.ApiLogins.Where(c => c.UserName == Username && c.Password == Password).SingleOrDefault();
+            ApiLogin account = Context.ApiLogins.Where(c => c.UserName == login.username && c.Password == login.password).SingleOrDefault();
             if (account != null)
             {
                 var tokenString = GenerateJwtToken(account);
-                _logger.LogInformation($"{Username} logged in.");
+                _logger.LogInformation($"{login.username} logged in.");
                 return Ok(new { Token = tokenString, Message = "Success" });
             }
             return BadRequest("Please pass the valid Username and Password");

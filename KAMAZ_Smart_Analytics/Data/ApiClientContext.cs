@@ -53,30 +53,24 @@ namespace KAMAZ_Smart_Analytics.Data
 
         private void Auth()
         {
-            //var result = Client.AuthAsync("123", "123");
-            //result.Wait();
-            string username = "123";
-            string password = "123";
+            Login login = new Login()
+            {
+                Username = "123",
+                Password = "123"
+            };
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(Client.BaseUrl != null ? Client.BaseUrl.TrimEnd('/') : "").Append("/Auth/Auth");
+
 
             HttpClient client_ = new HttpClient();
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(APP_PATH != null ? APP_PATH.TrimEnd('/') : "").Append("/api/Auth/Auth?");
-            if (username != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("Username") + "=").Append(System.Uri.EscapeDataString(username) + "&");
-            }
-            if (password != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("Password") + "=").Append(System.Uri.EscapeDataString(password) + "&");
-            }
-            urlBuilder_.Length--;
-
             var disposeClient_ = false;
             try
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    request_.Content = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(login));
+                    request_.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Method = new System.Net.Http.HttpMethod("POST");
 
 

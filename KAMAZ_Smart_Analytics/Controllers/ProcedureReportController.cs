@@ -2,10 +2,11 @@
 using KAMAZ_Smart_Analytics.Models.List;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using TableModelLibrary.Web;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KAMAZ_Smart_Analytics.Controllers
 {
+    [Authorize]
     public class ProcedureReportController : Controller
     {
         swaggerClient client = new ApiClientContext().GetClient;
@@ -16,7 +17,7 @@ namespace KAMAZ_Smart_Analytics.Controllers
         }
 
         public async Task<IActionResult> List(string? type, string? vin, string? ecu, string? result, string? file,
-            DateTime? dateStart,  DateTime? dateEnd, int page = 1, SortProcedureReportState sortOrder = SortProcedureReportState.DateDesc)
+             DateTime? dateStart, DateTime? dateEnd, int page = 1, SortProcedureReportState sortOrder = SortProcedureReportState.DateDesc)
         {
             int pageCount, entitesOnPage = 30;
             type = type == _sharedLocalizer["All"] ? null : type;
