@@ -63,9 +63,10 @@
   <ItemGroup>
     <EmbeddedResource Update="Resources\SharedResource.en.resx">
       <Generator></Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\SharedResource.ru.resx">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Generator></Generator>
     </EmbeddedResource>
   </ItemGroup>

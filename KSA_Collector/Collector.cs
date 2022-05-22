@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using Microsoft.Extensions.Hosting;
 using System.Diagnostics;
 using System.Timers;
+using KSA_Collector.Handlers;
 
 namespace KSA_Collector
 {
@@ -36,10 +37,10 @@ namespace KSA_Collector
 
         Task IHostedService.StopAsync(CancellationToken cancellationToken)
         {
-            if (_timer != null) 
+            if (_timer != null)
             {
                 _timer.Stop();
-                _timer.Dispose(); 
+                _timer.Dispose();
             }
             return Task.CompletedTask;
         }
@@ -51,7 +52,7 @@ namespace KSA_Collector
         private void CheckByTimer(object source, ElapsedEventArgs e)
         {
             _timer.Stop();
-            ParserController  Parser = new ParserController(_logger);
+            ParserController Parser = new ParserController(_logger);
 
             try
             {
@@ -59,14 +60,6 @@ namespace KSA_Collector
                 ServiceSettings settings = ServiceSettings.GetSettings();
 
                 var dtNow = DateTime.Now;
-
-                if (dtNow.DayOfWeek == settings.DayOfWeekToCheck && dtNow.Hour == settings.HourOfDayToCheck)
-                {
-                    var dateFile = File.GetLastWriteTime(tempContinuePath);
-                    if (dateFile.Day != dtNow.Day)
-                    File.Delete(tempContinuePath);
-                }
-
 
                 if (!File.Exists(tempContinuePath))
                 {
@@ -77,6 +70,15 @@ namespace KSA_Collector
                     File.Create(tempContinuePath).Dispose();
                     swatch.Stop();
                     _logger.LogInformation("CheckByTimer: " + swatch.Elapsed);
+                }
+                else
+                {
+                    if (dtNow.DayOfWeek == settings.DayOfWeekToCheck && dtNow.Hour == settings.HourOfDayToCheck)
+                    {
+                        var dateFile = File.GetLastWriteTime(tempContinuePath);
+                        if (dateFile.Day != dtNow.Day)
+                            File.Delete(tempContinuePath);
+                    }
                 }
 
                 if (_licWatcher.LogFileChanged())

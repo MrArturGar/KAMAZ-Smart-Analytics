@@ -59,13 +59,17 @@ namespace KSA_Collector.Controllers
 
             if (fileSession != null)
             {
-                Models.session session;
-                XmlSerializer serializer = new XmlSerializer(typeof(Models.session));
 
-                session = (Models.session)serializer.Deserialize(new StreamReader(fileSession));
-                LoadECUs(session);
-                LoadVehicle(session);
-                LoadSession(session);
+                if (!_apiClient.SessionExistenceByName(fileSession.Split("\\").Last().Replace(".session","")))
+                {
+                    Models.session session;
+                    XmlSerializer serializer = new XmlSerializer(typeof(Models.session));
+
+                    session = (Models.session)serializer.Deserialize(new StreamReader(fileSession));
+                    LoadECUs(session);
+                    LoadVehicle(session);
+                    LoadSession(session);
+                }
             }
         }
 
@@ -129,6 +133,7 @@ namespace KSA_Collector.Controllers
                 string[] signals = IdentificationSettings.GetSignalNames(ecuFile.id);
                 bool hasTable = IdentificationSettings.HasEcuNameForTables(ecuFile.id);
 
+                Translates translates = new Translates();////////////////////////////////////////////////////DELETE
                 for (int i = 0; i < identifications.Length; i++)
                 {
                     string signalName = identifications[i].id.Split('-')[0];
@@ -141,6 +146,7 @@ namespace KSA_Collector.Controllers
                             Value = identifications[i].value
                         };
                         ident.Id = _apiClient.GetIdentificationId(ident);
+                        translates.LoadPhrase(ident.Name, identifications[i].displayText);////////////////////////////////////////////////////DELETE
 
                         EcuIdentification ecu_ident = new EcuIdentification()
                         {
@@ -165,6 +171,7 @@ namespace KSA_Collector.Controllers
 
             if (dtcs != null)
             {
+                Translates translates = new Translates();
                 Session.HasDtc = true;
                 for (int i = 0; i < dtcs.Length; i++)
                 {
@@ -173,10 +180,11 @@ namespace KSA_Collector.Controllers
                     {
                         IdEcu = ecuId,
                         VehicleType = Data.GetVehicleType(type),///
-                        Code = (int)dtcFile.troubleCode,///
+                        Code = (int)dtcFile.troubleCode,
                         TroubleCode = dtcFile.displayTroubleCode
                     };
                     dtc.Id = _apiClient.GetDtcId(dtc);
+                    translates.LoadPhrase($"{dtc.VehicleType}.{dtc.IdEcu}.{dtc.Code}", dtcFile.text);
 
                     SessionDtc sessionDtc = new SessionDtc
                     {
